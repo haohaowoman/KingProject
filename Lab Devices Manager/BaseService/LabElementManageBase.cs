@@ -1,0 +1,435 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LabMCESystem.LabElement;
+using System.Collections.Specialized;
+using System.Runtime.Serialization;
+
+namespace LabMCESystem.BaseService
+{
+    [Serializable]
+    public class LabElementManageBase : ILabElementManageable
+    {
+        #region Fields
+
+        // registed devices collection.
+        private List<LabDevice> _registedDevices;
+
+        // registed experiment areaes collection.
+        private List<ExperimentArea> _expAreaes;
+
+
+        protected List<LabDevice> RegistedDevices
+        {
+            get { return _registedDevices; }
+            set { _registedDevices = value; }
+        }
+
+        protected List<ExperimentArea> ExpAreaes
+        {
+            get { return _expAreaes; }
+            set { _expAreaes = value; }
+        }
+
+        // the key is channel's key code, the dictionary remenber all of the manage channels .
+        [NonSerialized]
+        private Dictionary<int, LabChannel> _channelKeyDic;
+
+        #endregion
+
+        #region Build
+
+        /// <summary>
+        /// Creat a Lab element management.
+        /// </summary>
+        public LabElementManageBase()
+        {
+            ExpAreaes = new List<ExperimentArea>();
+            RegistedDevices = new List<LabDevice>();
+
+            _channelKeyDic = new Dictionary<int, LabChannel>();
+
+            DevicesChanged += LabElementManageBase_DevicesChanged;
+        }
+
+        #endregion
+
+
+        #region Properties
+
+        //--------------------------------------------
+
+        /// <summary>
+        /// Management device collection changed event.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler DevicesChanged;
+
+        /// <summary>
+        /// Management experiment collection  changed event.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler ExperimentAreaesChanged;
+
+        /// <summary>
+        /// Get management devices readonly list.
+        /// </summary>
+        public IReadOnlyList<LabDevice> Devices
+        {
+            get
+            {
+                return _registedDevices.AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Get management experiment areaes readonly list.
+        /// </summary>
+        public IReadOnlyList<ExperimentArea> ExperimnetAreaes
+        {
+            get
+            {
+                return _expAreaes.AsReadOnly();
+            }
+        }
+
+        #endregion
+
+        #region Operators
+        #region ILabElementManageabel
+
+        /// <summary>
+        /// A device client program regist a LabDevice object into this manager.
+        /// </summary>
+        /// <param name="regDev">Device where devcie client assign.</param>
+        /// <returns></returns>
+        public int RegistDevice(LabDevice regDev)
+        {
+            // regID must be only in RegistedDevices.
+
+            // Client have not assign device ID.
+            RegistNewDevice(regDev);
+
+            return regDev.RegistID;
+        }
+
+        /// <summary>
+        /// Log in device.
+        /// </summary>
+        /// <param name="regID"></param>
+        /// <returns>If the device with regID is registed, look up.</returns>
+        public LabDevice LoginDevice(int regID)
+        {
+            LabDevice regitedDev = RegistedDevices.Find(o => o.RegistID == regID);
+            if (regitedDev != null)
+            {
+                regitedDev.IsOnline = true;
+            }
+
+            return regitedDev;
+        }
+
+        /// <summary>
+        /// Look up a experiment area with label.
+        /// </summary>
+        /// <param name="label">Area label.</param>
+        /// <returns>If there is no area named as label return null.</returns>
+        public ExperimentArea LookUpExpArea(string label)
+        {
+            return _expAreaes.Find(o => label == o.Label);
+        }
+
+        /// <summary>
+        /// Look up a device with label.
+        /// </summary>
+        /// <param name="label">Device label.</param>
+        /// <returns>If there is no device named as label return null.</returns>
+        public LabDevice LookUpDevice(string label)
+        {
+            return _registedDevices.Find(o => o.Label == label);
+        }
+
+        /// <summary>
+        /// IDeviceOperator, regist a new device into this management.
+        /// </summary>
+        /// <param name="nDev">A new registed device.</param>
+        /// <returns>Result arguments.</returns>
+        public bool RegistNewDevice(LabDevice nDev)
+        {
+
+            //First no rebuild nDv's registID, is it contain device that same with nDev in this.
+
+            LabDevice temp = _registedDevices.Find(o => o.Label == nDev.Label || o.RegistID == nDev.RegistID);
+
+            if (temp != null)
+            {
+                LabDevice.ReBuildDeviceID(nDev);
+                // Find again.
+                temp = _registedDevices.Find(o => o.Label == nDev.Label || o.RegistID == nDev.RegistID);
+
+            }
+            if (temp == null)
+            {
+                _registedDevices.Add(nDev);
+
+                DevicesChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, nDev));
+
+                // add a event callback for device subelements changed.
+                nDev.ElementGroupChanged += NDev_ElementGroupChanged;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Discharge device from this management.
+        /// </summary>
+        /// <param name="devLabel">Device named label.</param>
+        /// <returns>Succeeful status.</returns>
+        public bool DischargeDevice(string devLabel)
+        {
+            LabDevice temp = _registedDevices.Find(o => o.Label == devLabel);
+            if (temp != null)
+            {
+                bool br = _registedDevices.Remove(temp);
+                if (br)
+                {
+                    DevicesChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, temp));
+
+                    return br;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Discharge device from this management.
+        /// </summary>
+        /// <param name="devLabel">Device object.</param>
+        /// <returns>Succeeful status.</returns>
+        public bool DischargeDevice(LabDevice dev)
+        {
+            bool br = _registedDevices.Remove(dev);
+            if (br)
+            {
+                DevicesChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, dev));
+            }
+            return br;
+        }
+
+
+        public bool ExitLogDevice(int devRegID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExitLogDevice(LabDevice dev)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RegistNewExpArea(ExperimentArea nArea)
+        {
+            bool bc = _expAreaes.Contains(nArea);
+            if (!bc)
+            {
+                _expAreaes.Add(nArea);
+            }
+            return !bc;
+        }
+
+        public bool DischargeExpArea(string eaLabel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DischargeExpArea(ExperimentArea area)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+        #endregion
+
+        #region Events
+
+        // There should refresh the channel key dictionary when device's group element changed.
+        private void NDev_ElementGroupChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+
+                    foreach (var item in e.NewItems)
+                    {
+                        LabChannel ch = item as LabChannel;
+
+                        if (_channelKeyDic.ContainsKey(ch.KeyCode))
+                        {
+                            throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", sender as LabDevice);
+
+                        }
+                        else
+                        {
+                            _channelKeyDic.Add(ch.KeyCode, ch);
+
+                            // add channel's key code changed event callback.k
+                            ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+                        }
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        // There should refresh the channel key dictionary when device collection changed.
+        private void LabElementManageBase_DevicesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    {
+                        foreach (var dev in e.NewItems)
+                        {
+                            LabDevice ndev = dev as LabDevice;
+
+                            if (e.NewItems != null && ndev != null)
+                            {
+                                // add dictionary item
+                                foreach (var ch in ndev.SubElements)
+                                {
+                                    if (_channelKeyDic.ContainsKey(ch.KeyCode))
+                                    {
+                                        throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", ndev);
+
+                                    }
+                                    else
+                                    {
+                                        _channelKeyDic.Add(ch.KeyCode, ch);
+
+                                        // add channel's key code changed event callback.k
+                                        ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                throw new ArgumentNullException("Lab element management devices changed item is null");
+                            }
+                        }
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    {
+                        foreach (var dev in e.OldItems)
+                        {
+                            LabDevice odev = dev as LabDevice;
+                            if (e.OldItems != null && odev != null)
+                            {
+                                // remove dictionary item
+                                foreach (var ch in odev.SubElements)
+                                {
+                                    bool br = _channelKeyDic.Remove(ch.KeyCode);
+                                    if (br)
+                                    {
+                                        // remove key code changed event callback at the same time.
+                                        ch.ChannelKeyCodeChanged -= Ch_ChannelKeyCodeChanged;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                throw new ArgumentNullException("Lab element management devices changed item is null");
+                            }
+                        }
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        // There should update the dictionary key value when channel key code changed.
+        private void Ch_ChannelKeyCodeChanged(LabChannel ch, ChannelKeyCodeChangedEventArgs e)
+        {
+            try
+            {
+                _channelKeyDic.Remove(e.OldKeyCode);
+                _channelKeyDic.Add(e.NewKeyCode, ch);
+            }
+            catch (KeyNotFoundException kex)
+            {
+                Console.WriteLine(kex.Message);
+            }
+            catch (ArgumentException aex)
+            {
+                Console.WriteLine(aex.Message);
+            }
+        }
+
+        // Do something on deserialized.
+        [OnDeserialized]
+        private void OnDeserializedMethod(StreamingContext context)
+        {
+            if (_channelKeyDic == null)
+            {
+                _channelKeyDic = new Dictionary<int, LabChannel>();
+            }
+            // Refresh this key code dictionary of channel.
+            foreach (var dev in _registedDevices)
+            {
+                foreach (var ch in dev.SubElements)
+                {
+                    _channelKeyDic.Add(ch.KeyCode, ch);
+                    // channel key code changed event.
+                    ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+                }
+                // device element group changed event.
+                dev.ElementGroupChanged += Dev_ElementGroupChanged;
+            }
+
+            // Check this experiment element collection all of experiment areaes,
+            // if experiment point's paired channel key code is not zero, then find channel in key code dictionary
+            // and paired it for point.
+            foreach (var area in _expAreaes)
+            {
+                foreach (var p in area.SubElements)
+                {
+                    try
+                    {
+                        p.PairedChannel = _channelKeyDic[p.PairedChannelKeyCode];
+                    }
+                    catch (KeyNotFoundException kex)
+                    {
+                        Console.WriteLine($"{kex.Message}\nExperiment point {p} paired key code {p.PairedChannelKeyCode} can not find is channel key code dictionary.");
+                    }
+                }
+            }
+        }
+
+        private void Dev_ElementGroupChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    }
+}

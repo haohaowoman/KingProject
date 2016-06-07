@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabElement", "Lab Devices Manager\LabElement.csproj", "{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpRuntimeApp", "ExpRuntimeApp\ExpRuntimeApp.csproj", "{A4CD879A-33C5-488E-8C70-7DFFE6D59A79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabServicesStand_alone", "LabServicesStand_alone\LabServicesStand_alone.csproj", "{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CD879A-33C5-488E-8C70-7DFFE6D59A79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CD879A-33C5-488E-8C70-7DFFE6D59A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CD879A-33C5-488E-8C70-7DFFE6D59A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CD879A-33C5-488E-8C70-7DFFE6D59A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

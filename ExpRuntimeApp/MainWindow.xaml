@@ -1,0 +1,54 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp"
+        xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ExpRuntimeApp.MainWindow"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="测控试验管理系统" Height="331.931" Width="658.584" Padding="10">
+
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!--User Log in UI-->
+        <!--#region -->
+        <DockPanel Grid.Row="0" Grid.Column="1" Margin="5,10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <!--User heard image-->
+            <Image DockPanel.Dock="Left" Margin="3" Source="pack://siteoforigin:,,,/Images/DefualtUserImage.png" MinHeight="16" MinWidth="16" MaxHeight="72" MaxWidth="72"/>
+
+            <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
+                <ComboBox Margin="2" MinWidth="120" MaxWidth="250" IsEditable="True"/>
+                <PasswordBox Margin="2"/>
+            </StackPanel>
+
+            <Button DockPanel.Dock="Left" Content="登录" Margin="3" Padding="20,3" VerticalAlignment="Center" Style="{DynamicResource AccentedSquareButtonStyle}"/>
+
+        </DockPanel>
+        <!--#endregion-->
+
+        <!--UI Command Control.-->
+        <UniformGrid Grid.Row="1" Grid.Column="1" Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top" ButtonBase.Click="UniformGrid_Click">
+            <Button Content="准备/查看" Margin="10" Padding="10" MinHeight="128" MinWidth="128"/>
+
+            <Button Content="测控试验" Margin="10" Padding="10"/>
+
+            <Button Content="数据分析" Margin="10" Padding="10"/>
+
+        </UniformGrid>
+        <!--<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="214,290,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="103" Margin="10,182,0,0" VerticalAlignment="Top" Width="486"/>-->
+
+    </Grid>
+</Window>

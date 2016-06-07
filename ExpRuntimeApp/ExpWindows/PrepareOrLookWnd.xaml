@@ -1,0 +1,48 @@
+﻿<Window x:Class="ExpRuntimeApp.ExpWindows.PrepareOrLookWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        xmlns:s="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:o="clr-namespace:System;assembly=mscorlib"
+        xmlns:labe="clr-namespace:LabMCESystem.LabElement;assembly=LabElement"
+        
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="准备/查看" Height="600" Width="800"
+        
+        DataContext="{Binding Path=ElementManager, Source={StaticResource SingleService}}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <s:ArrayList x:Key="uriArray">
+                <o:String>/Pages/ElementPages/LabDevicesInfoPage.xaml</o:String>
+                <o:String>/Pages/ElementPages/ExperimentAreaInfoPage.xaml</o:String>
+            </s:ArrayList>
+            <o:String x:Key="rr">/Pages/ElementPages/LabDevicesInfoPage.xaml</o:String>
+        </Grid.Resources>
+        <!--Lab Elements tree-->
+        <DockPanel Grid.Row="1" Grid.Column="0" Margin="3">            
+            <TreeView DockPanel.Dock="Top" Name="ElementTree" Margin="1,3" MinWidth="120">
+                <TreeViewItem Header="设备" Tag="/Pages/ElementPages/ExperimentAreaInfoPage.xaml"/>
+                <TreeViewItem Header="实验段" Tag="/Pages/ElementPages/LabDevicesInfoPage.xaml"/>
+            </TreeView>
+        </DockPanel>
+
+        <!--View of the tree item informations.-->
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="1">
+            <Label DockPanel.Dock="Top" Content="在此进行详细查看和编辑:" Margin="3,1"/>
+            <Frame DockPanel.Dock="Top" Margin="3" Source="{Binding ElementName=ElementTree,Path=SelectedItem.Tag}"/>
+        </DockPanel>
+    </Grid>
+</Window>
