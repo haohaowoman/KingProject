@@ -44,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExperimentDataExchange\ExperimentDataExchange.csproj">
+      <Project>{c84a8feb-b898-4a4c-a208-5e240f1c2db8}</Project>
+      <Name>ExperimentDataExchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>

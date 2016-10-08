@@ -7,6 +7,9 @@ using LabMCESystem.LabElement;
 
 namespace LabMCESystem.BaseService
 {
+    /// <summary>
+    /// Service contract of device.
+    /// </summary>
     public interface IDeviceOperator
     {
         bool RegistNewDevice(LabDevice nDev);

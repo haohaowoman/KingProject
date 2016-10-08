@@ -34,7 +34,7 @@ namespace ExpRuntimeApp
                         LabElementManageBase mb = bf.Deserialize(fs) as LabElementManageBase;
                         (srvRes as SingleServer).ElementManager = mb;
 
-                        mb.ExperimnetAreaes[0].SubElements[0].PairedChannel = mb.Devices[0].SubElements[0];
+                        mb.ExperimnetAreas[0].SubElements[0].PairedChannel = mb.Devices[0].SubElements[0];
                     }
                 }
                 catch (Exception ex)

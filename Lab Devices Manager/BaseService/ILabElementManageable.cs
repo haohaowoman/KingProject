@@ -8,7 +8,7 @@ using LabMCESystem.LabElement;
 
 namespace LabMCESystem.BaseService
 {
-    public interface ILabElementManageable : IDeviceOperator, IExpAreaOperator
+    public interface ILabElementManageable : IDeviceOperator, IExpAreaOperator, IDeviceElementListen, IExpAreaElementListen
     {
         #region Events
 
@@ -20,13 +20,11 @@ namespace LabMCESystem.BaseService
 
         #region Operations
 
-        IReadOnlyList<LabDevice> Devices { get; }
+        bool AddNewSensor(MeasureSensor newSensor);
 
-        IReadOnlyList<ExperimentArea> ExperimnetAreaes { get; }
+        bool RemoveSensor(MeasureSensor newSensor);
 
-        ExperimentArea LookUpExpArea(string label);
-
-        LabDevice LookUpDevice(string label);
+        bool RemoveSensorAsNumber(string sensorNumber);
 
         #endregion
     }

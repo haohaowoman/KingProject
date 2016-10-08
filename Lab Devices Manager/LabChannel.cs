@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LabMCESystem.LabElement
 {
@@ -19,6 +20,23 @@ namespace LabMCESystem.LabElement
         {
             NewKeyCode = newCode;
             OldKeyCode = oldCode;
+        }
+    }
+
+    [Serializable]
+    public class ChannelConnectSensorChangedEventArgs : EventArgs
+    {
+        public MeasureSensor OldSensor { get; set; }
+        public MeasureSensor NewSensor { get; set; }
+
+        public ChannelConnectSensorChangedEventArgs(MeasureSensor newSensor, MeasureSensor oldSensor)
+        {
+            NewSensor = newSensor;
+            OldSensor = oldSensor;
+        }
+        public ChannelConnectSensorChangedEventArgs(MeasureSensor newSensor) : this(newSensor, null)
+        {
+
         }
     }
 
@@ -77,6 +95,18 @@ namespace LabMCESystem.LabElement
             }
         }
 
+        // If this channel is a measurement channel, it should connects a sensor.
+        private MeasureSensor _connectSensor;
+
+        /// <summary>
+        /// Get/set channel connects a measurement sensor.
+        /// </summary>
+        public MeasureSensor ConnectSensor
+        {
+            get { return _connectSensor; }
+            set { _connectSensor = value; }
+        }
+
         #endregion
 
         #region Event
@@ -86,10 +116,15 @@ namespace LabMCESystem.LabElement
         /// </summary>
         public event Action<LabChannel, ChannelKeyCodeChangedEventArgs> ChannelKeyCodeChanged;
 
+        /// <summary>
+        /// Invoke this event when channel's connect sensor changed.
+        /// </summary>
+        public event Action<LabChannel, ChannelConnectSensorChangedEventArgs> ChannelConnectSensorChanged;
+        
         #endregion
         #region Build
 
-        public LabChannel(LabChannel ownedev, string label, ExperimentWorkStyle workStyle):this()
+        public LabChannel(LabChannel ownedev, string label, ExperimentWorkStyle workStyle) : this()
         {
             LabGroup = ownedev;
 
@@ -100,7 +135,7 @@ namespace LabMCESystem.LabElement
 
         public LabChannel(string label, ExperimentWorkStyle workStyle) : this(null, label, workStyle)
         {
-           
+
         }
 
         public LabChannel()
@@ -143,7 +178,7 @@ namespace LabMCESystem.LabElement
                 OperChannelKeyCode();
             }
         }
-        
+
         /// <summary>
         /// Operate the key code.
         /// </summary>

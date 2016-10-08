@@ -22,7 +22,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
     {
         public ExpPointDataGridShowPage()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
     }
 }

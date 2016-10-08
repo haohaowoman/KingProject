@@ -8,6 +8,40 @@ using System.Xml.Serialization;
 namespace LabMCESystem.LabElement
 {
     /// <summary>
+    /// enum device state.
+    /// </summary>
+    [Serializable]
+    [Flags]
+    public enum DeviceState
+    {
+        Created,
+
+        Registed,
+
+        Connected,
+        
+        Running,             
+
+        Stopped,        
+
+        Closed,
+    }
+
+    /// <summary>
+    /// Deivce state has been changed event arguments.
+    /// </summary>
+    public class DeviceStateChangedEventArgs : EventArgs
+    {
+        public DeviceState NewState { get; private set; } = DeviceState.Registed;
+        public DeviceState OldState { get; private set; } = DeviceState.Created;
+
+        public DeviceStateChangedEventArgs(DeviceState newState, DeviceState oldState)
+        {
+            NewState = newState;
+            OldState = oldState;
+        }
+    }
+    /// <summary>
     /// Class of lab device.
     /// </summary>
     [Serializable]
@@ -17,15 +51,15 @@ namespace LabMCESystem.LabElement
 
         public LabDevice()
         {
-            _isOnline = false;
+            State = DeviceState.Created;
         }
 
         public LabDevice(int regID) : this(null, regID)
         {
-            
+
         }
 
-        public LabDevice(string label, int regID):this()
+        public LabDevice(string label, int regID) : this()
         {
             Label = label;
             _registID = regID;
@@ -33,19 +67,28 @@ namespace LabMCESystem.LabElement
         #endregion
 
         #region Properties
-
-        [NonSerialized]
-        private bool _isOnline;
+                
+        private DeviceState _state;
         /// <summary>
-        /// Get/set device online statues.
+        /// Get/set the device current state.
         /// </summary>
-        public bool IsOnline
+        public DeviceState State
         {
-            get { return _isOnline; }
-            set { _isOnline = value; }
+            get { return _state; }
+            set
+            {
+                if (_state != value)
+                {
+                    DeviceStateChangedEventArgs args = new DeviceStateChangedEventArgs(value, _state);
+
+                    _state = value;
+
+                    DeviceStateChanged?.Invoke(this, args);
+                }                
+            }
         }
 
-        //
+        // The only id in all of lab devices.
         private int _registID;
 
         /// <summary>
@@ -56,13 +99,19 @@ namespace LabMCESystem.LabElement
             get
             {
                 return _registID;
-            }            
+            }
             set
             {
                 _registID = value;
             }
         }
 
+        // events.
+        /// <summary>
+        /// Invoke this event when device state has been changed.
+        /// </summary>
+        public event Action<object, DeviceStateChangedEventArgs> DeviceStateChanged;       
+        
         #endregion
 
         #region Override
@@ -117,7 +166,7 @@ namespace LabMCESystem.LabElement
 
             foreach (var item in dev.SubElements)
             {
-                sb.Append("\t\t");     
+                sb.Append("\t\t");
                 sb.AppendLine(item.Label);
             }
 

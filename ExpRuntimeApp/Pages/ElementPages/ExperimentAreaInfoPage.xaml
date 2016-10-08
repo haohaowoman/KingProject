@@ -23,7 +23,7 @@
 
         <Label Grid.Row="0" Content="实验段信息:" Grid.ColumnSpan="2"></Label>
 
-        <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=ExperimnetAreaes}">
+        <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=ExperimnetAreas}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type label:ExperimentArea}" ItemsSource="{Binding Path=SubElements}">
                     <StackPanel Margin="3">

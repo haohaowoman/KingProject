@@ -7,7 +7,7 @@
         xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ExpRuntimeApp.MainWindow"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="测控试验管理系统" Height="331.931" Width="658.584" Padding="10">
+        Title="测控试验管理系统" Height="331.931" Width="658.584" Padding="10" FontSize="18.667">
 
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
         <Grid.RowDefinitions>

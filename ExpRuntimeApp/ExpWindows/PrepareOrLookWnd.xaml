@@ -29,13 +29,13 @@
                 <o:String>/Pages/ElementPages/LabDevicesInfoPage.xaml</o:String>
                 <o:String>/Pages/ElementPages/ExperimentAreaInfoPage.xaml</o:String>
             </s:ArrayList>
-            <o:String x:Key="rr">/Pages/ElementPages/LabDevicesInfoPage.xaml</o:String>
+            
         </Grid.Resources>
         <!--Lab Elements tree-->
         <DockPanel Grid.Row="1" Grid.Column="0" Margin="3">            
             <TreeView DockPanel.Dock="Top" Name="ElementTree" Margin="1,3" MinWidth="120">
-                <TreeViewItem Header="设备" Tag="/Pages/ElementPages/ExperimentAreaInfoPage.xaml"/>
-                <TreeViewItem Header="实验段" Tag="/Pages/ElementPages/LabDevicesInfoPage.xaml"/>
+                <TreeViewItem Header="设备" Tag="/Pages/ElementPages/LabDevicesInfoPage.xaml"/>
+                <TreeViewItem Header="实验段" Tag="/Pages/ElementPages/ExperimentAreaInfoPage.xaml"/>
             </TreeView>
         </DockPanel>
 

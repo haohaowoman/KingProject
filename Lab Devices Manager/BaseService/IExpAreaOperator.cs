@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LabMCESystem.BaseService
 {
+    /// <summary>
+    /// Some experiment area base operate methods.
+    /// </summary>
     public interface IExpAreaOperator
     {
         bool RegistNewExpArea(ExperimentArea nArea);

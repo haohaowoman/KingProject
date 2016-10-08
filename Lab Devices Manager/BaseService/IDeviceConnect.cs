@@ -8,6 +8,6 @@ namespace LabMCESystem.BaseService
 {
     public interface IDeviceConnect
     {
-        IDeviceOperator GetDeviceOperator();
+        IDeviceOperator DeviceOperator { get; }
     }
 }

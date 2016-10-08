@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +43,9 @@
   <ItemGroup>
     <Compile Include="BaseService\IDeviceConnect.cs" />
     <Compile Include="BaseService\IDeviceOperator.cs" />
+    <Compile Include="BaseService\IExpAreaElementListen.cs" />
     <Compile Include="BaseService\IExpAreaOperator.cs" />
+    <Compile Include="BaseService\IDeviceElementListen.cs" />
     <Compile Include="BaseService\InvalidChannelKeyCodeException.cs" />
     <Compile Include="ExperimentWorkStyle.cs" />
     <Compile Include="LabChannel.cs" />
@@ -52,13 +55,35 @@
     <Compile Include="IRegisted.cs" />
     <Compile Include="BaseService\ILabElementManageable.cs" />
     <Compile Include="BaseService\LabElementManageBase.cs" />
+    <Compile Include="DataBase\LabElementDataSet.cs">
+      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\LabElementDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="LabGroupElement.cs" />
     <Compile Include="LabGroupSubElement.cs" />
     <Compile Include="BaseService\RegistElementResultArgs.cs" />
+    <Compile Include="MeasureSensor.cs" />
     <Compile Include="NotifyGroupObjectChangedEvent.cs" />
     <Compile Include="ExperimentArea.cs" />
     <Compile Include="LabElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataBase\LabElementDataSet.xsc">
+      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DataBase\LabElementDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LabElementDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataBase\LabElementDataSet.xss">
+      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

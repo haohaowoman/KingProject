@@ -8,10 +8,11 @@ using LabMCESystem.BaseService;
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+
 namespace LabMCESystem.Servers
 {
     [Serializable]
-    public class SingleServer : IDeviceConnect
+    public class SingleServer
     {
         #region Properties
         private LabElementManageBase _elementManager;
@@ -22,19 +23,27 @@ namespace LabMCESystem.Servers
             set { _elementManager = value; }
         }
 
+        private MesCtrlDataCenterBase _expDataExchange;
+
+        public MesCtrlDataCenterBase ExpDataExchange
+        {
+            get { return _expDataExchange; }
+            set { _expDataExchange = value; }
+        }
+
         #endregion
 
         #region Build
         public SingleServer()
         {
             ElementManager = new LabElementManageBase();
-        }
 
-        public IDeviceOperator GetDeviceOperator()
-        {
-            return _elementManager as IDeviceOperator;
-        }
+            ExpDataExchange = new MesCtrlDataCenterBase();
 
+            ExpDataExchange.WriteXml();
+            ExpDataExchange.ReadXml();
+        }
+        
         #endregion
 
         //#region Static

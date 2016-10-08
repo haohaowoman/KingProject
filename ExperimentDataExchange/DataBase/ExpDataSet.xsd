@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ExpDataSet" targetNamespace="http://tempuri.org/Experiment Data Set.xsd" xmlns:mstns="http://tempuri.org/Experiment Data Set.xsd" xmlns="http://tempuri.org/Experiment Data Set.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="NotPublic" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ExpDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msdata:Prefix="LabMCExpSys" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ExpDataSet" msprop:Generator_UserDSName="ExpDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="RTDataLoadTable" msprop:Generator_TableClassName="RTDataLoadTableDataTable" msprop:Generator_TableVarName="tableRTDataLoadTable" msprop:Generator_RowChangedName="RTDataLoadTableRowChanged" msprop:Generator_TablePropName="RTDataLoadTable" msprop:Generator_RowDeletingName="RTDataLoadTableRowDeleting" msprop:Generator_RowChangingName="RTDataLoadTableRowChanging" msprop:Generator_RowEvHandlerName="RTDataLoadTableRowChangeEventHandler" msprop:Generator_RowDeletedName="RTDataLoadTableRowDeleted" msprop:Generator_RowClassName="RTDataLoadTableRow" msprop:Generator_UserTableName="RTDataLoadTable" msprop:Generator_RowEvArgName="RTDataLoadTableRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_labCh_keyCode" msdata:Caption="Channel_KeyCode" msprop:Generator_ColumnVarNameInTable="column_labCh_keyCode" msprop:Generator_ColumnPropNameInRow="_labCh_keyCode" msprop:Generator_ColumnPropNameInTable="_labCh_keyCodeColumn" msprop:Generator_UserColumnName="_labCh_keyCode" type="xs:int" />
+              <xs:element name="_fupDateTime" msdata:Caption="First UpDate Data Time" msprop:Generator_ColumnVarNameInTable="column_fupDateTime" msprop:Generator_ColumnPropNameInRow="_fupDateTime" msprop:Generator_ColumnPropNameInTable="_fupDateTimeColumn" msprop:Generator_UserColumnName="_fupDateTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="_lrefDateTime" msdata:Caption="Last refresh time" msprop:Generator_ColumnVarNameInTable="column_lrefDateTime" msprop:Generator_ColumnPropNameInRow="_lrefDateTime" msprop:Generator_ColumnPropNameInTable="_lrefDateTimeColumn" msprop:Generator_UserColumnName="_lrefDateTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="_rcvDataCount" msdata:Caption="Receive Data Count" msprop:Generator_ColumnVarNameInTable="column_rcvDataCount" msprop:Generator_ColumnPropNameInRow="_rcvDataCount" msprop:Generator_ColumnPropNameInTable="_rcvDataCountColumn" msprop:Generator_UserColumnName="_rcvDataCount" type="xs:int" default="0" />
+              <xs:element name="_refCount" msdata:Caption="Refresh Count" msprop:Generator_ColumnVarNameInTable="column_refCount" msprop:Generator_ColumnPropNameInRow="_refCount" msprop:Generator_ColumnPropNameInTable="_refCountColumn" msprop:Generator_UserColumnName="_refCount" type="xs:int" default="0" />
+              <xs:element name="_rtValue" msdata:Caption="RT Value" msprop:Generator_ColumnVarNameInTable="column_rtValue" msprop:Generator_ColumnPropNameInRow="_rtValue" msprop:Generator_ColumnPropNameInTable="_rtValueColumn" msprop:Generator_UserColumnName="_rtValue" type="xs:float" />
+              <xs:element name="_valueType" msdata:Caption="RT Value Type" msprop:Generator_ColumnVarNameInTable="column_valueType" msprop:Generator_ColumnPropNameInRow="_valueType" msprop:nullValue="_null" msprop:Generator_ColumnPropNameInTable="_valueTypeColumn" msprop:Generator_UserColumnName="_valueType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="SensorCalibrateInfoTable" msprop:Generator_TableClassName="SensorCalibrateInfoTableDataTable" msprop:Generator_TableVarName="tableSensorCalibrateInfoTable" msprop:Generator_RowChangedName="SensorCalibrateInfoTableRowChanged" msprop:Generator_TablePropName="SensorCalibrateInfoTable" msprop:Generator_RowDeletingName="SensorCalibrateInfoTableRowDeleting" msprop:Generator_RowChangingName="SensorCalibrateInfoTableRowChanging" msprop:Generator_RowEvHandlerName="SensorCalibrateInfoTableRowChangeEventHandler" msprop:Generator_RowDeletedName="SensorCalibrateInfoTableRowDeleted" msprop:Generator_RowClassName="SensorCalibrateInfoTableRow" msprop:Generator_UserTableName="SensorCalibrateInfoTable" msprop:Generator_RowEvArgName="SensorCalibrateInfoTableRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_labCh_keyCode" msdata:Caption="Channel_KeyCode" msprop:Generator_ColumnVarNameInTable="column_labCh_keyCode" msprop:Generator_ColumnPropNameInRow="_labCh_keyCode" msprop:Generator_ColumnPropNameInTable="_labCh_keyCodeColumn" msprop:Generator_UserColumnName="_labCh_keyCode" type="xs:int" />
+              <xs:element name="_sensorNum" msdata:Caption="Sensor Number" msprop:Generator_ColumnVarNameInTable="column_sensorNum" msprop:Generator_ColumnPropNameInRow="_sensorNum" msprop:Generator_ColumnPropNameInTable="_sensorNumColumn" msprop:Generator_UserColumnName="_sensorNum" type="xs:string" />
+              <xs:element name="_cl_scale" msdata:Caption="Defualt Scale" msprop:Generator_ColumnVarNameInTable="column_cl_scale" msprop:Generator_ColumnPropNameInRow="_cl_scale" msprop:Generator_ColumnPropNameInTable="_cl_scaleColumn" msprop:Generator_UserColumnName="_cl_scale" type="xs:float" default="1" />
+              <xs:element name="_cl_offset" msdata:Caption="Defualt Offset" msprop:Generator_ColumnVarNameInTable="column_cl_offset" msprop:Generator_ColumnPropNameInRow="_cl_offset" msprop:Generator_ColumnPropNameInTable="_cl_offsetColumn" msprop:Generator_UserColumnName="_cl_offset" type="xs:float" default="0" />
+              <xs:element name="_mulcabobj_type" msdata:Caption="Multiple Calibrate Object Type" msprop:nullValue="_null" msprop:Generator_ColumnPropNameInRow="_mulcabobj_type" msprop:Generator_ColumnVarNameInTable="column_mulcabobj_type" msprop:Generator_ColumnPropNameInTable="_mulcabobj_typeColumn" msprop:Generator_UserColumnName="_mulcabobj_type" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ExpPointRTValueConverterTable" msprop:Generator_TableClassName="ExpPointRTValueConverterTableDataTable" msprop:Generator_TableVarName="tableExpPointRTValueConverterTable" msprop:Generator_TablePropName="ExpPointRTValueConverterTable" msprop:Generator_RowDeletingName="ExpPointRTValueConverterTableRowDeleting" msprop:Generator_RowChangingName="ExpPointRTValueConverterTableRowChanging" msprop:Generator_RowEvHandlerName="ExpPointRTValueConverterTableRowChangeEventHandler" msprop:Generator_RowDeletedName="ExpPointRTValueConverterTableRowDeleted" msprop:Generator_UserTableName="ExpPointRTValueConverterTable" msprop:Generator_RowChangedName="ExpPointRTValueConverterTableRowChanged" msprop:Generator_RowEvArgName="ExpPointRTValueConverterTableRowChangeEvent" msprop:Generator_RowClassName="ExpPointRTValueConverterTableRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_conveterID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="1" msdata:Caption="Converter ID" msprop:Generator_ColumnVarNameInTable="column_conveterID" msprop:Generator_ColumnPropNameInRow="_conveterID" msprop:Generator_ColumnPropNameInTable="_conveterIDColumn" msprop:Generator_UserColumnName="_conveterID" type="xs:int" />
+              <xs:element name="_srcType" msdata:Caption="Source Type" msprop:nullValue="_null" msprop:Generator_ColumnPropNameInRow="_srcType" msprop:Generator_ColumnVarNameInTable="column_srcType" msprop:Generator_ColumnPropNameInTable="_srcTypeColumn" msprop:Generator_UserColumnName="_srcType" type="xs:string" />
+              <xs:element name="_tagType" msdata:Caption="Target Type" msprop:nullValue="_null" msprop:Generator_ColumnPropNameInRow="_tagType" msprop:Generator_ColumnVarNameInTable="column_tagType" msprop:Generator_ColumnPropNameInTable="_tagTypeColumn" msprop:Generator_UserColumnName="_tagType" type="xs:string" minOccurs="0" />
+              <xs:element name="_def_scale" msdata:Caption="Defualt Converte Scale" msprop:Generator_ColumnVarNameInTable="column_def_scale" msprop:Generator_ColumnPropNameInRow="_def_scale" msprop:Generator_ColumnPropNameInTable="_def_scaleColumn" msprop:Generator_UserColumnName="_def_scale" type="xs:float" default="1" />
+              <xs:element name="_def_offset" msdata:Caption="Defualt Convert Offset" msprop:Generator_ColumnVarNameInTable="column_def_offset" msprop:Generator_ColumnPropNameInRow="_def_offset" msprop:Generator_ColumnPropNameInTable="_def_offsetColumn" msprop:Generator_UserColumnName="_def_offset" type="xs:string" minOccurs="0" />
+              <xs:element name="_con_cap" msdata:Caption="Converter Caption" msprop:Generator_ColumnVarNameInTable="column_con_cap" msprop:Generator_ColumnPropNameInRow="_con_cap" msprop:Generator_ColumnPropNameInTable="_con_capColumn" msprop:Generator_UserColumnName="_con_cap" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:RTDataLoadTable" />
+      <xs:field xpath="mstns:_labCh_keyCode" />
+    </xs:unique>
+    <xs:unique name="SensorCalibrateInfoTable_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:SensorCalibrateInfoTable" />
+      <xs:field xpath="mstns:_sensorNum" />
+    </xs:unique>
+    <xs:unique name="Sensor_x0020_Calibrate_x0020_Info_x0020_TableKey1">
+      <xs:selector xpath=".//mstns:SensorCalibrateInfoTable" />
+      <xs:field xpath="mstns:_labCh_keyCode" />
+    </xs:unique>
+    <xs:unique name="ExpPointRTValueConverterTable_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ExpPointRTValueConverterTable" />
+      <xs:field xpath="mstns:_conveterID" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="RT_x0020_Data_x0020_Load_x0020_Temp_x0020_Table_Sensor_x0020_Calibrate_x0020_Info_x0020_Table" msdata:parent="RTDataLoadTable" msdata:child="SensorCalibrateInfoTable" msdata:parentkey="_labCh_keyCode" msdata:childkey="_labCh_keyCode" msprop:Generator_UserChildTable="SensorCalibrateInfoTable" msprop:Generator_ChildPropName="GetSensorCalibrateInfoTableRows" msprop:Generator_UserRelationName="RT Data Load Temp Table_Sensor Calibrate Info Table" msprop:Generator_ParentPropName="RT_Data_Load_Temp_TableRow" msprop:Generator_RelationVarName="relationRT_Data_Load_Temp_Table_Sensor_Calibrate_Info_Table" msprop:Generator_UserParentTable="RTDataLoadTable" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

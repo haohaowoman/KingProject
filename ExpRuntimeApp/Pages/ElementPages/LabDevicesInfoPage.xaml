@@ -5,12 +5,20 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpRuntimeApp.Pages.ElementPages"
       xmlns:label="clr-namespace:LabMCESystem.LabElement;assembly=LabElement"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:sysc="clr-namespace:System.Collections;assembly=mscorlib"
       mc:Ignorable="d"
       
       d:DesignHeight="300" d:DesignWidth="300"
       DataContext="{Binding Path=ElementManager, Source={StaticResource SingleService}}"
       Title="LabDevicesInfoPage">
-       
+    <Page.Resources>
+        <sysc:ArrayList x:Key="workStyle">
+            <sys:String>测量</sys:String>
+            <sys:String>控制</sys:String>
+            <sys:String>双重</sys:String>
+        </sysc:ArrayList>
+    </Page.Resources>
     <Grid Margin="1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -28,7 +36,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type label:LabDevice}" ItemsSource="{Binding Path=SubElements}">
                     <StackPanel Margin="3">
                         <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="1" Padding="5,3"/>
-                        <TextBlock Text="{Binding Path=RegistID, StringFormat=No.{0:X8}}" Margin="1" HorizontalAlignment="Left" Padding="5,3"/>
+                        <TextBlock Text="{Binding Path=RegistID, StringFormat=No.{0:X8}}" Margin="1" HorizontalAlignment="Right" Padding="5,3" FontStyle="Italic" FontSize="10" Foreground="Black"/>
                     </StackPanel>
 
                     <HierarchicalDataTemplate.ItemTemplate>
@@ -36,12 +44,21 @@
                             <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="3" Padding="10,3" HorizontalAlignment="Left"/>
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
-                    
+
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
         <!--Devices information data grid.-->
         <DataGrid Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="通道名" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                
+                <!--<DataGridComboBoxColumn Header="方式" ItemsSource="{StaticResource workStyle}" SelectedValueBinding="{Binding WorkStyle}"></DataGridComboBoxColumn>-->
+
+                <DataGridTextColumn Header="频率" Binding="{Binding Path=Frequence}"></DataGridTextColumn>
+                
+                
+            </DataGrid.Columns>
 
         </DataGrid>
     </Grid>

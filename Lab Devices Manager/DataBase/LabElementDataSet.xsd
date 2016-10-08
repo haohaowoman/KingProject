@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="LabElementDataSet" targetNamespace="http://tempuri.org/LabElementDataSet.xsd" xmlns:mstns="http://tempuri.org/LabElementDataSet.xsd" xmlns="http://tempuri.org/LabElementDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="NotPublic" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="LabElementDataSet" msdata:IsDataSet="true" msdata:CaseSensitive="true" msdata:UseCurrentLocale="true" msdata:Prefix="LabMCExpSys" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="LabElementDataSet" msprop:Generator_UserDSName="LabElementDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="LabDevices" msprop:Generator_TableClassName="LabDevicesDataTable" msprop:Generator_TableVarName="tableLabDevices" msprop:Generator_RowChangedName="LabDevicesRowChanged" msprop:Generator_TablePropName="LabDevices" msprop:Generator_RowDeletingName="LabDevicesRowDeleting" msprop:Generator_RowChangingName="LabDevicesRowChanging" msprop:Generator_RowEvHandlerName="LabDevicesRowChangeEventHandler" msprop:Generator_RowDeletedName="LabDevicesRowDeleted" msprop:Generator_RowClassName="LabDevicesRow" msprop:Generator_UserTableName="LabDevices" msprop:Generator_RowEvArgName="LabDevicesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_devID" msdata:Caption="Deivce ID" msprop:Generator_ColumnVarNameInTable="column_devID" msprop:Generator_ColumnPropNameInRow="_devID" msprop:Generator_ColumnPropNameInTable="_devIDColumn" msprop:Generator_UserColumnName="_devID" type="xs:int" />
+              <xs:element name="_label" msdata:Caption="Label" msprop:Generator_ColumnVarNameInTable="column_label" msprop:Generator_ColumnPropNameInRow="_label" msprop:Generator_ColumnPropNameInTable="_labelColumn" msprop:Generator_UserColumnName="_label" type="xs:string" />
+              <xs:element name="_ch_count" msdata:Caption="Channels Count" msprop:Generator_ColumnVarNameInTable="column_ch_count" msprop:Generator_ColumnPropNameInRow="_ch_count" msprop:Generator_ColumnPropNameInTable="_ch_countColumn" msprop:Generator_UserColumnName="_ch_count" type="xs:int" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ExpAreas" msprop:Generator_TableClassName="ExpAreasDataTable" msprop:Generator_TableVarName="tableExpAreas" msprop:Generator_RowChangedName="ExpAreasRowChanged" msprop:Generator_TablePropName="ExpAreas" msprop:Generator_RowDeletingName="ExpAreasRowDeleting" msprop:Generator_RowChangingName="ExpAreasRowChanging" msprop:Generator_RowEvHandlerName="ExpAreasRowChangeEventHandler" msprop:Generator_RowDeletedName="ExpAreasRowDeleted" msprop:Generator_RowClassName="ExpAreasRow" msprop:Generator_UserTableName="ExpAreas" msprop:Generator_RowEvArgName="ExpAreasRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:Caption="ExpArea ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
+              <xs:element name="_label" msdata:Caption="Label" msprop:Generator_ColumnVarNameInTable="column_label" msprop:Generator_ColumnPropNameInRow="_label" msprop:Generator_ColumnPropNameInTable="_labelColumn" msprop:Generator_UserColumnName="_label" type="xs:string" />
+              <xs:element name="_ep_count" msdata:Caption="Experimnet Point Count" msprop:Generator_ColumnVarNameInTable="column_ep_count" msprop:Generator_ColumnPropNameInRow="_ep_count" msprop:Generator_ColumnPropNameInTable="_ep_countColumn" msprop:Generator_UserColumnName="_ep_count" type="xs:string" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="LabSensors" msprop:Generator_TableClassName="LabSensorsDataTable" msprop:Generator_TableVarName="tableLabSensors" msprop:Generator_RowChangedName="LabSensorsRowChanged" msprop:Generator_TablePropName="LabSensors" msprop:Generator_RowDeletingName="LabSensorsRowDeleting" msprop:Generator_RowChangingName="LabSensorsRowChanging" msprop:Generator_RowEvHandlerName="LabSensorsRowChangeEventHandler" msprop:Generator_RowDeletedName="LabSensorsRowDeleted" msprop:Generator_RowClassName="LabSensorsRow" msprop:Generator_UserTableName="LabSensors" msprop:Generator_RowEvArgName="LabSensorsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_s_number" msdata:Caption="Sensor Number" msprop:Generator_ColumnVarNameInTable="column_s_number" msprop:Generator_ColumnPropNameInRow="_s_number" msprop:Generator_ColumnPropNameInTable="_s_numberColumn" msprop:Generator_UserColumnName="_s_number" type="xs:string" />
+              <xs:element name="_label" msdata:Caption="Label" msprop:Generator_ColumnVarNameInTable="column_label" msprop:Generator_ColumnPropNameInRow="_label" msprop:Generator_ColumnPropNameInTable="_labelColumn" msprop:Generator_UserColumnName="_label" type="xs:string" minOccurs="0" />
+              <xs:element name="_remarks" msdata:Caption="Sensor Remarks" msprop:Generator_ColumnVarNameInTable="column_remarks" msprop:Generator_ColumnPropNameInRow="_remarks" msprop:Generator_ColumnPropNameInTable="_remarksColumn" msprop:Generator_UserColumnName="_remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="_signal_type" msdata:Caption="Signal Type" msprop:Generator_ColumnVarNameInTable="column_signal_type" msprop:Generator_ColumnPropNameInRow="_signal_type" msprop:Generator_ColumnPropNameInTable="_signal_typeColumn" msprop:Generator_UserColumnName="_signal_type" type="xs:string" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="LabChannels" msprop:Generator_TableClassName="LabChannelsDataTable" msprop:Generator_TableVarName="tableLabChannels" msprop:Generator_RowChangedName="LabChannelsRowChanged" msprop:Generator_TablePropName="LabChannels" msprop:Generator_RowDeletingName="LabChannelsRowDeleting" msprop:Generator_RowChangingName="LabChannelsRowChanging" msprop:Generator_RowEvHandlerName="LabChannelsRowChangeEventHandler" msprop:Generator_RowDeletedName="LabChannelsRowDeleted" msprop:Generator_RowClassName="LabChannelsRow" msprop:Generator_UserTableName="LabChannels" msprop:Generator_RowEvArgName="LabChannelsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_ch_keycode" msdata:Caption="Key Code" msprop:Generator_ColumnVarNameInTable="column_ch_keycode" msprop:Generator_ColumnPropNameInRow="_ch_keycode" msprop:Generator_ColumnPropNameInTable="_ch_keycodeColumn" msprop:Generator_UserColumnName="_ch_keycode" type="xs:int" default="0" />
+              <xs:element name="_label" msdata:Caption="Label" msprop:Generator_ColumnVarNameInTable="column_label" msprop:Generator_ColumnPropNameInRow="_label" msprop:Generator_ColumnPropNameInTable="_labelColumn" msprop:Generator_UserColumnName="_label" type="xs:string" default="" />
+              <xs:element name="_workstyle" msprop:Generator_ColumnVarNameInTable="column_workstyle" msprop:Generator_ColumnPropNameInRow="_workstyle" msprop:Generator_ColumnPropNameInTable="_workstyleColumn" msprop:Generator_UserColumnName="_workstyle" type="xs:string" minOccurs="0" />
+              <xs:element name="_frequence" msdata:Caption="Frequence" msprop:Generator_ColumnVarNameInTable="column_frequence" msprop:Generator_ColumnPropNameInRow="_frequence" msprop:Generator_ColumnPropNameInTable="_frequenceColumn" msprop:Generator_UserColumnName="_frequence" type="xs:int" default="1" />
+              <xs:element name="_index" msdata:Caption="Index" msprop:Generator_ColumnVarNameInTable="column_index" msprop:Generator_ColumnPropNameInRow="_index" msprop:Generator_ColumnPropNameInTable="_indexColumn" msprop:Generator_UserColumnName="_index" type="xs:int" default="0" />
+              <xs:element name="_owner_devID" msdata:Caption="Owner Device ID" msprop:Generator_ColumnVarNameInTable="column_owner_devID" msprop:Generator_ColumnPropNameInRow="_owner_devID" msprop:Generator_ColumnPropNameInTable="_owner_devIDColumn" msprop:Generator_UserColumnName="_owner_devID" type="xs:int" />
+              <xs:element name="_c_sensor_number" msdata:Caption="Connect Sensor Number" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="_c_sensor_number" msprop:Generator_ColumnVarNameInTable="column_c_sensor_number" msprop:Generator_ColumnPropNameInTable="_c_sensor_numberColumn" msprop:Generator_UserColumnName="_c_sensor_number" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ExperimentPoints" msprop:Generator_TableClassName="ExperimentPointsDataTable" msprop:Generator_TableVarName="tableExperimentPoints" msprop:Generator_RowChangedName="ExperimentPointsRowChanged" msprop:Generator_TablePropName="ExperimentPoints" msprop:Generator_RowDeletingName="ExperimentPointsRowDeleting" msprop:Generator_RowChangingName="ExperimentPointsRowChanging" msprop:Generator_RowEvHandlerName="ExperimentPointsRowChangeEventHandler" msprop:Generator_RowDeletedName="ExperimentPointsRowDeleted" msprop:Generator_RowClassName="ExperimentPointsRow" msprop:Generator_UserTableName="ExperimentPoints" msprop:Generator_RowEvArgName="ExperimentPointsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:AutoIncrement="true" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
+              <xs:element name="_label" msprop:Generator_ColumnVarNameInTable="column_label" msprop:Generator_ColumnPropNameInRow="_label" msprop:Generator_ColumnPropNameInTable="_labelColumn" msprop:Generator_UserColumnName="_label" type="xs:string" minOccurs="0" />
+              <xs:element name="_unit" msprop:Generator_ColumnVarNameInTable="column_unit" msprop:Generator_ColumnPropNameInRow="_unit" msprop:Generator_ColumnPropNameInTable="_unitColumn" msprop:Generator_UserColumnName="_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="_work_style" msdata:Caption="Work Style" msprop:Generator_ColumnVarNameInTable="column_work_style" msprop:Generator_ColumnPropNameInRow="_work_style" msprop:Generator_ColumnPropNameInTable="_work_styleColumn" msprop:Generator_UserColumnName="_work_style" type="xs:int" default="0" minOccurs="0" />
+              <xs:element name="_p_ch_keycode" msdata:Caption="Paired Channel Key Code" msprop:Generator_ColumnVarNameInTable="column_p_ch_keycode" msprop:Generator_ColumnPropNameInRow="_p_ch_keycode" msprop:Generator_ColumnPropNameInTable="_p_ch_keycodeColumn" msprop:Generator_UserColumnName="_p_ch_keycode" type="xs:int" minOccurs="0" />
+              <xs:element name="_index" msdata:Caption="Index" msprop:Generator_ColumnVarNameInTable="column_index" msprop:Generator_ColumnPropNameInRow="_index" msprop:Generator_ColumnPropNameInTable="_indexColumn" msprop:Generator_UserColumnName="_index" type="xs:int" default="0" />
+              <xs:element name="_area_id" msdata:Caption="Area ID" msprop:Generator_ColumnVarNameInTable="column_area_id" msprop:Generator_ColumnPropNameInRow="_area_id" msprop:Generator_ColumnPropNameInTable="_area_idColumn" msprop:Generator_UserColumnName="_area_id" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:LabDevices" />
+      <xs:field xpath="mstns:_devID" />
+    </xs:unique>
+    <xs:unique name="ExpAreas_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ExpAreas" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+    <xs:unique name="ExpAreasKey1">
+      <xs:selector xpath=".//mstns:ExpAreas" />
+      <xs:field xpath="mstns:_label" />
+    </xs:unique>
+    <xs:unique name="LabSensors_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:LabSensors" />
+      <xs:field xpath="mstns:_s_number" />
+    </xs:unique>
+    <xs:unique name="LabChannels_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:LabChannels" />
+      <xs:field xpath="mstns:_ch_keycode" />
+    </xs:unique>
+    <xs:unique name="ExperimentPoints_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ExperimentPoints" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="LabChannels_ExperimentPoints" msdata:parent="LabChannels" msdata:child="ExperimentPoints" msdata:parentkey="_ch_keycode" msdata:childkey="_p_ch_keycode" msprop:Generator_UserChildTable="ExperimentPoints" msprop:Generator_ChildPropName="GetExperimentPointsRows" msprop:Generator_UserRelationName="LabChannels_ExperimentPoints" msprop:Generator_ParentPropName="LabChannelsRow" msprop:Generator_RelationVarName="relationLabChannels_ExperimentPoints" msprop:Generator_UserParentTable="LabChannels" />
+      <msdata:Relationship name="LabDevices_LabChannels" msdata:parent="LabDevices" msdata:child="LabChannels" msdata:parentkey="_devID" msdata:childkey="_owner_devID" msprop:Generator_UserChildTable="LabChannels" msprop:Generator_ChildPropName="GetLabChannelsRows" msprop:Generator_UserRelationName="LabDevices_LabChannels" msprop:Generator_ParentPropName="LabDevicesRow" msprop:Generator_RelationVarName="relationLabDevices_LabChannels" msprop:Generator_UserParentTable="LabDevices" />
+      <msdata:Relationship name="LabSensors_LabChannels" msdata:parent="LabSensors" msdata:child="LabChannels" msdata:parentkey="_s_number" msdata:childkey="_c_sensor_number" msprop:Generator_UserChildTable="LabChannels" msprop:Generator_ChildPropName="GetLabChannelsRows" msprop:Generator_UserRelationName="LabSensors_LabChannels" msprop:Generator_ParentPropName="LabSensorsRow" msprop:Generator_RelationVarName="relationLabSensors_LabChannels" msprop:Generator_UserParentTable="LabSensors" />
+      <msdata:Relationship name="ExpAreas_ExperimentPoints" msdata:parent="ExpAreas" msdata:child="ExperimentPoints" msdata:parentkey="ID" msdata:childkey="_area_id" msprop:Generator_UserChildTable="ExperimentPoints" msprop:Generator_ChildPropName="GetExperimentPointsRows" msprop:Generator_UserRelationName="ExpAreas_ExperimentPoints" msprop:Generator_ParentPropName="ExpAreasRow" msprop:Generator_RelationVarName="relationExpAreas_ExperimentPoints" msprop:Generator_UserParentTable="ExpAreas" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

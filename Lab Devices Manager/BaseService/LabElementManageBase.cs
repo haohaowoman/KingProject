@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using LabMCESystem.LabElement;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
-
+using LabMCESystem.DataBase;
 namespace LabMCESystem.BaseService
 {
+    /// <summary>
+    /// Lab element manage service base class.
+    /// You can get some contract interface form this management.
+    /// </summary>
     [Serializable]
-    public class LabElementManageBase : ILabElementManageable
+    public class LabElementManageBase : ILabElementManageable, IDeviceConnect
     {
         #region Fields
 
@@ -37,6 +41,10 @@ namespace LabMCESystem.BaseService
         [NonSerialized]
         private Dictionary<int, LabChannel> _channelKeyDic;
 
+
+        // lab element data set.
+        LabElementDataSet _elDataSet;
+
         #endregion
 
         #region Build
@@ -52,6 +60,11 @@ namespace LabMCESystem.BaseService
             _channelKeyDic = new Dictionary<int, LabChannel>();
 
             DevicesChanged += LabElementManageBase_DevicesChanged;
+
+            _elDataSet = new LabElementDataSet();
+            // deserialize el data set form xml file.
+            //_elDataSet.ReadXml(@".\Element Data Set.xml");
+
         }
 
         #endregion
@@ -72,6 +85,15 @@ namespace LabMCESystem.BaseService
         public event NotifyCollectionChangedEventHandler ExperimentAreaesChanged;
 
         /// <summary>
+        /// Invoke this event when channels key code have been changed.
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler ChannlesKeyCodeChanged;
+
+        public event NotifyCollectionChangedEventHandler ExperimentPointsChanged;
+
+        public event NotifyCollectionChangedEventHandler SensorsChanged;
+
+        /// <summary>
         /// Get management devices readonly list.
         /// </summary>
         public IReadOnlyList<LabDevice> Devices
@@ -85,11 +107,62 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get management experiment areaes readonly list.
         /// </summary>
-        public IReadOnlyList<ExperimentArea> ExperimnetAreaes
+        public IReadOnlyList<ExperimentArea> ExperimnetAreas
         {
             get
             {
                 return _expAreaes.AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Get all channels.
+        /// </summary>
+        public List<LabChannel> AllChannels
+        {
+            get
+            {
+                List<LabChannel> temp = new List<LabChannel>();
+
+                foreach (var dev in _registedDevices)
+                {
+                    temp.AddRange(dev.SubElements);
+                }
+                return temp;
+            }
+        }
+
+        /// <summary>
+        /// Get all experiment points.
+        /// </summary>
+        public List<ExperimentPoint> AllExperimentPoints
+        {
+            get
+            {
+                List<ExperimentPoint> temp = new List<ExperimentPoint>();
+
+                foreach (var area in _expAreaes)
+                {
+                    temp.AddRange(area.SubElements);
+                }
+
+                return temp;
+            }
+        }
+
+        public List<MeasureSensor> AllSensors
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IDeviceOperator DeviceOperator
+        {
+            get
+            {
+                return this;
             }
         }
 
@@ -123,7 +196,7 @@ namespace LabMCESystem.BaseService
             LabDevice regitedDev = RegistedDevices.Find(o => o.RegistID == regID);
             if (regitedDev != null)
             {
-                regitedDev.IsOnline = true;
+                regitedDev.State = DeviceState.Connected;
             }
 
             return regitedDev;
@@ -150,6 +223,26 @@ namespace LabMCESystem.BaseService
         }
 
         /// <summary>
+        /// Look up a channel with key code.
+        /// </summary>
+        /// <param name="chKeyCode">Assign a channle key code.</param>
+        /// <returns>Return null if there is no this lab channel as key code.</returns>
+        public LabChannel LookUpChannel(int chKeyCode)
+        {
+            LabChannel temp = null;
+            try
+            {
+                temp = _channelKeyDic[chKeyCode];
+            }
+            catch (KeyNotFoundException kex)
+            {
+                Console.WriteLine($"{kex.Message}, Key Code is {chKeyCode}");
+            }
+
+            return temp;
+        }
+
+        /// <summary>
         /// IDeviceOperator, regist a new device into this management.
         /// </summary>
         /// <param name="nDev">A new registed device.</param>
@@ -171,6 +264,10 @@ namespace LabMCESystem.BaseService
             if (temp == null)
             {
                 _registedDevices.Add(nDev);
+
+                nDev.State = DeviceState.Registed;
+                // add to data set .
+                _elDataSet.LabDevices.AddLabDevicesRow(nDev.RegistID, nDev.Label, nDev.SubElements.Count);
 
                 DevicesChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, nDev));
 
@@ -248,6 +345,28 @@ namespace LabMCESystem.BaseService
         {
             throw new NotImplementedException();
         }
+
+
+        public bool AddNewSensor(MeasureSensor newSensor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveSensor(MeasureSensor newSensor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveSensorAsNumber(string sensorNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MeasureSensor LookUpSensor(string sensorNumber)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
         #endregion
@@ -430,6 +549,7 @@ namespace LabMCESystem.BaseService
         {
             throw new NotImplementedException();
         }
+
         #endregion
     }
 }

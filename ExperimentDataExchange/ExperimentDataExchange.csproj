@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C84A8FEB-B898-4A4C-A208-5E240F1C2DB8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LabMCESystem</RootNamespace>
+    <AssemblyName>ExperimentDataExchange</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseService\MesCtrlDataCenterBase.cs" />
+    <Compile Include="BaseService\IMesCtrlDataExchange.cs" />
+    <Compile Include="DataBase\ExpDataSet.cs">
+      <DependentUpon>ExpDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\ExpDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataContract\CustomConverter.cs" />
+    <Compile Include="DataContract\DiscreteSignalConverter.cs" />
+    <Compile Include="DataContract\ExpValueConverterBase.cs" />
+    <Compile Include="DataContract\MultipleLinearCablibrater.cs" />
+    <Compile Include="DataContract\RangeLinearCalibrater.cs" />
+    <Compile Include="DataContract\SensorCalibraterBase.cs" />
+    <Compile Include="DataContract\SingleLinearCalibrater.cs" />
+    <Compile Include="DataContract\SingleLinearConverter.cs" />
+    <Compile Include="ExperimentDataExchange\ExpSingleRTDataArgs.cs" />
+    <Compile Include="ExperimentDataExchange\IMeasureDevDataConnect.cs" />
+    <Compile Include="ExperimentDataExchange\IExpDataExchangeLoad.cs" />
+    <Compile Include="ExperimentDataExchange\IExpDataPush.cs" />
+    <Compile Include="ExperimentDataExchange\IExpDataRead.cs" />
+    <Compile Include="ExperimentDataExchange\IExpValueConvert.cs" />
+    <Compile Include="ExperimentDataExchange\IMulDevDataConnect.cs" />
+    <Compile Include="ExperimentDataExchange\ISensorCalibrate.cs" />
+    <Compile Include="ExperimentDataExchange\ISingleExpRTDataRead.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataBase\ExpDataSet.xsc">
+      <DependentUpon>ExpDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DataBase\ExpDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ExpDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataBase\ExpDataSet.xss">
+      <DependentUpon>ExpDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
+      <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
+      <Name>LabElement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
