@@ -8,13 +8,14 @@
       d:DesignHeight="300" d:DesignWidth="300"
       xmlns:label="clr-namespace:LabMCESystem.LabElement;assembly=LabElement"
       DataContext="{Binding Path=ElementManager, Source={StaticResource SingleService}}"
-      Title="ExperimentAreaInfoPage">
+      Title="ExperimentAreaInfoPage" Loaded="Page_Loaded">
 
 
     <Grid Margin="1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,21 +29,37 @@
                 <HierarchicalDataTemplate DataType="{x:Type label:ExperimentArea}" ItemsSource="{Binding Path=SubElements}">
                     <StackPanel Margin="3">
                         <TextBlock Text="{Binding Path=Label, Mode=TwoWay}"/>
-                        
+
                     </StackPanel>
 
-                    <HierarchicalDataTemplate.ItemTemplate>
+                    <!--<HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate DataType="{x:Type label:LabChannel}">
                             <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="3,3,10,3" Padding="10,3" HorizontalAlignment="Left"/>
                         </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>-->
 
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
         <!--Devices information data grid.-->
-        <DataGrid Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}">
+        <DataGrid Name="epGrid" Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="名称" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                <DataGridTextColumn Header="工作方式" Binding="{Binding Path=WorkType}"></DataGridTextColumn>
+                <DataGridComboBoxColumn Header="匹配通道" ItemsSource="{Binding Source={StaticResource SingleService}, Path=ElementManager.AllChannels}" DisplayMemberPath="Label" SelectedItemBinding="{Binding Path=PairedChannel}"/>
+                <DataGridTextColumn Header="单位" Binding="{Binding Path=Units}"></DataGridTextColumn>
 
+            </DataGrid.Columns>
+
+            <DataGrid.GroupStyle>
+                <GroupStyle AlternationCount="5">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Label}" Background="#FFD9D9E8"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
         </DataGrid>
     </Grid>
 </Page>

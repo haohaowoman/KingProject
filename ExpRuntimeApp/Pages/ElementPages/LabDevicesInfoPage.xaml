@@ -31,33 +31,51 @@
 
         <Label Grid.Row="0" Content="实验室系统设备信息:" Grid.ColumnSpan="2"></Label>
 
-        <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=Devices}">
+        <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=Devices}" MinWidth="80">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type label:LabDevice}" ItemsSource="{Binding Path=SubElements}">
+                <HierarchicalDataTemplate DataType="{x:Type label:LabDevice}">
                     <StackPanel Margin="3">
                         <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="1" Padding="5,3"/>
                         <TextBlock Text="{Binding Path=RegistID, StringFormat=No.{0:X8}}" Margin="1" HorizontalAlignment="Right" Padding="5,3" FontStyle="Italic" FontSize="10" Foreground="Black"/>
+
+                        <!--<UniformGrid Columns="4">
+                            <Button Margin="1" Padding="1">
+                                <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_city}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
+                            <Button Margin="3" Padding="3"></Button>
+                            <Button Margin="3" Padding="3"></Button>
+                            <Button Margin="3" Padding="3"></Button>
+                        </UniformGrid>-->
+
                     </StackPanel>
 
-                    <HierarchicalDataTemplate.ItemTemplate>
+                    <!--<HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate DataType="{x:Type label:LabChannel}">
                             <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="3" Padding="10,3" HorizontalAlignment="Left"/>
                         </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>-->
 
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
         <!--Devices information data grid.-->
-        <DataGrid Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}">
+        
+        <DataGrid Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="通道名" Binding="{Binding Path=Label}"></DataGridTextColumn>
-                
+
                 <!--<DataGridComboBoxColumn Header="方式" ItemsSource="{StaticResource workStyle}" SelectedValueBinding="{Binding WorkStyle}"></DataGridComboBoxColumn>-->
 
                 <DataGridTextColumn Header="频率" Binding="{Binding Path=Frequence}"></DataGridTextColumn>
-                
-                
+
+                <DataGridTextColumn Header="关系传感器" Binding="{Binding Path=ConnectSensor}"></DataGridTextColumn>
+
             </DataGrid.Columns>
 
         </DataGrid>

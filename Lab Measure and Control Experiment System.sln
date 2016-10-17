@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabElement", "Lab Devices Manager\LabElement.csproj", "{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabTask", "LabTask\LabTask.csproj", "{BB95FC99-EB10-4CFE-A4A4-6AE5FEF031CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpException", "ExpException\ExpException.csproj", "{44BA695A-F289-488D-8DB0-36D1EC0AA191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mcLogic", "mcLogic\mcLogic.csproj", "{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{44BA695A-F289-488D-8DB0-36D1EC0AA191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44BA695A-F289-488D-8DB0-36D1EC0AA191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44BA695A-F289-488D-8DB0-36D1EC0AA191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

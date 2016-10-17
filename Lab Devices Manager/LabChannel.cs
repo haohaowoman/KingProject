@@ -62,20 +62,7 @@ namespace LabMCESystem.LabElement
         /// Set/Get channel's workable style.
         /// </summary>
         public ExperimentWorkStyle WorkStyle { get; set; }
-
-        public override int IndexInGroup
-        {
-            get
-            {
-                LabDevice dev = LabGroup as LabDevice;
-                if (dev != null)
-                {
-                    return dev.ElementIndexOf(this);
-                }
-                return -1;
-            }
-        }
-
+        
         // This channel's only code.
         // We can use it to find this channel.
         private int _keyCode;

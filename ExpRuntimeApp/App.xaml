@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExpRuntimeApp"
              xmlns:srv="clr-namespace:LabMCESystem.Servers;assembly=LabServicesStand_alone"
+             xmlns:viewm="clr-namespace:ExpRuntimeApp.ViewModules"
              StartupUri="MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
 
@@ -13,8 +14,12 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                
+                <ResourceDictionary Source="/Resources/Icons.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <srv:SingleServer x:Key="SingleService"></srv:SingleServer>
+            
+            <viewm:ExperimentViewModule x:Key="ExpViewModule" Service="{StaticResource SingleService}"/>
         </ResourceDictionary>
     </Application.Resources>
 

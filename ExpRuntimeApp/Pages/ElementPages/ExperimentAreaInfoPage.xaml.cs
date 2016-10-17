@@ -23,6 +23,22 @@ namespace ExpRuntimeApp.Pages.ElementPages
         public ExperimentAreaInfoPage()
         {
             InitializeComponent();
+            
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        //private void epGrid_GotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    CollectionView v = (CollectionView)CollectionViewSource.GetDefaultView(epGrid.ItemsSource);
+
+        //    if (v.CanGroup)
+        //    {
+        //        v.GroupDescriptions.Add(new PropertyGroupDescription("LabGroup"));
+        //    }
+        //}
     }
 }

@@ -10,19 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ExpRuntimeApp.ExpWindows
+namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 {
     /// <summary>
-    /// PrepareOrLookWnd.xaml 的交互逻辑
+    /// ChannelsValuePage.xaml 的交互逻辑
     /// </summary>
-    public partial class PrepareOrLookWnd : Window
+    public partial class ChannelsValuePage : Page
     {
-        public PrepareOrLookWnd()
+        public ChannelsValuePage()
         {
             InitializeComponent();
-
         }
     }
 }

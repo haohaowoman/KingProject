@@ -78,13 +78,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Modules\ChannelValues.cs" />
     <Compile Include="Modules\Initialization.cs" />
     <Compile Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml.cs">
       <DependentUpon>ExperimentAreaInfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ElementPages\SensorsInforPage.xaml.cs">
+      <DependentUpon>SensorsInforPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MeasureAndControlPages\ChannelsValuePage.xaml.cs">
+      <DependentUpon>ChannelsValuePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ExpCommandBar.xaml.cs">
       <DependentUpon>ExpCommandBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModules\ExperimentViewModule.cs" />
+    <Page Include="Dictionary1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExpWindows\MeasureAndControlWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +128,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ElementPages\LabDevicesInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ElementPages\SensorsInforPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MeasureAndControlPages\ChannelsValuePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -192,6 +212,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExperimentDataExchange\ExperimentDataExchange.csproj">
+      <Project>{C84A8FEB-B898-4A4C-A208-5E240F1C2DB8}</Project>
+      <Name>ExperimentDataExchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>

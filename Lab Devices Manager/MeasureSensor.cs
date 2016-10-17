@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace LabMCESystem.LabElement
 {
+    /// <summary>
+    /// 传感器信息类型
+    /// </summary>
     [Serializable]
     public enum SensorSignalType
     {
-        Analogue, 
+        // 模拟量信号
+        Analogue,
+        // 离散量信号
         Digital
     }
 

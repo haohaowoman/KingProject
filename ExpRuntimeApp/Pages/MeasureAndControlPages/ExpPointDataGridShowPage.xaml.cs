@@ -22,7 +22,21 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
     {
         public ExpPointDataGridShowPage()
         {
-            InitializeComponent();            
+            InitializeComponent();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (epGrid != null)
+            {
+                CollectionView v = (CollectionView)CollectionViewSource.GetDefaultView(epGrid.ItemsSource);
+
+                if (v.CanGroup)
+                {
+                    v.GroupDescriptions.Add(new PropertyGroupDescription("ExpArea"));
+                }
+            }
+
         }
     }
 }

@@ -141,20 +141,7 @@ namespace LabMCESystem.LabElement
         #endregion
 
         #region Override
-
-        public override int IndexInGroup
-        {
-            get
-            {
-                ExperimentArea area = LabGroup as ExperimentArea;
-                if (area != null)
-                {
-                    return area.ElementIndexOf(this);
-                }
-                return -1;
-            }
-        }
-
+        
         public override string ToString()
         {
             return $"{LabGroup}-{Label}";

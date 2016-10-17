@@ -25,15 +25,9 @@ namespace LabMCESystem.LabElement
         #region Properties
         [NonSerialized]
         private LabElement _labGroup;
-
         /// <summary>
-        /// Get this indxe of group.
+        /// 获取/设置子元素的组
         /// </summary>
-        public abstract int IndexInGroup
-        {
-            get;
-        }
-
         public LabElement LabGroup
         {
             get { return _labGroup; }

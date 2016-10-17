@@ -36,13 +36,14 @@
             <TreeView DockPanel.Dock="Top" Name="ElementTree" Margin="1,3" MinWidth="120">
                 <TreeViewItem Header="设备" Tag="/Pages/ElementPages/LabDevicesInfoPage.xaml"/>
                 <TreeViewItem Header="实验段" Tag="/Pages/ElementPages/ExperimentAreaInfoPage.xaml"/>
+
+                <TreeViewItem Header="传感器" Tag="/Pages/ElementPages/ExperimentAreaInfoPage.xaml"/>
             </TreeView>
         </DockPanel>
 
         <!--View of the tree item informations.-->
-        <DockPanel Grid.Row="1" Grid.Column="1" Margin="1">
-            <Label DockPanel.Dock="Top" Content="在此进行详细查看和编辑:" Margin="3,1"/>
-            <Frame DockPanel.Dock="Top" Margin="3" Source="{Binding ElementName=ElementTree,Path=SelectedItem.Tag}"/>
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="1">            
+            <Frame Name="Page_Frame" DockPanel.Dock="Top" Margin="3" Source="{Binding ElementName=ElementTree,Path=SelectedItem.Tag}" NavigationUIVisibility="Automatic"/>
         </DockPanel>
     </Grid>
 </Window>

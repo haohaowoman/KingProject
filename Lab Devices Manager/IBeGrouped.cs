@@ -12,12 +12,7 @@ namespace LabMCESystem.LabElement
         /// <summary>
         /// Get/set the group.
         /// </summary>
-         LabElement LabGroup { get; set; }
-
-        /// <summary>
-        /// Get this index of LabGroup.
-        /// </summary>
-        int IndexInGroup { get; }
+         LabElement LabGroup { get; set; }        
     }
 
     /// <summary>

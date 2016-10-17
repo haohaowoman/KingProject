@@ -11,9 +11,10 @@ namespace LabMCESystem.LabElement
     /// 定义试验点的类型
     /// </summary>
     [Serializable]
+    [Flags]
     public enum ExperimentWorkStyle
     {
-        Measure, //输入（采集）
+        Measure = 1, //输入（采集）
         Control,//输出（控制）
         Both//双向
     }
