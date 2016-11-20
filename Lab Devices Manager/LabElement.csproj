@@ -48,6 +48,7 @@
     <Compile Include="BaseService\IDeviceElementListen.cs" />
     <Compile Include="BaseService\InvalidChannelKeyCodeException.cs" />
     <Compile Include="ExperimentWorkStyle.cs" />
+    <Compile Include="IUnitRange.cs" />
     <Compile Include="LabChannel.cs" />
     <Compile Include="LabDevice.cs" />
     <Compile Include="ExperimentPoint.cs" />

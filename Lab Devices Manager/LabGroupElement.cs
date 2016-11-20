@@ -28,6 +28,9 @@ namespace LabMCESystem.LabElement
 
         #region IOwnedGroup
 
+        /// <summary>
+        /// 获取子元素集合的只读列表
+        /// </summary>
         public IReadOnlyList<T> SubElements
         {
             get
@@ -68,6 +71,19 @@ namespace LabMCESystem.LabElement
         public T GetElementAsLabel(string label)
         {
             return _subElements.Find(o => o.Label == label);
+        }
+
+        /// <summary>
+        /// 获取实例中指定Label属性的LabElement对象
+        /// </summary>
+        /// <param name="label">LabElement 的 Label</param>
+        /// <returns>本实例中不存在Label的LabElement，返回null</returns>
+        public T this[string label]
+        {
+            get
+            {
+                return GetElementAsLabel(label);
+            }
         }
 
         public bool RemoveElement(T el)

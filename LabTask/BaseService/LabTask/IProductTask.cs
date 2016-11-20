@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.BaseSerivce.LabTask
+namespace LabMCESystem.BaseService.LabTask
 {
     public interface IProductTask
     {
-        void OutSetter(Setter s);
+        void OutSetter(TaskSetter s);
 
-        void OutMultipleSetters(List<Setter> ss);
+        void OutMultipleSetters(List<TaskSetter> ss);
 
 
     }

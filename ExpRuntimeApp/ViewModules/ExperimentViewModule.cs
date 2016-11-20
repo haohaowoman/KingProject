@@ -9,6 +9,8 @@ using ExpRuntimeApp.Modules;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using LabMCESystem.BaseService.ExperimentDataExchange;
+using LabMCESystem.Servers.HS;
+using System.Windows.Data;
 
 namespace ExpRuntimeApp.ViewModules
 {
@@ -16,9 +18,9 @@ namespace ExpRuntimeApp.ViewModules
     {
         private Timer _readValueTimer;
         
-        private SingleServer _service;
+        private HS_Server _service;
 
-        public SingleServer Service
+        public HS_Server Service
         {
             get
             {
@@ -41,6 +43,14 @@ namespace ExpRuntimeApp.ViewModules
                         _curChannelVal.Add(new ChannelValue(ch));
                     }
 
+                    // 为集合设备Group CollectionView
+                    // 通道以工作方式分类
+                    CollectionView cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curChannelVal);
+                    if (cCView.CanGroup)
+                    {
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Channel.WorkStyle"));
+                    }
+
                     // 试验点当前数据初始化
                     _curExpPointVal = new ObservableCollection<ExpPointValue>();
 
@@ -49,6 +59,12 @@ namespace ExpRuntimeApp.ViewModules
                     foreach (var ep in eps)
                     {
                         _curExpPointVal.Add(new ExpPointValue(ep));
+                    }
+
+                    cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curExpPointVal);
+                    if (cCView.CanGroup)
+                    {
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("ExpPoint.Units"));
                     }
 
                     _service.ElementManager.ExperimentAreaesChanged += ElementManager_ExperimentAreaesChanged;
@@ -71,7 +87,7 @@ namespace ExpRuntimeApp.ViewModules
             throw new NotImplementedException();
         }
 
-        public ExperimentViewModule(SingleServer service) : this()
+        public ExperimentViewModule(HS_Server service) : this()
         {
             Service = service;
         }

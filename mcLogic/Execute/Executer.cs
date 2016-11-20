@@ -10,14 +10,15 @@ namespace LabMCESystem.Logic.Execute
     /// 根据设定目标值而产生执行动作的控制器
     /// 抽象类，其它控制执行器的基类
     /// </summary>
-    public class Executer
+    public abstract class Executer
     {
         /// <summary>
-        /// 指定目标值与安全输出范围创建
+        /// 指定目标值与安全输出范围创建。
         /// </summary>
         /// <param name="targetVal">目标值</param>
         /// <param name="srange">安全范围</param>
-        public Executer(float targetVal, SafeRange srange)
+        /// <exception cref="ArgumentOutOfRangeException">目标值超出安全范围时引发异常。</exception>
+        public Executer(double targetVal, SafeRange srange)
         {
             _safeRange = srange;
 
@@ -25,15 +26,20 @@ namespace LabMCESystem.Logic.Execute
             {
                 throw new ArgumentOutOfRangeException("设置的TargetVal值超出了所规定的SafeRange范围。");
             }
+            else
+            {
+                _targetVal = targetVal;
+            }
         }
 
         #region Properties, Fields
 
-        private float _targetVal;
+        private double _targetVal;
         /// <summary>
-        /// 获取/设置执行目标值
+        /// 获取/设置执行目标值。
         /// </summary>
-        public float TargetVal
+        /// <exception cref="ArgumentOutOfRangeException">目标值超出安全范围时引发异常。</exception>
+        public double TargetVal
         {
             get { return _targetVal; }
             set
@@ -57,7 +63,7 @@ namespace LabMCESystem.Logic.Execute
 
         private SafeRange _safeRange;
         /// <summary>
-        /// 获取/设置执行器的安全输出范围
+        /// 获取/设置执行器的安全输出范围。
         /// </summary>
         public SafeRange SafeRange
         {
@@ -86,7 +92,12 @@ namespace LabMCESystem.Logic.Execute
         /// <summary>
         /// 获取已执行输出值
         /// </summary>
-        public float ExecuteVal { get; protected set; }
+        public double ExecuteVal { get; protected set; }
+
+        /// <summary>
+        /// 获取/设置执行器的设计标记
+        /// </summary>
+        public string DesignMark { get; set; }
 
         #endregion
 
@@ -103,6 +114,12 @@ namespace LabMCESystem.Logic.Execute
         public event ExecuterTargetValChangedEventHandler TargetValChanged;
 
         /// <summary>
+        /// 执行器改变输之前发生
+        /// 客户端有机会在此做出执行输出数据的更新
+        /// </summary>
+        public event BeforeExecutedEventHandler BeforeExecuted;
+
+        /// <summary>
         /// 调用Execute后已经执行时发生
         /// </summary>
         public event ExecuteChangedEventHandler ExecuteChanged;
@@ -114,26 +131,43 @@ namespace LabMCESystem.Logic.Execute
 
         #endregion
 
-        #region Mehods
+        #region Methods
 
         /// <summary>
-        /// 执行控制输出
+        /// 执行开始，默认执行Execute()。
+        /// </summary>
+        public virtual void ExecuteBegin()
+        {
+            Execute();
+        }
+
+        /// <summary>
+        /// 执行控制输出，单次执行。
         /// </summary>
         public void Execute()
         {
-            float teVal = 0f;
+            double teVal = ExecuteVal;
             if (OnExecute(ref teVal))
             {
-                Status = ExecuteStatus.Excuting;
+                Status = ExecuteStatus.Executing;
+
+                BeforeExecuted?.Invoke(this, ref teVal);
+
+                // 在输出时进行安全范围验证
+                if (!SafeRange.IsSafeIn(teVal))
+                {
+                    teVal = Math.Max(teVal, SafeRange.Low);
+                    teVal = Math.Min(teVal, SafeRange.Hight);
+                }
 
                 ExecuteVal = teVal;
 
                 ExecuteChanged?.Invoke(this, ExecuteVal);
 
-                if (ExecuteVal == TargetVal)
-                {
-                    ExecuteOver();
-                }
+                //if (ExecuteVal == TargetVal)
+                //{
+                //    ExecuteOver();
+                //}
             }
         }
 
@@ -158,12 +192,8 @@ namespace LabMCESystem.Logic.Execute
         /// <summary>
         /// 派生类实现，调用Execute时产生，做为执行前调用逻辑
         /// </summary>
-        /// <returns>反加True进行执行状态，并产生Executed事件</returns>
-        protected virtual bool OnExecute(ref float eVal)
-        {
-            eVal = _targetVal;
-            return true;
-        }
+        /// <returns>反回True进行执行状态，并产生Executed事件</returns>
+        protected abstract bool OnExecute(ref double eVal);
 
         #endregion
     }
@@ -176,7 +206,7 @@ namespace LabMCESystem.Logic.Execute
         // 等待，未执行任务动作
         Wait,
         // 正在执行输出
-        Excuting,
+        Executing,
         // 完成
         Over
     }
@@ -189,13 +219,13 @@ namespace LabMCESystem.Logic.Execute
         /// <summary>
         /// 获取/设置范围低值
         /// </summary>
-        public float Low { set; get; }
+        public double Low { set; get; }
         /// <summary>
         /// 获取/设置范围高值
         /// </summary>
-        public float Hight { get; set; }
+        public double Hight { get; set; }
 
-        public SafeRange(float l = float.NaN, float h = float.NaN)
+        public SafeRange(double l = float.NaN, double h = float.NaN)
         {
             if (h < l)
             {
@@ -211,7 +241,7 @@ namespace LabMCESystem.Logic.Execute
         /// </summary>
         /// <param name="val">检测值</param>
         /// <returns>在范围内为True</returns>
-        public bool IsSafeIn(float val)
+        public bool IsSafeIn(double val)
         {            
             return val >= Low && val <= Hight;
         }
@@ -228,12 +258,12 @@ namespace LabMCESystem.Logic.Execute
         /// <summary>
         /// 获取旧执行目标值
         /// </summary>
-        public float OldVal { get; private set; }
+        public double OldVal { get; private set; }
 
         /// <summary>
         /// 获取要新设定的执行目标值
         /// </summary>
-        public float NewVal { get; private set; }
+        public double NewVal { get; private set; }
 
         /// <summary>
         /// 获取新新设定的执行目标值是否超出其安全输出范围
@@ -257,7 +287,7 @@ namespace LabMCESystem.Logic.Execute
         /// <param name="newVal">新TargetVal值</param>
         /// <param name="oldVal">拥有的旧TargetVal</param>
         /// <param name="range">Executer的安全范围</param>
-        public TargetValChangeEventArgs(float newVal, float oldVal, SafeRange range)
+        public TargetValChangeEventArgs(double newVal, double oldVal, SafeRange range)
         {
             NewVal = newVal;
             OldVal = oldVal;
@@ -276,7 +306,7 @@ namespace LabMCESystem.Logic.Execute
         /// 如果出现了数据有效性证错误，可以在此重新设置正确的值
         /// </summary>
         /// <param name="reVal"></param>
-        public void ResetTrueVal(float reVal)
+        public void ResetTrueVal(double reVal)
         {
             if (Range.IsSafeIn(reVal))
             {
@@ -301,9 +331,16 @@ namespace LabMCESystem.Logic.Execute
     public delegate void ExecuterTargetValChangedEventHandler(object sender, TargetValChangeEventArgs e);
 
     /// <summary>
-    /// 执行器执行发生委托
+    /// 执行器执行改变之前委托
+    /// </summary>
+    /// <param name="sender">Executer事件源</param>
+    /// <param name="eVal">将执行的数据</param>
+    public delegate void BeforeExecutedEventHandler(object sender, ref double eVal);
+
+    /// <summary>
+    /// 执行器执行改变委托
     /// </summary>
     /// <param name="sender">Executer事件源</param>
     /// <param name="executedVal">执行值</param>
-    public delegate void ExecuteChangedEventHandler(object sender, float executedVal);
+    public delegate void ExecuteChangedEventHandler(object sender, double executedVal);
 }

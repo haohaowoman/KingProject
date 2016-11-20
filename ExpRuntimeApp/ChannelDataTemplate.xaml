@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ExpRuntimeApp"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:module="clr-namespace:ExpRuntimeApp.Modules">
+
+    <DataTemplate x:Key="EOVDataTemplate" DataType="{x:Type module:ChannelValue}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="{Binding Path=Channel.Label}" Margin="3"></Label>
+            
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

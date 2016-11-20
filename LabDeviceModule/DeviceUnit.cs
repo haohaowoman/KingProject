@@ -31,7 +31,10 @@ namespace LabMCESystem.LabDeviceModule
 
                 _device = value;
 
-                _device.DeviceStateChanged += _device_DeviceStateChanged;
+                if (_device != null)
+                {
+                    _device.DeviceStateChanged += _device_DeviceStateChanged;
+                }                
             }
 
             get
@@ -97,7 +100,7 @@ namespace LabMCESystem.LabDeviceModule
 
         public void LoginMain()
         {
-            Device = _devOperator.LoginDevice(Device.RegistID);
+            Device = _devOperator.LoginDevice(Device.RegistID);            
         }
 
         public void ExitLogMain()

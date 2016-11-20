@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.BaseSerivce.LabTask
+namespace LabMCESystem.BaseService.LabTask
 {
     public interface IControllerConnect
     {

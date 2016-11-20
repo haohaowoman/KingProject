@@ -24,11 +24,11 @@ namespace LabMCESystem.Task
         /// <summary>
         /// 获取该任务备选集中的所有任务设定项列表
         /// </summary>
-        public List<Setter> Setters
+        public List<TaskSetter> Setters
         {
             get
             {
-                List<Setter> tempSetters = new List<Setter>();
+                List<TaskSetter> tempSetters = new List<TaskSetter>();
                 foreach (var t in Tasks)
                 {
                     tempSetters.AddRange(t.Setters);

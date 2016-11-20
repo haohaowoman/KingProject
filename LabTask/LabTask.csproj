@@ -40,18 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseSerivce\LabTask\IController.cs" />
-    <Compile Include="BaseSerivce\LabTask\IControllerConnect.cs" />
-    <Compile Include="BaseSerivce\LabTask\IProductTask.cs" />
-    <Compile Include="BaseSerivce\TaskDistributeCenter.cs" />
+    <Compile Include="BaseService\LabTask\IController.cs" />
+    <Compile Include="BaseService\LabTask\IControllerConnect.cs" />
+    <Compile Include="BaseService\LabTask\IProductTask.cs" />
+    <Compile Include="BaseService\TaskDistributeCenter.cs" />
     <Compile Include="ExTaskBase.cs" />
+    <Compile Include="IOwnTaskSetter.cs" />
     <Compile Include="TaskExecuter.cs" />
     <Compile Include="ExecutabelTask.cs" />
     <Compile Include="TaskReserveSet.cs" />
     <Compile Include="TaskSetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>

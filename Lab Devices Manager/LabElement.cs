@@ -53,14 +53,30 @@ namespace LabMCESystem.LabElement
     }
 
     /// <summary>
-    /// Class of lab base element.
+    /// 通知LabElement的Label属性已改变的事件委托
+    /// </summary>
+    /// <param name="sender">LabElement 对象</param>
+    /// <param name="arg">改变事件参数</param>
+    public delegate void NotifyElementLabelChangedEventHandler(LabElement sender, NotifyElementLabelChangedEventArgs arg);
+
+    /// <summary>
+    /// 通知LabElement的Label改变之前的事件委托
+    /// </summary>
+    /// <param name="sender">LabElement 对象</param>
+    /// <param name="newLabel">新设置的Label参数</param>
+    /// <returns>是否满足更改要求</returns>
+    public delegate bool NotifyElementLabelChangingEventHandler(LabElement sender, string newLabel);
+
+    /// <summary>
+    /// 实验室系统元素基类
+    /// 代表系统中的实物与抽象信息
     /// </summary>
     [Serializable]
     public abstract class LabElement
     {
         private string _label;
         /// <summary>
-        /// Get/set this label.
+        /// 获取/设置LabElement的标签。
         /// </summary>
         [XmlAttribute(AttributeName = "Name")]
         public string Label
@@ -91,6 +107,18 @@ namespace LabMCESystem.LabElement
                 NotifyElementLabelChanged?.Invoke(this, e);
             }
         }
+                
+        private string _summary;
+        /// <summary>
+        /// 获取/设置Element摘要说明。
+        /// </summary>
+        public string Summary
+        {
+            get { return _summary; }
+            set { _summary = value; }
+        }
+
+
         #region Build
 
         public LabElement()
@@ -150,14 +178,14 @@ namespace LabMCESystem.LabElement
         #region Events
 
         /// <summary>
-        /// Label have being changed event.
+        /// LabElement标签Label已改变时发生。
         /// </summary>
-        public event Action<LabElement, NotifyElementLabelChangedEventArgs> NotifyElementLabelChanged;
+        public event NotifyElementLabelChangedEventHandler NotifyElementLabelChanged;
 
         /// <summary>
-        /// Label is channging.If you don't want to change it return false.
+        /// LabElement标签Label改变之前发生。
         /// </summary>
-        public event Func<LabElement, string, bool> ElementLabelChanging;
+        public event NotifyElementLabelChangingEventHandler ElementLabelChanging;
 
         #endregion
     }

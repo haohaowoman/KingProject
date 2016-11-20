@@ -4,109 +4,177 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LabMCESystem.LabElement;
+using LabMCESystem.BaseService;
+
 namespace LabMCESystem.Task
 {
     /// <summary>
     /// 控制设定项
-    /// 通过通道关键码确定所需要通道，并执行通道任务目标值
+    /// 通过通道关键码确定所需要通道，并执行通道任务目标值。
     /// </summary>
     [Serializable]
-    public class Setter
+    public struct TaskSetter
     {
         /// <summary>
         /// 获取/设置任务相关的通道关键码
         /// </summary>
-        public int ChannelKeyCode { get; protected set; }
+        public int ChannelKeyCode { get; set; }
 
         /// <summary>
         /// 任务项通道设定目标
         /// </summary>
-        public float TargetValue { get; set; }
+        public double TargetValue { get; set; }
 
-        public Setter(int chKeyCode)
+        public TaskSetter(int chKeyCode, double targetVal)
         {
             ChannelKeyCode = chKeyCode;
+            TargetValue = targetVal;
         }
     }
 
     /// <summary>
-    /// 通过通道实现的控制设定项
+    /// 通过通道实现的控制设定项。
     /// </summary>
     [Serializable]
-    public class ChannelSetter : Setter
+    public class ChannelSetter : IOwnTaskSetter
     {
         private LabChannel _channel;
-
+        /// <summary>
+        /// 获取/设置指定项通道。
+        /// </summary>
         public LabChannel Channel
         {
             get
             {
                 return _channel;
             }
-            set
+            private set
             {
                 _channel = value;
-                if (_channel != null)
-                {
-                    ChannelKeyCode = _channel.KeyCode;
-                }
             }
         }
 
-        public ChannelSetter(LabChannel ch) : base(ch.KeyCode)
+        private TaskSetter _setter;
+        /// <summary>
+        /// 获取/设置指定项的设备器。
+        /// </summary>
+        public TaskSetter Setter
+        {
+            get
+            {
+                return _setter;
+            }
+            set
+            {
+                _setter = value;
+            }
+        }
+
+        /// <summary>
+        /// 为通道指定目标值创建。
+        /// </summary>
+        /// <param name="ch">指定通道</param>
+        /// <param name="targetVal">设置目标值</param>
+        public ChannelSetter(LabChannel ch, double targetVal) : this(ch, new TaskSetter(ch.KeyCode, targetVal))
         {
 
         }
-
-        public ChannelSetter() : base(0)
+        /// <summary>
+        /// 通道指定TaskSetter指定项创建。
+        /// </summary>
+        /// <param name="ch">指定通道</param>
+        /// <param name="setter">任务指定项</param>
+        protected ChannelSetter(LabChannel ch, TaskSetter setter)
         {
-
+            Channel = ch;
+            Setter = setter;
         }
 
+        /// <summary>
+        /// 通过指定TaskSetter从IDeviceElementListen服务中得到一个ChannelSetter。
+        /// </summary>
+        /// <param name="setter">任务指定项</param>
+        /// <param name="del">管理服务</param>
+        /// <returns>如果setter所指定的通道无效则返回null</returns>
+        public static ChannelSetter FromTaskSetter(TaskSetter setter, IDeviceElementListen del)
+        {
+            LabChannel ch = del.LookUpChannel(setter.ChannelKeyCode);
+
+            return new ChannelSetter(ch, setter.TargetValue);
+        }
+        /// <summary>
+        /// 通过指定TaskSetter从LabDevice所拥有的通道中中得到一个ChannelSetter。
+        /// </summary>
+        /// <param name="setter">任务指定项</param>
+        /// <param name="dev">设备对象</param>
+        /// <returns>如果setter所指定的通道无效则返回null</returns>
+        public static ChannelSetter FromTaskSetter(TaskSetter setter, LabDevice dev)
+        {
+            LabChannel ch = dev[setter.ChannelKeyCode];
+
+            return new ChannelSetter(ch, setter.TargetValue);
+        }
     }
 
     /// <summary>
-    /// 通道试验点实现的控制设定项
+    /// 通道试验点实现设定项
     /// </summary>
     [Serializable]
-    public class ExpPointSetter : Setter
+    public class ExpPointSetter : IOwnTaskSetter
     {
-        private ExperimentPoint _expPoint;
+        // 通道任务设定项
+        private ChannelSetter _chSetter;
+        /// <summary>
+        /// 获取所配对的通道设定项。
+        /// </summary>
+        public ChannelSetter PChannelSetter
+        {
+            get
+            {
+                return _chSetter;
+            }
+        }
 
+        private ExperimentPoint _expPoint;
+        /// <summary>
+        /// 获取指定项的测试点。
+        /// </summary>
         public ExperimentPoint ExpPoint
         {
             get { return _expPoint; }
-            set
+            private set
             {
                 _expPoint = value;
-                if ((_expPoint != null) && (_expPoint.PairedChannel != null))
-                {
-                    ChannelKeyCode = _expPoint.PairedChannel.KeyCode;
-                }
             }
         }
 
-        public ExpPointSetter() : base(0)
+        public TaskSetter Setter
         {
+            get
+            {
+                return ((IOwnTaskSetter)_chSetter).Setter;
+            }
 
+            set
+            {
+                ((IOwnTaskSetter)_chSetter).Setter = value;
+            }
         }
 
-        public ExpPointSetter(ExperimentPoint exp) : base(0)
+        /// <summary>
+        /// 指定测试点对象，与设定目标值创建。
+        /// </summary>
+        /// <param name="exp">测试点</param>
+        /// <param name="targetVal">目标值</param>
+        public ExpPointSetter(ExperimentPoint exp, double targetVal)
         {
             ExpPoint = exp;
+            if (exp != null)
+            {
+                _chSetter = new ChannelSetter(exp.PairedChannel, targetVal);
+            }
         }
 
-        public ChannelSetter ToChnnelSetter()
-        {
-            if ((_expPoint != null) && (_expPoint.PairedChannel != null))
-            {
-                return new ChannelSetter(_expPoint.PairedChannel) { TargetValue = TargetValue };
-            }
-            else
-            {
-                return null;
-            }
-        }
     }
 
     /// <summary>

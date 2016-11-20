@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LabMCESystem.Logic.Execute
 {
     /// <summary>
-    /// 可周期性地执行方法
+    /// 定义可周期性地执行方法
     /// </summary>
     public interface IPeriodExecute
     {
@@ -35,5 +35,10 @@ namespace LabMCESystem.Logic.Execute
         /// 继续当前已暂定的周期执行
         /// </summary>
         void Resum();
+
+        /// <summary>
+        /// 获取当前执行器是否为有效
+        /// </summary>
+        bool Enabled { get; }
     }
 }

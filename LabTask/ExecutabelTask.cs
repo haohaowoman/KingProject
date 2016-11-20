@@ -17,7 +17,7 @@ namespace LabMCESystem.Task
         /// <summary>
         /// 获取/设置任务设定项集合
         /// </summary>
-        public List<Setter> Setters { get; set; }
+        public List<TaskSetter> Setters { get; set; }
 
         /// <summary>
         /// 获取任务单号

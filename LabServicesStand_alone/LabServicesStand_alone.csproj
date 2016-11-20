@@ -7,7 +7,7 @@
     <ProjectGuid>{A5499C18-05F5-41DB-B3FD-2AA60D691AB6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SingleLabServices</RootNamespace>
+    <RootNamespace>LabMCESystem.Servers</RootNamespace>
     <AssemblyName>LabServicesStand_alone</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,7 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SingleServer.cs" />
+    <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
+    <Compile Include="HS\HS_FirstColdFanDevice.cs" />
+    <Compile Include="HS\HS_FIRQExecuter.cs" />
+    <Compile Include="HS\HS_HotRoadHeaterExe.cs" />
+    <Compile Include="HS\HS_MeasCtrlDevice.cs" />
+    <Compile Include="HS\HS_ElectricHeaterExecuter.cs" />
+    <Compile Include="HS\HS_EOVPIDExecuter.cs" />
+    <Compile Include="HS\HS_MultipelEOVExecuter.cs" />
+    <Compile Include="HS\HS_SecendHeaterExe.cs" />
+    <Compile Include="HS\HS_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +61,18 @@
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabDeviceModule\LabDeviceModule.csproj">
+      <Project>{f94fdf1f-45f5-4cbd-8d9c-04c2a1ae8fee}</Project>
+      <Name>LabDeviceModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabTask\LabTask.csproj">
+      <Project>{bb95fc99-eb10-4cfe-a4a4-6ae5fef031cc}</Project>
+      <Name>LabTask</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mcLogic\mcLogic.csproj">
+      <Project>{9aa6b9d7-b437-4e26-84c1-3e3c402ed4b8}</Project>
+      <Name>mcLogic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

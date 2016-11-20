@@ -13,15 +13,10 @@ namespace LabMCESystem.Logic.Execute
     /// </summary>
     public class PeriodExecuter : Executer, IPeriodExecute, IDisposable
     {
-        public PeriodExecuter(float targetVal, SafeRange srang):base(targetVal, srang)
+        public PeriodExecuter(double targetVal, SafeRange srang):base(targetVal, srang)
         {
             _periodTimer = new Timer();
             _periodTimer.Elapsed += _periodTimer_Elapsed;
-        }
-
-        private void _periodTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Execute();
         }
 
         #region Properties,Fields
@@ -29,6 +24,34 @@ namespace LabMCESystem.Logic.Execute
         // 周期的定时器
         private Timer _periodTimer;
 
+        #endregion
+
+        #region Override
+
+        /// <summary>
+        /// 执行开始，默认调用Start()。
+        /// </summary>
+        public override void ExecuteBegin()
+        {
+            Start();
+        }
+
+        public override void ExecuteOver()
+        {
+            _periodTimer.Stop();
+            base.ExecuteOver();
+        }
+
+        protected override bool OnExecute(ref double eVal)
+        {
+            return true;
+        }
+
+        public override void Reset()
+        {
+            _periodTimer.Stop();
+            base.Reset();
+        }
         #endregion
 
         #region IPeriodExecute
@@ -43,6 +66,14 @@ namespace LabMCESystem.Logic.Execute
             set
             {
                 _periodTimer.Interval = value;
+            }
+        }
+
+        public bool Enabled
+        {
+            get
+            {
+                return _periodTimer.Enabled;
             }
         }
 
@@ -63,14 +94,20 @@ namespace LabMCESystem.Logic.Execute
 
         public void Stop()
         {
-            _periodTimer.Stop();
             ExecuteOver();
         }
 
         public void Suspend()
         {
             _periodTimer.Enabled = false;
-        } 
+        }
+
         #endregion
+        
+        private void _periodTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Execute();
+        }
+
     }
 }

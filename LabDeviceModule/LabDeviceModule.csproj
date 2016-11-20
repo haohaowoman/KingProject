@@ -55,6 +55,10 @@
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LabTask\LabTask.csproj">
+      <Project>{bb95fc99-eb10-4cfe-a4a4-6ae5fef031cc}</Project>
+      <Name>LabTask</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

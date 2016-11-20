@@ -23,7 +23,7 @@ namespace LabMCESystem.LabElement
             OldChannel = oldChannel;
         }
 
-        public NotifyPairedChannelChangedEventArgs(LabChannel newChannel):this(newChannel, null)
+        public NotifyPairedChannelChangedEventArgs(LabChannel newChannel) : this(newChannel, null)
         {
 
         }
@@ -33,23 +33,18 @@ namespace LabMCESystem.LabElement
     /// Class of lab's experiment point. 
     /// </summary>
     [Serializable]
-    public class ExperimentPoint : LabGroupSubElement
+    public class ExperimentPoint : LabGroupSubElement, IUnitRange
     {
         #region Fields Properties
 
-        /// <summary>
-        /// 获取/设置试验点类型
-        /// </summary>
-        public ExperimentWorkStyle WorkType { get; set; }
-
-        private string _units;
+        private string _unit;
         /// <summary>
         /// 获取/设置试验点的工程量单位
         /// </summary>
-        public string Units
+        public string Unit
         {
-            get { return _units; }
-            set { _units = value; }
+            get { return _unit; }
+            set { _unit = value; }
         }
 
         // The keyCode of the pairred channel.
@@ -81,7 +76,7 @@ namespace LabMCESystem.LabElement
                     _pairedChannelKeyCode = 0;
                 }
                 else
-                {                    
+                {
                     _pairedChannelKeyCode = value.KeyCode;
                 }
 
@@ -97,11 +92,20 @@ namespace LabMCESystem.LabElement
                 // remove ChannelKeyCodeChanged event of old paired channel.
                 if (temp != null)
                 {
-                    temp.ChannelKeyCodeChanged -= Value_ChannelKeyCodeChanged;                    
+                    temp.ChannelKeyCodeChanged -= Value_ChannelKeyCodeChanged;
                 }
             }
         }
-        
+
+        /// <summary>
+        /// 获取/设置测试点的测量或输出范围。
+        /// </summary>
+        public QRange Range
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Events
@@ -115,7 +119,7 @@ namespace LabMCESystem.LabElement
             if (object.ReferenceEquals(sender, _pairedChannel))
             {
                 _pairedChannelKeyCode = e.NewKeyCode;
-            }            
+            }
         }
 
         #endregion
@@ -124,24 +128,18 @@ namespace LabMCESystem.LabElement
 
         public ExperimentPoint()
         {
-            WorkType = ExperimentWorkStyle.Measure;
         }
 
-        public ExperimentPoint(string label, ExperimentWorkStyle workStyle)
+        public ExperimentPoint(string label)
         {
             Label = label;
-            WorkType = workStyle;
-        }
 
-        public ExperimentPoint(ExperimentArea owner, ExperimentWorkStyle workType = ExperimentWorkStyle.Measure)
-        {
-            LabGroup = owner;
         }
 
         #endregion
 
         #region Override
-        
+
         public override string ToString()
         {
             return $"{LabGroup}-{Label}";

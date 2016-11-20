@@ -9,9 +9,10 @@
       xmlns:sysc="clr-namespace:System.Collections;assembly=mscorlib"
       mc:Ignorable="d"
       
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="300"
       DataContext="{Binding Path=ElementManager, Source={StaticResource SingleService}}"
-      Title="LabDevicesInfoPage">
+      Title="LabDevicesInfoPage"
+      >
     <Page.Resources>
         <sysc:ArrayList x:Key="workStyle">
             <sys:String>测量</sys:String>
@@ -65,7 +66,7 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <!--Devices information data grid.-->
-        
+
         <DataGrid Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="通道名" Binding="{Binding Path=Label}"></DataGridTextColumn>

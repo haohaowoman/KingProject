@@ -23,6 +23,9 @@ namespace LabMCESystem.LabElement
         }
     }
 
+    /// <summary>
+    /// 通道连接传感器的事件改变参数。
+    /// </summary>
     [Serializable]
     public class ChannelConnectSensorChangedEventArgs : EventArgs
     {
@@ -41,16 +44,16 @@ namespace LabMCESystem.LabElement
     }
 
     /// <summary>
-    /// Class of Device's channel.
+    /// 表示实验室设备中的特定通道对象。
     /// </summary>
     [Serializable]
-    public class LabChannel : LabGroupSubElement
+    public class LabChannel : LabGroupSubElement, IUnitRange
     {
         #region Properties
         // channel refresh frequence.
-        private int _frequence;
+        private int _frequence = 1;
         /// <summary>
-        /// Set/Get channel's workable frequence.
+        /// 获取/设置通道的采样或输出频率。
         /// </summary>
         public int Frequence
         {
@@ -59,16 +62,16 @@ namespace LabMCESystem.LabElement
         }
 
         /// <summary>
-        /// Set/Get channel's workable style.
+        /// 获取/设置通道的工作方式。
         /// </summary>
         public ExperimentWorkStyle WorkStyle { get; set; }
-        
+
         // This channel's only code.
         // We can use it to find this channel.
         private int _keyCode;
 
         /// <summary>
-        /// Get channel's key code that is only param .
+        /// 获取通道的关键码。
         /// </summary>
         public int KeyCode
         {
@@ -86,12 +89,60 @@ namespace LabMCESystem.LabElement
         private MeasureSensor _connectSensor;
 
         /// <summary>
-        /// Get/set channel connects a measurement sensor.
+        /// 获取/设置通道的连接传感器。
         /// </summary>
         public MeasureSensor ConnectSensor
         {
             get { return _connectSensor; }
             set { _connectSensor = value; }
+        }
+
+        private SignalType _connectSignalType;
+        /// <summary>
+        /// 获取/设置通道连接信号的类型。
+        /// 可能会影响到通道的ConnectSensor属性和Range属性。
+        /// </summary>
+        public SignalType ConnectSignalType
+        {
+            get { return _connectSignalType; }
+            set
+            {
+                _connectSignalType = value;
+                // 如果将信号类型设置为离散量信号 则同时修改连接传感器的各个属性。
+                if (_connectSignalType == SignalType.Digital)
+                {
+                    Range = new QRange(0, 1);
+                }
+            }
+        }
+
+        private string _unit;
+        /// <summary>
+        /// 获取/设置能通道数据的工程量纲。
+        /// </summary>
+        public string Unit
+        {
+            get { return _unit; }
+            set { _unit = value; }
+        }
+
+        private string _prompt;
+        /// <summary>
+        /// 获取/设置通道在设备上的快速提示信息。
+        /// </summary>
+        public string Prompt
+        {
+            get { return _prompt; }
+            set { _prompt = value; }
+        }
+
+        /// <summary>
+        /// 获取/设置通道的测量或输出范围。
+        /// </summary>
+        public QRange Range
+        {
+            get;
+            set;
         }
 
         #endregion
@@ -107,22 +158,16 @@ namespace LabMCESystem.LabElement
         /// Invoke this event when channel's connect sensor changed.
         /// </summary>
         public event Action<LabChannel, ChannelConnectSensorChangedEventArgs> ChannelConnectSensorChanged;
-        
+
         #endregion
+
         #region Build
 
-        public LabChannel(LabChannel ownedev, string label, ExperimentWorkStyle workStyle) : this()
+        public LabChannel(string label, ExperimentWorkStyle workStyle = ExperimentWorkStyle.Measure) : this()
         {
-            LabGroup = ownedev;
-
             Label = label;
 
             WorkStyle = workStyle;
-        }
-
-        public LabChannel(string label, ExperimentWorkStyle workStyle) : this(null, label, workStyle)
-        {
-
         }
 
         public LabChannel()

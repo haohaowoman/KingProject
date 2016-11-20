@@ -17,7 +17,7 @@ namespace LabMCESystem.Logic.Execute
         /// </summary>
         /// <param name="targetVal">目标值</param>
         /// <param name="srange">安全范围</param>
-        public PeriodStepExecuter(float targetVal, SafeRange srange) : base(targetVal, srange)
+        public PeriodStepExecuter(double targetVal, SafeRange srange) : base(targetVal, srange)
         {
             _periodTimer = new Timer();
             _periodTimer.Elapsed += _periodTimer_Elapsed;
@@ -29,7 +29,7 @@ namespace LabMCESystem.Logic.Execute
         /// <param name="targetVal">目标值</param>
         /// <param name="srange">安全范围</param>
         /// <param name="interval">时间间隔，以毫秒为单位</param>
-        public PeriodStepExecuter(float targetVal, SafeRange srange, double interval) : this(targetVal, srange)
+        public PeriodStepExecuter(double targetVal, SafeRange srange, double interval) : this(targetVal, srange)
         {
             _periodTimer.Interval = interval;
         }
@@ -56,6 +56,14 @@ namespace LabMCESystem.Logic.Execute
             }
         }
 
+        public bool Enabled
+        {
+            get
+            {
+                return _periodTimer.Enabled;
+            }
+        }
+
         public void Resum()
         {
             _periodTimer.Enabled = true;
@@ -68,7 +76,7 @@ namespace LabMCESystem.Logic.Execute
 
         public void Stop()
         {
-            _periodTimer.Stop();
+            ExecuteOver();
         }
 
         public void Suspend()
@@ -88,5 +96,78 @@ namespace LabMCESystem.Logic.Execute
             Execute();            
         }
 
+        public override void ExecuteOver()
+        {
+            _periodTimer.Stop();
+            base.ExecuteOver();
+        }
+    }
+
+    /// <summary>
+    /// 自动周期获取反馈步进执行器
+    /// </summary>
+    public class AutoFedbackStepExecuter : PeriodStepExecuter, IDataFedback
+    {
+        /// <summary>
+        /// 指定目标值与安全输出范围创建
+        /// </summary>
+        /// <param name="targetVal">目标值</param>
+        /// <param name="srange">安全范围</param>
+        public AutoFedbackStepExecuter(double targetVal, SafeRange srange) : base(targetVal, srange)
+        {
+        }
+
+        /// <summary>
+        /// 指定时间间隔创建
+        /// </summary>
+        /// <param name="targetVal">目标值</param>
+        /// <param name="srange">安全范围</param>
+        /// <param name="interval">时间间隔，以毫秒为单位</param>
+        public AutoFedbackStepExecuter(double targetVal, SafeRange srange, double interval) : base(targetVal, srange, interval)
+        {
+        }
+
+        #region IDataFedback
+
+        //反馈数据
+        private double _fedbackData;
+        /// <summary>
+        /// 获取/设置执行器反馈
+        /// </summary>
+        public double FedbackData
+        {
+            get
+            {
+                return _fedbackData;
+            }
+            set
+            {
+                _fedbackData = value;
+
+                if (!SafeRange.IsSafeIn(_fedbackData))
+                {
+                    FedbackDataOutOfSafeRange?.Invoke(this, _fedbackData);
+                }
+            }
+        }
+
+        public event FedbackDataOutOfSafeRangeEventHandler FedbackDataOutOfSafeRange;
+        public event UpdateFedbackValEventHandler UpdateFedback;
+
+        #endregion
+
+        #region Override
+
+        protected override bool OnExecute(ref double eVal)
+        {
+            UpdateFedback?.Invoke(this);
+
+            // 以反馈数据确定当前输出量
+            ExecuteVal = FedbackData;
+
+            return true;
+        }
+
+        #endregion
     }
 }

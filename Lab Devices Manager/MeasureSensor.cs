@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace LabMCESystem.LabElement
 {
     /// <summary>
-    /// 传感器信息类型
+    /// 表示模拟量或离散量信号类型 
     /// </summary>
     [Serializable]
-    public enum SensorSignalType
+    public enum SignalType
     {
         // 模拟量信号
         Analogue,
@@ -19,17 +19,88 @@ namespace LabMCESystem.LabElement
     }
 
     /// <summary>
-    /// Measure sensor should connect with a channel that measurement.
+    /// 表示测量系统中的传感器对象。
     /// </summary>
     [Serializable]
-    public class MeasureSensor : LabElement
+    public class MeasureSensor : LabElement, IUnitRange
     {
+        private QRange _range = new QRange(0, 1);
+        /// <summary>
+        /// 获取/设置传感器的工程量测量表示范围。
+        /// </summary>
+        public QRange Range
+        {
+            get
+            {
+                return _range;
+            }
+            set
+            {
+                _range = value;
+            }
+        }
+
+        /// <summary>
+        /// 获取/设置传感器的电信号输出范围。
+        /// </summary>
+        public QRange ElectricSignalRange { get; set; } = new QRange(0, 1);
+        /// <summary>
+        /// 获取/设置传感器的特定编号。
+        /// </summary>
         public string SensorNumber { get; set; }
 
-        public string Remarks { get; set; }
+        private SignalType _qType;
 
-        public SensorSignalType SignalType { get; set; }
+        /// <summary>
+        /// 获取/设置传感器采集信号的类型。分别为模拟量信号或离散量信号。
+        /// </summary>
+        public SignalType QType
+        {
+            get { return _qType; }
+            set
+            {
+                _qType = value;
+                // 如果设置为离散量信号 则修改其工程量表示范围。
+                if (_qType == SignalType.Digital)
+                {
+                    _range = new QRange(0, 1);
+                }
+            }
+        }
+        /// <summary>
+        /// 获取/设置传感器采集所表示的工程量量纲。
+        /// </summary>
+        public string Unit
+        {
+            get;
+            set;
+        }
 
+        /// <summary>
+        /// 指定传感器的电信号输出范围与工程量量纲测量范围。
+        /// </summary>
+        /// <param name="elecOutRange"></param>
+        /// <param name="mQRange"></param>
+        public MeasureSensor(QRange elecOutRange, QRange mQRange)
+        {
+            ElectricSignalRange = elecOutRange;
+            Range = mQRange;
+            QType = SignalType.Analogue;
+        }
+
+        /// <summary>
+        /// 指定
+        /// </summary>
+        /// <param name="sType"></param>
+        public MeasureSensor(SignalType sType = SignalType.Analogue)
+        {
+            QType = sType;
+        }
+
+        /// <summary>
+        /// 将返回传感器的 标签/编号。
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"{Label}/{SensorNumber}";

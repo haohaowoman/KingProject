@@ -17,13 +17,13 @@ namespace LabMCESystem.Logic.Execute
         /// <param name="targetVal">目标值</param>
         /// <param name="srange">安全范围</param>
         /// <param name="p">执行条件委托</param>
-        public PredicateExcuter(float targetVal, SafeRange srange, ExectuePredicateEventHandler p) : base(targetVal, srange)
+        public PredicateExcuter(double targetVal, SafeRange srange, ExecutePredicateEventHandler p) : base(targetVal, srange)
         {
             ExecutePredicate = p;
         }
 
 
-        public ExectuePredicateEventHandler ExecutePredicate
+        public ExecutePredicateEventHandler ExecutePredicate
         {
             get;
             set;
@@ -31,9 +31,14 @@ namespace LabMCESystem.Logic.Execute
 
         #region Override
 
-        protected override bool OnExecute(ref float eVal)
+        protected override bool OnExecute(ref double eVal)
         {
-            return ExecutePredicate.Invoke(this, ref eVal);
+            bool bt = true;
+            if (ExecutePredicate != null)
+            {
+                bt = ExecutePredicate.Invoke(this, ref eVal);
+            }
+            return bt;
         }
 
         #endregion

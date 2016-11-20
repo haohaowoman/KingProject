@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LabMCESystem.LabElement;
 namespace ExpRuntimeApp.Modules
 {
-    class ChannelValue : INotifyPropertyChanged
+    public class ChannelValue : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,9 +23,9 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
-        private float _value;
+        private double _value;
 
-        public float Value
+        public double Value
         {
             get { return _value; }
             set
@@ -35,6 +35,20 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+        private double _valueSetter;
+        /// <summary>
+        /// 获取/设置控制设定值
+        /// </summary>
+        public double ValueSetter
+        {
+            get { return _valueSetter; }
+            set
+            {
+                _valueSetter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ValueSetter"));
+            }
+        }
+        
         public ChannelValue(LabChannel channel)
         {
             if (channel == null)
@@ -45,9 +59,13 @@ namespace ExpRuntimeApp.Modules
             channel.NotifyElementLabelChanged += (lab, args) => { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Channel")); };
         }
 
+        public override string ToString()
+        {
+            return Channel.Label;
+        }
     }
 
-    class ExpPointValue : INotifyPropertyChanged
+    public class ExpPointValue : INotifyPropertyChanged
     {
         private ExperimentPoint _expPoint;
 
@@ -71,11 +89,11 @@ namespace ExpRuntimeApp.Modules
         public string ExpArea { get { return ExpPoint.LabGroup.ToString(); } }
         
         // 测试点数据
-        private float _value;
+        private double _value;
         /// <summary>
         /// 获取/设备测试点数据
         /// </summary>
-        public float Value
+        public double Value
         {
             get { return _value; }
             set
@@ -85,6 +103,19 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+        private double _valueSetter;
+        /// <summary>
+        /// 获取/设置控制设定值
+        /// </summary>
+        public double ValueSetter
+        {
+            get { return _valueSetter; }
+            set
+            {
+                _valueSetter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ValueSetter"));
+            }
+        }
 
         public ExpPointValue(ExperimentPoint point)
         {

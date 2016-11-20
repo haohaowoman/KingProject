@@ -30,6 +30,7 @@ namespace LabMCESystem.LabElement
     /// <summary>
     /// Deivce state has been changed event arguments.
     /// </summary>
+    [Serializable]
     public class DeviceStateChangedEventArgs : EventArgs
     {
         public DeviceState NewState { get; private set; } = DeviceState.Registed;
@@ -150,6 +151,18 @@ namespace LabMCESystem.LabElement
             return _subElements.Find(o => o.KeyCode == keyCode);
         }
 
+        /// <summary>
+        /// 通过通道的关键码在本LabDevice实例中查找指定通道
+        /// </summary>
+        /// <param name="keyCode">通道关键码</param>
+        /// <returns>通道对象</returns>
+        public LabChannel this[int keyCode]
+        {
+            get
+            {
+                return FindChannelAsKeyCode(keyCode);
+            }
+        }
 
         /// <summary>
         /// Rebuild the dev RegistID.

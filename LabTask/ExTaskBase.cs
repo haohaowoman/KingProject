@@ -30,12 +30,12 @@ namespace LabMCESystem.Task
     [Serializable]
     public class ExTaskBase
     {
-        private List<Setter> _setters;
+        private List<TaskSetter> _setters;
 
         /// <summary>
         /// 获取/设置任务的设定项列表
         /// </summary>
-        public List<Setter> Setters
+        public List<TaskSetter> Setters
         {
             get { return _setters; }
             set { _setters = value; }
