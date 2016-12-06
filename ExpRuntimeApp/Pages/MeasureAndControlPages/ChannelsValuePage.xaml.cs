@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExpRuntimeApp.Modules;
+using ExpRuntimeApp.ViewModules;
+using LabMCESystem.Task;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +30,22 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+            // 控制产生
+            ExperimentViewModule vm = DataContext as ExperimentViewModule;
+            Button btn = e.OriginalSource as Button;
+            if (btn != null && btn.Tag != null)
+            {
+                // 通道行
+                ChannelValue cv = btn.Tag as ChannelValue;
+
+                if (cv != null)
+                {
+                    ChannelSetter cs = new ChannelSetter(cv.Channel, cv.ValueSetter);
+
+                    vm.Service.ExperimentTasker.OutSetter(cs.Setter);
+                }
+
+            }
         }
     }
 }

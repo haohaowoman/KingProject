@@ -107,7 +107,7 @@ namespace LabMCESystem.LabElement
                 NotifyElementLabelChanged?.Invoke(this, e);
             }
         }
-                
+        
         private string _summary;
         /// <summary>
         /// 获取/设置Element摘要说明。
@@ -117,8 +117,7 @@ namespace LabMCESystem.LabElement
             get { return _summary; }
             set { _summary = value; }
         }
-
-
+        
         #region Build
 
         public LabElement()
@@ -156,6 +155,11 @@ namespace LabMCESystem.LabElement
         public override bool Equals(object obj)
         {
             LabElement tempObj = obj as LabElement;
+
+            if (tempObj == null)
+            {
+                return false;
+            }
 
             if (object.ReferenceEquals(tempObj, null))
             {

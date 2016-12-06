@@ -48,7 +48,7 @@ namespace ExpRuntimeApp.Modules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ValueSetter"));
             }
         }
-        
+
         public ChannelValue(LabChannel channel)
         {
             if (channel == null)
@@ -83,11 +83,45 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+        private ChannelValue _pairedChannelValue;
+
+        public ChannelValue PairedChannelValue
+        {
+            get {
+                return _pairedChannelValue;
+            }
+            set
+            {
+                if (value.Channel == ExpPoint.PairedChannel)
+                {
+                    _pairedChannelValue = value;
+
+                    if (_pairedChannelValue != null)
+                    {
+                        _pairedChannelValue.PropertyChanged += _pairedChannelValue_PropertyChanged;
+                    }
+                }
+                else
+                {
+                    _pairedChannelValue = null;
+                }
+                
+            }
+        }
+
+        private void _pairedChannelValue_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                Value = _pairedChannelValue.Value;
+            }
+        }
+
         /// <summary>
         /// 获取所属的实验段,为分组、过滤等提供支持
         /// </summary>
         public string ExpArea { get { return ExpPoint.LabGroup.ToString(); } }
-        
+
         // 测试点数据
         private double _value;
         /// <summary>
@@ -113,6 +147,10 @@ namespace ExpRuntimeApp.Modules
             set
             {
                 _valueSetter = value;
+                if (_pairedChannelValue != null)
+                {
+                    _pairedChannelValue.ValueSetter = value;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ValueSetter"));
             }
         }

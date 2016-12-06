@@ -72,6 +72,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFVisifire.Charts">
+      <HintPath>..\packages\Visifire.Controls\WPFVisifire.Charts.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFVisifire.Gauges">
+      <HintPath>..\packages\Visifire.Controls\WPFVisifire.Gauges.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -86,9 +92,12 @@
     <Compile Include="Pages\ElementPages\SensorsInforPage.xaml.cs">
       <DependentUpon>SensorsInforPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\ADigitalValueConverter.cs" />
     <Compile Include="Pages\MeasureAndControlPages\ChannelsValuePage.xaml.cs">
       <DependentUpon>ChannelsValuePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MeasureAndControlPages\ChValueRowDetailsTemplateSelector.cs" />
+    <Compile Include="Pages\MeasureAndControlPages\EPItemDataTemplateSelector.cs" />
     <Compile Include="UserControls\EOVCtrlControl.xaml.cs">
       <DependentUpon>EOVCtrlControl.xaml</DependentUpon>
     </Compile>
@@ -237,6 +246,10 @@
     <ProjectReference Include="..\LabServicesStand_alone\LabServicesStand_alone.csproj">
       <Project>{a5499c18-05f5-41db-b3fd-2aa60d691ab6}</Project>
       <Name>LabServicesStand_alone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LabTask\LabTask.csproj">
+      <Project>{BB95FC99-EB10-4CFE-A4A4-6AE5FEF031CC}</Project>
+      <Name>LabTask</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

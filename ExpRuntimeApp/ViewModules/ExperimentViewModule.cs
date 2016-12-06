@@ -48,7 +48,7 @@ namespace ExpRuntimeApp.ViewModules
                     CollectionView cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curChannelVal);
                     if (cCView.CanGroup)
                     {
-                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Channel.WorkStyle"));
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Channel.Unit"));
                     }
 
                     // 试验点当前数据初始化
@@ -58,13 +58,22 @@ namespace ExpRuntimeApp.ViewModules
 
                     foreach (var ep in eps)
                     {
-                        _curExpPointVal.Add(new ExpPointValue(ep));
+                        var epv = new ExpPointValue(ep);
+                        foreach (var item in _curChannelVal)
+                        {
+                            epv.PairedChannelValue = item;
+                            if (epv.PairedChannelValue != null)
+                            {
+                                break;
+                            }
+                        }
+                        _curExpPointVal.Add(epv);
                     }
 
                     cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curExpPointVal);
                     if (cCView.CanGroup)
                     {
-                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("ExpPoint.Units"));
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("ExpPoint.LabGroup"));
                     }
 
                     _service.ElementManager.ExperimentAreaesChanged += ElementManager_ExperimentAreaesChanged;
@@ -137,6 +146,10 @@ namespace ExpRuntimeApp.ViewModules
                     args.ChKeyCode = item.Channel.KeyCode;
                     //eReader.Read(args);
                     item.Value += 1.1f;
+                    if (item.Value > 100.0)
+                    {
+                        item.Value = 0;
+                    }
                     //item.Value = args.RTValue;
                 }
 
@@ -147,7 +160,12 @@ namespace ExpRuntimeApp.ViewModules
                     {
                         args.ChKeyCode = item.ExpPoint.PairedChannel.KeyCode;
                         //eReader.Read(args);
-                        item.Value += 2.1f;
+                        //item.Value += 2.1f;
+                        
+                        if (item.Value > 100.0)
+                        {
+                            item.Value = 0;
+                        }
                         //item.Value = args.RTValue;
                     }
                 }

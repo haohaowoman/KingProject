@@ -2,16 +2,649 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:ExpRuntimeApp"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:module="clr-namespace:ExpRuntimeApp.Modules">
+                    xmlns:module="clr-namespace:ExpRuntimeApp.Modules"
+                    xmlns:vfgauge="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges">
+
+    <Style x:Key="VGroupBorderStyle" TargetType="{x:Type Border}">
+        <Style.Setters>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="BorderBrush" Value="DarkGoldenrod"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style.Setters>
+    </Style>
+
+    <Thickness x:Key="TextBlockMargin">3,1</Thickness>
+
+    <DataTemplate x:Key="MeasureDataTemplate" DataType="{x:Type module:ChannelValue}">
+        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+            <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
+                <Grid Margin="1" HorizontalAlignment="Left" Background="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+
+                        <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ~ {1}">
+                                    <Binding Path="Channel.Range.Low"></Binding>
+                                    <Binding Path="Channel.Range.Height"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </UniformGrid>
+
+                    <!--#endregion-->
+
+                    <!--#region 显示测量部分-->
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="采集值" Margin="1">
+                        <vfgauge:Gauge Margin="3" DockPanel.Dock="Top" MinWidth="200" MinHeight="200" Type="Circular"
+                            Background="#FF3E3A44"
+                            BorderBrush="#FFAC4848" 
+                            Foreground="#FFC9BFBF" 
+                            OuterBackground="#FF4B236C" 
+                            OuterBorderBrush="#FF2821A6">
+                            <vfgauge:Gauge.CircularScales>
+                                <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=Channel.Range.Low}" 
+                                Maximum="{Binding Path=Channel.Range.Height}"
+                                >
+                                
+                            </vfgauge:CircularScale>-->
+                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                            </vfgauge:Gauge.CircularScales>
+                            <vfgauge:Gauge.Indicators>
+                                <vfgauge:NeedleIndicator 
+                                Value="{Binding Path=Value}" 
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18"
+                                CapWidth="0.4"
+                                >
+                                    <vfgauge:NeedleIndicator.CapBackground>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <LinearGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="-0.95" ScaleX="1.05"/>
+                                                    <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
+                                                    <RotateTransform CenterY="0.5" CenterX="0.5" Angle="10"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </LinearGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFC2D0F3"/>
+                                            <GradientStop Color="#FF8E9299" Offset="0.536"/>
+                                            <GradientStop Color="#FF5F437C" Offset="0.933"/>
+                                        </LinearGradientBrush>
+                                    </vfgauge:NeedleIndicator.CapBackground>
+                                </vfgauge:NeedleIndicator>
+                            </vfgauge:Gauge.Indicators>
+                        </vfgauge:Gauge>
+                    </GroupBox>
+                    <!--#endregion-->
+
+                </Grid>
+            </Border>
+        </GroupBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FlowDataTemplate" DataType="{x:Type module:ChannelValue}">
+        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+            <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
+                <Grid Margin="1" HorizontalAlignment="Left" Background="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+
+                        <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ~ {1}">
+                                    <Binding Path="Channel.Range.Low"></Binding>
+                                    <Binding Path="Channel.Range.Height"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </UniformGrid>
+
+                    <!--#endregion-->
+
+                    <!--#region 显示测量部分-->
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="采集值" Margin="1">
+                        <vfgauge:Gauge Margin="3" DockPanel.Dock="Top" MinWidth="200" MinHeight="200" Type="Circular"
+                            Background="#FF3E3A44"
+                            BorderBrush="#FFAC4848" 
+                            Foreground="#FFC9BFBF" 
+                            OuterBackground="#FF4B236C" 
+                            OuterBorderBrush="#FF2821A6" AnimationEnabled="False">
+                            <vfgauge:Gauge.CircularScales>
+                                <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=Channel.Range.Low}" 
+                                Maximum="{Binding Path=Channel.Range.Height}"
+                                >
+                                
+                            </vfgauge:CircularScale>-->
+                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                            </vfgauge:Gauge.CircularScales>
+                            <vfgauge:Gauge.Indicators>
+                                <vfgauge:BarIndicator
+                                Value="{Binding Path=Value}"
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="24" FontSize="32" Placement="Inside"
+                                    >
+
+                                </vfgauge:BarIndicator>
+
+                            </vfgauge:Gauge.Indicators>
+                        </vfgauge:Gauge>
+                    </GroupBox>
+                    <!--#endregion-->
+
+                </Grid>
+            </Border>
+        </GroupBox>
+    </DataTemplate>
 
     <DataTemplate x:Key="EOVDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="{Binding Path=Channel.Label}" Margin="3"></Label>
-            
-        </Grid>
+        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+            <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
+                <Grid Margin="1" HorizontalAlignment="Left" Background="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Row="0" Grid.Column="0" Columns="2" HorizontalAlignment="Left">
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+
+                        <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ~ {1}">
+                                    <Binding Path="Channel.Range.Low"></Binding>
+                                    <Binding Path="Channel.Range.Height"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </UniformGrid>
+
+                    <!--#endregion-->
+
+                    <!--#region 显示测量部分-->
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="开度" Margin="1">
+                        <vfgauge:Gauge Margin="3" DockPanel.Dock="Top" MinWidth="200" MinHeight="200" Type="Circular"
+                            Background="#FF3E3A44"
+                            BorderBrush="#FFAC4848" 
+                            Foreground="#FFC9BFBF" 
+                            OuterBackground="#FF4B236C" 
+                            OuterBorderBrush="#FF2821A6" AnimationEnabled="False">
+                            <vfgauge:Gauge.CircularScales>
+                                <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=Channel.Range.Low}" 
+                                Maximum="{Binding Path=Channel.Range.Height}"
+                                >
+                                
+                            </vfgauge:CircularScale>-->
+                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                            </vfgauge:Gauge.CircularScales>
+                            <vfgauge:Gauge.Indicators>
+                                <vfgauge:NeedleIndicator 
+                                Value="{Binding Path=Value}" 
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18"
+                                CapWidth="0.4"
+                                >
+                                    <vfgauge:NeedleIndicator.CapBackground>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <LinearGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="-0.95" ScaleX="1.05"/>
+                                                    <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
+                                                    <RotateTransform CenterY="0.5" CenterX="0.5" Angle="10"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </LinearGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FFC2D0F3"/>
+                                            <GradientStop Color="#FF8E9299" Offset="0.536"/>
+                                            <GradientStop Color="#FF5F437C" Offset="0.933"/>
+                                        </LinearGradientBrush>
+                                    </vfgauge:NeedleIndicator.CapBackground>
+                                </vfgauge:NeedleIndicator>
+                            </vfgauge:Gauge.Indicators>
+                        </vfgauge:Gauge>
+                    </GroupBox>
+                    <!--#endregion-->
+
+                    <!--#region 控制部分-->
+                    <!--控制元素，对阀的开度进行控制-->
+                    <GroupBox Grid.Row="1"  Grid.Column="1" Margin="1" Header="控制">
+                        <DockPanel LastChildFill="False" VerticalAlignment="Center">
+                            <metro:NumericUpDown DockPanel.Dock="Top"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     MinWidth="100"
+                                                     x:Name="ValueNum"                                        
+                                                     HasDecimals="True" 
+                                                     Minimum="0"
+                                         Maximum="100"
+                                                     TextAlignment="Left"                                        
+                                                     Value="{Binding Path=ValueSetter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Speedup="True" StringFormat="{}{0:F2}" />
+
+                            <Slider DockPanel.Dock="Top" 
+                                        Margin="3"                                        
+                                        Orientation="Horizontal"                            
+                                        LargeChange="10"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        SmallChange="1"
+                                        Value="{Binding Path=Value,ElementName=ValueNum}"/>
+                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                        </DockPanel>
+                    </GroupBox>
+
+                    <!--#endregion-->
+
+                </Grid>
+            </Border>
+        </GroupBox>
+    </DataTemplate>
+
+    <module:ADigitalValueConverter x:Key="AorDigitalConverter"/>
+
+    <DataTemplate x:Key="DigitalDataTemplate" DataType="{x:Type module:ChannelValue}">
+        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+            <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
+                <Grid Margin="1" HorizontalAlignment="Left" Background="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Row="0" Grid.Column="0" Columns="2" HorizontalAlignment="Left">
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+
+                    </UniformGrid>
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="状态" Margin="1">
+                        <Ellipse x:Name="StatusLight" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="3" Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=GroupBox}, Path=Background}">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="#FF8AAC61" Offset="1"/>
+                                    <GradientStop Color="#FFA6F04E" Offset="0"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Grid.Column="1" Header="控制" Margin="1">
+                        <DockPanel Margin="3" Cursor="Hand">
+                            <metro:ToggleSwitch DockPanel.Dock="Top" OffLabel="关" OnLabel="开" Margin="3" Padding="10" Style="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding Path=ValueSetter,Converter={StaticResource AorDigitalConverter}}"></metro:ToggleSwitch>
+                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                        </DockPanel>
+                    </GroupBox>
+                </Grid>
+            </Border>
+        </GroupBox>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Value}" Value="0">
+                <DataTrigger.Setters>
+                    <Setter TargetName="StatusLight" Property="Fill">
+                        <Setter.Value>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FFEE3B5C" Offset="1"/>
+                                <GradientStop Color="#FFA84E63" Offset="0"/>
+                            </RadialGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="TemperatureDataTemplate" DataType="{x:Type module:ChannelValue}">
+        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+            <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
+                <Grid Margin="1" HorizontalAlignment="Left" Background="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+
+                        <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
+                        <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ~ {1}">
+                                    <Binding Path="Channel.Range.Low"></Binding>
+                                    <Binding Path="Channel.Range.Height"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </UniformGrid>
+
+                    <!--#endregion-->
+
+                    <!--#region 显示测量部分-->
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="采集值" Margin="1">
+                        <vfgauge:Gauge
+                               Margin="3" MinWidth="150" 
+                               MinHeight="200" Type="Linear" 
+                               AnimationEnabled="False"
+                               HorizontalAlignment="Center" Background="#FF5198EE" BorderBrush="#FF26C6EA" FrameBackground="#FFDE8989">
+                            <vfgauge:Gauge.OuterBorderBrush>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF8B8ED4" Offset="0"/>
+                                    <GradientStop Color="#FF4B64D4" Offset="1"/>
+                                </LinearGradientBrush>
+                            </vfgauge:Gauge.OuterBorderBrush>
+                            <vfgauge:Gauge.OuterBackground>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF55A6C5" Offset="0.005"/>
+                                    <GradientStop Color="#FF3E6BA0" Offset="1"/>
+                                </LinearGradientBrush>
+                            </vfgauge:Gauge.OuterBackground>
+                            <vfgauge:Gauge.LinearScales>
+                                <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=Channel.Range.Low}" 
+                                Maximum="{Binding Path=Channel.Range.Height}"
+                                />-->
+                                <vfgauge:LinearScale 
+                                Minimum="0" 
+                                Maximum="100" BorderThickness="1" Padding="3,0"
+                                />
+                            </vfgauge:Gauge.LinearScales>
+                            <vfgauge:Gauge.Indicators>
+                                <vfgauge:BarIndicator                            
+                                Value="{Binding Path=Value}"
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18" Placement="Center" BorderBrush="#FFF30606"
+                                    >
+                                    <vfgauge:BarIndicator.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#E287356D" Offset="0.05"/>
+                                            <GradientStop Color="#FFE23048" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </vfgauge:BarIndicator.Background>
+
+                                </vfgauge:BarIndicator>
+
+                            </vfgauge:Gauge.Indicators>
+                        </vfgauge:Gauge>
+                    </GroupBox>
+                    <!--#endregion-->
+
+                </Grid>
+            </Border>
+        </GroupBox>
+    </DataTemplate>
+    <!--测试点数据模板-->
+    <DataTemplate x:Key="EPPressureDataTemplate" DataType="{x:Type module:ExpPointValue}">
+        <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFE6714F" Offset="0.067"/>
+                            <GradientStop Color="#FF6B6BCF" Offset="0.574"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+
+                </TextBlock>
+
+                <vfgauge:Gauge Grid.Row="1" Grid.Column="0" Margin="3" MinWidth="200" MinHeight="200" Type="Circular"
+                            Background="#FF3E3A44"
+                            BorderBrush="#FFAC4848" 
+                            Foreground="#FFC9BFBF" 
+                            OuterBackground="#FF4B236C" 
+                            OuterBorderBrush="#FF2821A6" AnimationEnabled="False">
+                    <vfgauge:Gauge.CircularScales>
+                        <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=ExpPoint.Range.Low}" 
+                                Maximum="{Binding Path=ExpPoint.Range.Height}"
+                                />-->
+                        <vfgauge:CircularScale 
+                                Minimum="0" 
+                                Maximum="100"
+                                />
+                    </vfgauge:Gauge.CircularScales>
+                    <vfgauge:Gauge.Indicators>
+                        <vfgauge:NeedleIndicator
+                                Value="{Binding Path=Value}"
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18"
+                                    >
+
+                        </vfgauge:NeedleIndicator>
+
+                    </vfgauge:Gauge.Indicators>
+                </vfgauge:Gauge>
+
+                <Border Grid.Row="2" Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Center">
+                    <TextBlock FontSize="18" FontStyle="Oblique" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:F2} {1}">
+                                <Binding Path="Value"/>
+                                <Binding Path="ExpPoint.Unit"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EPFlowDataTemplate" DataType="{x:Type module:ExpPointValue}">
+        <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFE6714F" Offset="0.067"/>
+                            <GradientStop Color="#FF6B6BCF" Offset="0.574"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+
+                </TextBlock>
+
+                <vfgauge:Gauge Grid.Row="1" Grid.Column="0" Margin="3" MinWidth="200" MinHeight="200" Type="Circular"
+                            Background="#FF3E3A44"
+                            BorderBrush="#FFAC4848" 
+                            Foreground="#FFC9BFBF" 
+                            OuterBackground="#FF4B236C" 
+                            OuterBorderBrush="#FF2821A6" AnimationEnabled="False">
+                    <vfgauge:Gauge.CircularScales>
+                        <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=ExpPoint.Range.Low}" 
+                                Maximum="{Binding Path=ExpPoint.Range.Height}"
+                                />-->
+                        <vfgauge:CircularScale 
+                                Minimum="0" 
+                                Maximum="100"
+                                />
+                    </vfgauge:Gauge.CircularScales>
+                    <vfgauge:Gauge.Indicators>
+                        <vfgauge:BarIndicator
+                                Value="{Binding Path=Value}"
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18" Placement="Inside"
+                                    >
+
+                        </vfgauge:BarIndicator>
+
+                    </vfgauge:Gauge.Indicators>
+                </vfgauge:Gauge>
+
+                <Border Grid.Row="2" Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Center">
+                    <TextBlock FontSize="18" FontStyle="Oblique" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:F2} {1}">
+                                <Binding Path="Value"/>
+                                <Binding Path="ExpPoint.Unit"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EPTemperatureDataTemplate" DataType="{x:Type module:ExpPointValue}">
+        <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFE6714F" Offset="0.067"/>
+                            <GradientStop Color="#FF6B6BCF" Offset="0.574"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+
+                </TextBlock>
+
+                <vfgauge:Gauge Grid.Row="1" Grid.Column="0"
+                               Margin="3" MinWidth="150" 
+                               MinHeight="200" Type="Linear" 
+                               AnimationEnabled="False"
+                               HorizontalAlignment="Center" Background="#FF5198EE" BorderBrush="#FF26C6EA" FrameBackground="#FFDE8989">
+                    <vfgauge:Gauge.OuterBorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF8B8ED4" Offset="0"/>
+                            <GradientStop Color="#FF4B64D4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </vfgauge:Gauge.OuterBorderBrush>
+                    <vfgauge:Gauge.OuterBackground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF55A6C5" Offset="0.005"/>
+                            <GradientStop Color="#FF3E6BA0" Offset="1"/>
+                        </LinearGradientBrush>
+                    </vfgauge:Gauge.OuterBackground>
+                    <vfgauge:Gauge.LinearScales>
+                        <!--<vfgauge:CircularScale 
+                                Minimum="{Binding Path=ExpPoint.Range.Low}" 
+                                Maximum="{Binding Path=ExpPoint.Range.Height}"
+                                />-->
+                        <vfgauge:LinearScale 
+                                Minimum="0" 
+                                Maximum="100" BorderThickness="1" Padding="3,0"
+                                />
+                    </vfgauge:Gauge.LinearScales>
+                    <vfgauge:Gauge.Indicators>
+                        <vfgauge:BarIndicator                            
+                                Value="{Binding Path=Value}"
+                                ValueFormatString="F2"
+                                Focusable="False"
+                                LabelEnabled="True"
+                                LabelStyle="Outside"
+                                LabelFontSize="18" Placement="Center" BorderBrush="#FFF30606"
+                                    >
+                            <vfgauge:BarIndicator.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#E287356D" Offset="0.05"/>
+                                    <GradientStop Color="#FFE23048" Offset="1"/>
+                                </LinearGradientBrush>
+                            </vfgauge:BarIndicator.Background>
+
+                        </vfgauge:BarIndicator>
+
+                    </vfgauge:Gauge.Indicators>
+                </vfgauge:Gauge>
+
+                <Border Grid.Row="2" Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Center">
+                    <TextBlock FontSize="18" FontStyle="Oblique" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:F2} {1}">
+                                <Binding Path="Value"/>
+                                <Binding Path="ExpPoint.Unit"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </Border>
     </DataTemplate>
 </ResourceDictionary>

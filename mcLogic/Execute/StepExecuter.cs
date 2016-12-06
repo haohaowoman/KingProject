@@ -143,7 +143,7 @@ namespace LabMCESystem.Logic.Execute
 
                     if (!SafeRange.IsSafeIn(teVal))
                     {
-                        teVal = Math.Min(teVal, SafeRange.Hight);
+                        teVal = Math.Min(teVal, SafeRange.Height);
                         teVal = Math.Max(teVal, SafeRange.Low);
                     }
 

@@ -27,7 +27,7 @@ namespace LabMCESystem.Servers.HS
             AllowTolerance = new Tolerance(1);
             AutoFinish = true;
         }
-
+        
         /// <summary>
         /// 获取/设置阀门的管道直径。
         /// 单位毫米。

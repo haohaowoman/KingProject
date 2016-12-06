@@ -46,7 +46,7 @@ namespace LabMCESystem.LabDeviceModule
         private void _device_DeviceStateChanged(object sender, DeviceStateChangedEventArgs e)
         {
             if (!Object.ReferenceEquals(sender, _device))
-            {
+            {                
                 return;
             }
 

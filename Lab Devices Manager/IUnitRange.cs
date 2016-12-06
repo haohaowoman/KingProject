@@ -18,12 +18,12 @@ namespace LabMCESystem
         /// <summary>
         /// 获取/设置范围高值。
         /// </summary>
-        public double Hight { get; set; }
+        public double Height { get; set; }
 
         public QRange(double l, double h)
         {
             Low = l;
-            Hight = h;
+            Height = h;
         }
         
         /// <summary>
@@ -33,7 +33,7 @@ namespace LabMCESystem
         {
             get
             {
-                return Hight - Low == 0.0;
+                return Height - Low == 0.0;
             }
         }
     }

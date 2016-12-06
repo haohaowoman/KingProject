@@ -74,7 +74,7 @@ namespace LabMCESystem.Servers.HS
                 return;
             }
 
-            double tk = _mEOVDefualt / (_mEOV.SafeRange.Hight - _mEOV.SafeRange.Low);
+            double tk = _mEOVDefualt / (_mEOV.SafeRange.Height - _mEOV.SafeRange.Low);
             double tempdia = _mEOV.PipeDiameter * (1.0 - tk);
             double tempAdia = _fEOV.PipeDiameter + tempdia;
 
@@ -96,7 +96,7 @@ namespace LabMCESystem.Servers.HS
                 return;
             }
 
-            double tk = _mEOVDefualt / (_mEOV.SafeRange.Hight - _mEOV.SafeRange.Low);
+            double tk = _mEOVDefualt / (_mEOV.SafeRange.Height - _mEOV.SafeRange.Low);
             double tempdia = _mEOV.PipeDiameter * (1.0 - tk);
             double tempAdia = _fEOV.PipeDiameter + tempdia;
 

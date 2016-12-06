@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseService\IDeviceConnect.cs" />
+    <Compile Include="BaseService\IDeviceLogin.cs" />
     <Compile Include="BaseService\IDeviceOperator.cs" />
     <Compile Include="BaseService\IExpAreaElementListen.cs" />
     <Compile Include="BaseService\IExpAreaOperator.cs" />

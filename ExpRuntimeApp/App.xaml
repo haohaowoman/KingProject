@@ -1,9 +1,10 @@
-﻿<Application x:Class="ExpRuntimeApp.App"
+﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExpRuntimeApp"
              xmlns:srv="clr-namespace:LabMCESystem.Servers.HS;assembly=LabServicesStand_alone"
              xmlns:viewm="clr-namespace:ExpRuntimeApp.ViewModules"
+             xmlns:Gauges="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges" x:Class="ExpRuntimeApp.App"
              StartupUri="MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
 
@@ -11,16 +12,17 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
-                
+
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />                
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 
-                <ResourceDictionary Source="/Resources/Icons.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <srv:HS_Server x:Key="SingleService"></srv:HS_Server>
-            
+            <srv:HS_Server x:Key="SingleService"/>
+
             <viewm:ExperimentViewModule x:Key="ExpViewModule" Service="{StaticResource SingleService}"/>
+            
         </ResourceDictionary>
     </Application.Resources>
 

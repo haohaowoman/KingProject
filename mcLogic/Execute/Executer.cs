@@ -157,7 +157,7 @@ namespace LabMCESystem.Logic.Execute
                 if (!SafeRange.IsSafeIn(teVal))
                 {
                     teVal = Math.Max(teVal, SafeRange.Low);
-                    teVal = Math.Min(teVal, SafeRange.Hight);
+                    teVal = Math.Min(teVal, SafeRange.Height);
                 }
 
                 ExecuteVal = teVal;
@@ -223,7 +223,7 @@ namespace LabMCESystem.Logic.Execute
         /// <summary>
         /// 获取/设置范围高值
         /// </summary>
-        public double Hight { get; set; }
+        public double Height { get; set; }
 
         public SafeRange(double l = float.NaN, double h = float.NaN)
         {
@@ -233,7 +233,7 @@ namespace LabMCESystem.Logic.Execute
             }
 
             Low = l;
-            Hight = h;
+            Height = h;
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace LabMCESystem.Logic.Execute
         /// <returns>在范围内为True</returns>
         public bool IsSafeIn(double val)
         {            
-            return val >= Low && val <= Hight;
+            return val >= Low && val <= Height;
         }
     }
 

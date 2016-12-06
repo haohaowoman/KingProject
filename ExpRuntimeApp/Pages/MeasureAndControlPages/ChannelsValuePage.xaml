@@ -12,7 +12,22 @@
       DataContext="{StaticResource ExpViewModule}"
       >
 
-    <Grid>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ExpRuntimeApp;component/ChannelDataTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:ChValueRowDetailsTemplateSelector x:Key="ChDetailsSelector" 
+                                                     EOVChannelTemplate="{StaticResource EOVDataTemplate}" 
+                                                     TemperatureTemplate="{StaticResource TemperatureDataTemplate}" 
+                                                     DigitalTemplate="{StaticResource DigitalDataTemplate}" 
+                                                     FlowTemplate="{StaticResource FlowDataTemplate}"
+                                                     DefualtMeasureDataTemplate="{StaticResource MeasureDataTemplate}">
+
+            </local:ChValueRowDetailsTemplateSelector>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
@@ -23,61 +38,27 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=CurChannelVal}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="1" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid x:Name="dataGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=CurChannelVal}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="1" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="VisibleWhenSelected" RowDetailsTemplateSelector="{StaticResource ChDetailsSelector}" Button.Click="Button_Click">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Channel.Prompt}" Header="标记"/>
-                <DataGridTextColumn Binding="{Binding Path=Channel.Label}" Header="通道名"/>
+                <DataGridTextColumn Binding="{Binding Path=Channel.Label}" Header="通道名" FontSize="16" FontStyle="Italic" FontWeight="SemiBold"/>
                 <DataGridTextColumn Binding="{Binding Path=Channel.Unit}" Header="单位"/>
-                <DataGridTextColumn Binding="{Binding Path=Value}" Header="数据"/>
-
+                
+                <DataGridTemplateColumn Header="数据">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Path=Value, StringFormat={}{0:F2}}" Margin="3,2" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" />
+                                <metro:MetroProgressBar MinWidth="100" MinHeight="7" Margin="3,1" Value="{Binding Path=Value}" Minimum="{Binding Path=Channel.Range.Low}" Maximum="{Binding Path=Channel.Range.Height}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTextColumn Binding="{Binding Path=Channel.Summary}" Header="摘要"/>
 
             </DataGrid.Columns>
-
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate DataType="{x:Type modules:ChannelValue}">
-                    <Border Margin="5,10" BorderThickness="2" BorderBrush="AliceBlue" CornerRadius="3">
-                        <Grid Margin="1" HorizontalAlignment="Left">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Path=Channel.Label}" HorizontalAlignment="Center" FontWeight="Heavy"></TextBlock>
-
-                            <DockPanel Grid.Row="1" Grid.Column="1">
-                                <metro:NumericUpDown DockPanel.Dock="Top"
-                                                     Margin="3"
-                                                     HorizontalAlignment="Left"
-                                                     MinWidth="100"
-                                                     x:Name="ValueNum"                                        
-                                                     HasDecimals="True" 
-                                                     Minimum="0"                                        
-                                                     TextAlignment="Left"                                        
-                                                     Value="{Binding Path=ValueSetter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Speedup="True" StringFormat="{}{0:F2}" />
-                                
-                                <Slider DockPanel.Dock="Top" 
-                                        Margin="3"
-                                        metro:SliderHelper.EnableMouseWheel="MouseHover"
-                                        Orientation="Horizontal"
-                                        LargeChange="10"
-                                        Maximum="100"
-                                        Minimum="0"
-                                        SmallChange="1"
-                                        Value="{Binding Path=Value,ElementName=ValueNum}"/>
-                                <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" Click="Button_Click"></Button>
-                            </DockPanel>
-
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
+            
         </DataGrid>
 
     </Grid>

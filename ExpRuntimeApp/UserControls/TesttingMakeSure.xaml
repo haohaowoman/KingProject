@@ -17,29 +17,29 @@
 
         <TextBlock Text="注意：请确定以下实验准备工作已经完成!" TextWrapping="WrapWithOverflow" Margin="5, 3"/>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Margin="1">
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="1" ToggleButton.Checked="DockPanel_Checked">
             <GroupBox DockPanel.Dock="Top" Header="热边">
                 <UniformGrid  Columns="2">
-                    <metro:ToggleSwitch Header="热边气源已经准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure1" Header="热边气源已经准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
 
-                    <metro:ToggleSwitch Header="所有电炉入口阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure2" Header="所有电炉入口阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
                 </UniformGrid>
             </GroupBox>
 
             <GroupBox DockPanel.Dock="Top" Header="二冷">
                 <UniformGrid  Columns="2">
-                    <metro:ToggleSwitch Header="二冷气源已经准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure3" Header="二冷气源已经准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
 
-                    <metro:ToggleSwitch Header="所有电炉入口阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure4" Header="所有电炉入口阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
                     
                 </UniformGrid>
             </GroupBox>
 
             <GroupBox DockPanel.Dock="Top" Header="一冷">
                 <UniformGrid  Columns="2">
-                    <metro:ToggleSwitch Header="一冷风机准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure5" Header="一冷风机准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
 
-                    <metro:ToggleSwitch Header="一冷安全阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure6" Header="一冷安全阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
                     
                 </UniformGrid>
             </GroupBox>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabMCESystem.LabElement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace LabMCESystem.BaseService.ExperimentDataExchange
 
         public DateTime RefreshTime { get; set; }
 
-        public float RTValue { get; set; }
+        public double RTValue { get; set; }
 
         public ExpSingleRTDataArgs()
         {
@@ -24,17 +25,28 @@ namespace LabMCESystem.BaseService.ExperimentDataExchange
             ChKeyCode = chKeyCode;
         }
 
-        public ExpSingleRTDataArgs(int chKeyCode, float value)
+        public ExpSingleRTDataArgs(int chKeyCode, double value)
         {
             RefreshTime = DateTime.Now;
+
             ChKeyCode = chKeyCode;
             RTValue = value;
         }
     }
 
+    public class ChannelRTData : ExpSingleRTDataArgs
+    {
+        public LabChannel Channel { get; private set; }
+
+        public ChannelRTData(LabChannel ch) : base(ch.KeyCode)
+        {
+            Channel = ch;
+        }
+    }
+
     public class ExpMulRTDataArgs : ExpSingleRTDataArgs
     {
-        public float[] RTValues { set; get; }
+        public double[] RTValues { set; get; }
 
         public ExpMulRTDataArgs()
         {

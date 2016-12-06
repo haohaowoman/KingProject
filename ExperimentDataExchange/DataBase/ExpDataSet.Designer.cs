@@ -496,7 +496,7 @@ namespace LabMCESystem.DataBase {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RTDataLoadTableRow AddRTDataLoadTableRow(int _labCh_keyCode, System.DateTime _fupDateTime, System.DateTime _lrefDateTime, int _rcvDataCount, int _refCount, float _rtValue, string _valueType) {
+            public RTDataLoadTableRow AddRTDataLoadTableRow(int _labCh_keyCode, System.DateTime _fupDateTime, System.DateTime _lrefDateTime, int _rcvDataCount, int _refCount, double _rtValue, string _valueType) {
                 RTDataLoadTableRow rowRTDataLoadTableRow = ((RTDataLoadTableRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         _labCh_keyCode,
@@ -557,7 +557,7 @@ namespace LabMCESystem.DataBase {
                 base.Columns.Add(this.column_rcvDataCount);
                 this.column_refCount = new global::System.Data.DataColumn("_refCount", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.column_refCount);
-                this.column_rtValue = new global::System.Data.DataColumn("_rtValue", typeof(float), null, global::System.Data.MappingType.Element);
+                this.column_rtValue = new global::System.Data.DataColumn("_rtValue", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.column_rtValue);
                 this.column_valueType = new global::System.Data.DataColumn("_valueType", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.column_valueType);
@@ -1454,9 +1454,9 @@ namespace LabMCESystem.DataBase {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public float _rtValue {
+            public double _rtValue {
                 get {
-                    return ((float)(this[this.tableRTDataLoadTable._rtValueColumn]));
+                    return ((double)(this[this.tableRTDataLoadTable._rtValueColumn]));
                 }
                 set {
                     this[this.tableRTDataLoadTable._rtValueColumn] = value;

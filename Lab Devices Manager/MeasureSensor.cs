@@ -11,10 +11,15 @@ namespace LabMCESystem.LabElement
     /// </summary>
     [Serializable]
     public enum SignalType
-    {
-        // 模拟量信号
+    {        
+        /// <summary>
+        /// 模拟量信号，传感器输出电流或电压值。
+        /// </summary>
         Analogue,
-        // 离散量信号
+        // 数字量信号
+        /// <summary>
+        /// 变送器类传感器，使用数字量通讯输出。
+        /// </summary>
         Digital
     }
 
@@ -52,7 +57,7 @@ namespace LabMCESystem.LabElement
         private SignalType _qType;
 
         /// <summary>
-        /// 获取/设置传感器采集信号的类型。分别为模拟量信号或离散量信号。
+        /// 获取/设置传感器采集信号的类型。
         /// </summary>
         public SignalType QType
         {
@@ -67,6 +72,7 @@ namespace LabMCESystem.LabElement
                 }
             }
         }
+
         /// <summary>
         /// 获取/设置传感器采集所表示的工程量量纲。
         /// </summary>
@@ -75,7 +81,7 @@ namespace LabMCESystem.LabElement
             get;
             set;
         }
-
+        
         /// <summary>
         /// 指定传感器的电信号输出范围与工程量量纲测量范围。
         /// </summary>
@@ -86,8 +92,9 @@ namespace LabMCESystem.LabElement
             ElectricSignalRange = elecOutRange;
             Range = mQRange;
             QType = SignalType.Analogue;
+            
         }
-
+        
         /// <summary>
         /// 指定
         /// </summary>

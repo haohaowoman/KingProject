@@ -86,6 +86,17 @@ namespace LabMCESystem.LabElement
                 // regist ChannelKeyCodeChanged event of new paired channel.
                 if (value != null)
                 {
+                    // 如果测试点单位为空 则从配对通道处更新。
+                    if (Unit == null)
+                    {
+                        Unit = value.Unit;
+                    }
+                    // 如果范围无效 则从配对通道处更新。
+                    if (Range.IsInvalid)
+                    {
+                        Range = value.Range;
+                    }
+
                     value.ChannelKeyCodeChanged += Value_ChannelKeyCodeChanged;
                 }
 

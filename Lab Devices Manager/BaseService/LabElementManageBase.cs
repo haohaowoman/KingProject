@@ -182,7 +182,7 @@ namespace LabMCESystem.BaseService
 
             // Client have not assign device ID.
             RegistNewDevice(regDev);
-
+            
             return regDev.RegistID;
         }
 

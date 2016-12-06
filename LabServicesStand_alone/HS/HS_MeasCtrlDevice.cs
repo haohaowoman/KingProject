@@ -46,12 +46,21 @@ namespace LabMCESystem.Servers.HS
             get { return _executerMap; }
         }
 
-        // 表示 通道提示-采集值 的集合
+        // 表示 数采箱采集 通道提示-采集值 的集合
         private Dictionary<string, double> _measureValues = new Dictionary<string, double>();
 
         public Dictionary<string, double> MeasureValues
         {
             get { return _measureValues; }
+        }
+
+        // 根据通道名 与 数据值的集合
+        private Dictionary<string, ChannelRTData> _chsValueLook;
+
+        public Dictionary<string, ChannelRTData> ChsValueLook
+        {
+            get { return _chsValueLook; }
+            set { _chsValueLook = value; }
         }
 
         // 数据更新定时器
@@ -146,7 +155,7 @@ namespace LabMCESystem.Servers.HS
                     exe.Value.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
                 }
             }
-
+            
             // 为采集通道映射数据
             for (int i = 1; i <= 8; i++)
             {
@@ -154,6 +163,13 @@ namespace LabMCESystem.Servers.HS
                 {
                     _measureValues.Add($"{i:D2}_Ch{j:D2}", 0);
                 }
+            }
+
+            // 为通道映射数据集合
+            _chsValueLook = new Dictionary<string, ChannelRTData>();
+            foreach (var item in Device.SubElements)
+            {
+                _chsValueLook.Add(item.Label, new ChannelRTData(item));
             }
         }
 
@@ -319,19 +335,19 @@ namespace LabMCESystem.Servers.HS
             /// 热边PLC电磁阀 电动调节阀 AO通道
             /// 
             // 过滤器出口 DN80 常阀状态 可用于系统放气 去消音坑
-            LabChannel ch = new LabChannel("PV0104", ExperimentWorkStyle.Control) { Unit = "%" };
+            LabChannel ch = new LabChannel("PV0104", ExperimentWorkStyle.Control) { Unit = "%", Range=new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0104", 0));
 
             // 电炉入口 DN65 需要保证系统 加热器的基本流量 流量粗调作用 保证50%常开状态
-            ch = new LabChannel("FT0102A", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("FT0102A", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0102A", 50) { PipeDiameter = 65 });
 
             // 电炉入口 DN40 流量细调作用 
-            ch = new LabChannel("FT0102B", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("FT0102B", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0102B", 0) { PipeDiameter = 40 });
@@ -349,13 +365,13 @@ namespace LabMCESystem.Servers.HS
             _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0104" });
 
             // 热边入实验段入口 DN80 电动调节阀 此处可处于常开状态
-            ch = new LabChannel("PV0108", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("PV0108", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0108", 90) { PipeDiameter = 80 });
 
             // 热边 出实验段出口 DN80 电动调节阀 此处可处于常开状态 配合使用可 以达到流阻调节 共同调节压力与流量的作用
-            ch = new LabChannel("PV0109", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("PV0109", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0109", 90) { PipeDiameter = 80 });
@@ -365,19 +381,19 @@ namespace LabMCESystem.Servers.HS
             #region 二冷 PLC控制电磁阀 AO IO通道
 
             // 过滤器出口 DN80  常阀状态 可用于系统放气 去消音坑
-            ch = new LabChannel("PV0103", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("PV0103", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0103", 0));
 
             // 电炉入口 DN150 需要保证系统 加热器的基本流量 流量粗调作用 保证50%常开状态
-            ch = new LabChannel("FT0101A", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("FT0101A", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0101A", 50) { PipeDiameter = 150 });
 
             // 电炉入口 DN50 流量细调作用
-            ch = new LabChannel("FT0101B", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("FT0101B", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0101B", 0) { PipeDiameter = 50 });
@@ -395,7 +411,7 @@ namespace LabMCESystem.Servers.HS
             _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0102" });
 
             // 二冷入实验段入口 DN80 电动调节阀 此处可处于常开状态
-            ch = new LabChannel("PV0107", ExperimentWorkStyle.Control) { Unit = "%" };
+            ch = new LabChannel("PV0107", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
             dev.AddElement(ch);
 
             _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0107", 80) { PipeDiameter = 80 });
@@ -497,10 +513,36 @@ namespace LabMCESystem.Servers.HS
             int index = 0;
             foreach (var mv in _measureValues)
             {
-                _measureValues[mv.Key] = mvalues[index++];
+                _measureValues[mv.Key] = mvalues[index++];                
             }
 
-            // 获取
+            // 获取 PLC 数据 如果有执行器则更新为执行器的反馈值。
+            DateTime rdt = DateTime.Now;
+            foreach (var item in _chsValueLook)
+            {
+                item.Value.RefreshTime = rdt;
+                double val;
+                Executer ext;
+                if (_measureValues.TryGetValue(item.Value.Channel.Prompt, out val))
+                {
+                    item.Value.RTValue = val;
+                }
+                else if (_executerMap.TryGetValue(item.Key, out ext))
+                {
+                    // 如果没有找到集合_measureValues的键值 则从通道执行器去查找
+
+                    IDataFedback cle = ext as IDataFedback;
+                    if (cle != null)
+                    {
+                        item.Value.RTValue = cle.FedbackData;
+                    }
+                    else
+                    {
+                        item.Value.RTValue = ext.ExecuteVal;
+                    }
+                    
+                }
+            }
         }
 
         #endregion
