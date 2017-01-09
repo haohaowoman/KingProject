@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// 可周期动作的周期步进执行控制器
@@ -106,7 +106,7 @@ namespace LabMCESystem.Logic.Execute
     /// <summary>
     /// 自动周期获取反馈步进执行器
     /// </summary>
-    public class AutoFedbackStepExecuter : PeriodStepExecuter, IDataFedback
+    public class AutoFedbackStepExecuter : PeriodStepExecuter, IDataFeedback
     {
         /// <summary>
         /// 指定目标值与安全输出范围创建

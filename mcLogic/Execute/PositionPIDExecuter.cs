@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// PID位置算法执行器

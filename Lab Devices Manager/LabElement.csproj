@@ -41,6 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EException\AnalogueChannelTrigger.cs" />
+    <Compile Include="EException\DevEExceptionWatcher.cs" />
+    <Compile Include="EException\EExcepAction.cs" />
+    <Compile Include="EException\EException.cs" />
+    <Compile Include="EException\ChannelTrigger.cs" />
+    <Compile Include="EException\EExcepAppearInfor.cs" />
+    <Compile Include="EException\EExceptionManager.cs" />
+    <Compile Include="EException\ExcepTrigger.cs" />
+    <Compile Include="EException\ChannelExceptionSrc.cs" />
+    <Compile Include="EException\IEExcepAction.cs" />
+    <Compile Include="EException\IEExceptionAppear.cs" />
+    <Compile Include="EException\IExcepManagement.cs" />
+    <Compile Include="EException\MultipleTrigger.cs" />
+    <Compile Include="EException\OutRangeTrigger.cs" />
+    <Compile Include="EException\StatusChannelTrigger.cs" />
+    <Compile Include="LabElement\Channel\AnalogueOutputChannel.cs" />
     <Compile Include="BaseService\IDeviceConnect.cs" />
     <Compile Include="BaseService\IDeviceLogin.cs" />
     <Compile Include="BaseService\IDeviceOperator.cs" />
@@ -48,45 +64,36 @@
     <Compile Include="BaseService\IExpAreaOperator.cs" />
     <Compile Include="BaseService\IDeviceElementListen.cs" />
     <Compile Include="BaseService\InvalidChannelKeyCodeException.cs" />
-    <Compile Include="ExperimentWorkStyle.cs" />
-    <Compile Include="IUnitRange.cs" />
-    <Compile Include="LabChannel.cs" />
-    <Compile Include="LabDevice.cs" />
-    <Compile Include="ExperimentPoint.cs" />
-    <Compile Include="IBeGrouped.cs" />
-    <Compile Include="IRegisted.cs" />
+    <Compile Include="LabElement\Channel\Channel.cs" />
+    <Compile Include="LabElement\Channel\ControlChannel.cs" />
+    <Compile Include="LabElement\Channel\ExtendChannel.cs" />
+    <Compile Include="LabElement\Channel\FeedbackChannel.cs" />
+    <Compile Include="LabElement\Channel\IFeedback.cs" />
+    <Compile Include="LabElement\Channel\StatusOutputChannel.cs" />
+    <Compile Include="LabElement\ExperimentStyle.cs" />
+    <Compile Include="LabElement\Channel\IAnalogueOutput.cs" />
+    <Compile Include="LabElement\Channel\IController.cs" />
+    <Compile Include="LabElement\Channel\IAnalogueMeasure.cs" />
+    <Compile Include="LabElement\Channel\IStatusExpress.cs" />
+    <Compile Include="LabElement\IUnitRange.cs" />
+    <Compile Include="LabElement\Channel\AnalogueMeasureChannel.cs" />
+    <Compile Include="LabElement\LabDevice.cs" />
+    <Compile Include="LabElement\ExperimentalPoint.cs" />
+    <Compile Include="LabElement\IBelongtoGroup.cs" />
+    <Compile Include="LabElement\IRegisted.cs" />
     <Compile Include="BaseService\ILabElementManageable.cs" />
     <Compile Include="BaseService\LabElementManageBase.cs" />
-    <Compile Include="DataBase\LabElementDataSet.cs">
-      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="DataBase\LabElementDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="LabGroupElement.cs" />
-    <Compile Include="LabGroupSubElement.cs" />
+    <Compile Include="LabElement\GroupElement.cs" />
+    <Compile Include="LabElement\ChildElement.cs" />
     <Compile Include="BaseService\RegistElementResultArgs.cs" />
-    <Compile Include="MeasureSensor.cs" />
-    <Compile Include="NotifyGroupObjectChangedEvent.cs" />
-    <Compile Include="ExperimentArea.cs" />
-    <Compile Include="LabElement.cs" />
+    <Compile Include="LabElement\LinerSensor.cs" />
+    <Compile Include="LabElement\NotifyGroupObjectChangedEvent.cs" />
+    <Compile Include="LabElement\ExperimentalArea.cs" />
+    <Compile Include="LabElement\LabElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LabElement\Channel\StatusChannel.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="DataBase\LabElementDataSet.xsc">
-      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="DataBase\LabElementDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>LabElementDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="DataBase\LabElementDataSet.xss">
-      <DependentUpon>LabElementDataSet.xsd</DependentUpon>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

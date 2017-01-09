@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using LabMCESystem.LabDeviceModule;
 using LabMCESystem.LabElement;
-using LabMCESystem.Logic.Execute;
+using mcLogic.Execute;
 using System.Timers;
-using LabMCESystem.Task;
+using LabMCESystem.ETask;
 using LabMCESystem.BaseService.ExperimentDataExchange;
+
+using static LabMCESystem.Servers.HS.HS_PLCReadWriter;
 
 namespace LabMCESystem.Servers.HS
 {
@@ -20,13 +22,13 @@ namespace LabMCESystem.Servers.HS
     /// 如：电动调节阀通道： PV0104 其反馈如需要单独作为通道使用并上传数据 则其通道名称应为 PV0104#In, PV0104更改为PV0104#Out
     /// 如果不应用此操作，则控制通道更新上传的数据应以反馈数据优先 如果没有返馈 才使用控制数据作为上传数据标准
     /// </summary>
-    public class HS_MeasCtrlDevice : ControlExecuterBase
+    public partial class HS_MeasCtrlDevice : ControlExecuterBase
     {
         public HS_MeasCtrlDevice()
-        {
+        {   
             _updateTimer.Elapsed += _updateTimer_Elapsed;
 
-            InitialDevice();
+            InitialDevice();            
         }
 
         // 默认设置的热边最小流量
@@ -34,7 +36,7 @@ namespace LabMCESystem.Servers.HS
         // 默认设置的二冷最小流量
         public const double Defualt_MinQ_SecendCold = 100;
 
-        
+
         #region Fields
         // 通过通道名创建执行器的映射关系
         private Dictionary<string, Executer> _executerMap = new Dictionary<string, Executer>();
@@ -48,11 +50,13 @@ namespace LabMCESystem.Servers.HS
 
         // 表示 数采箱采集 通道提示-采集值 的集合
         private Dictionary<string, double> _measureValues = new Dictionary<string, double>();
-
+        
         public Dictionary<string, double> MeasureValues
         {
             get { return _measureValues; }
         }
+
+        private string[] _mvDicKeys;
 
         // 根据通道名 与 数据值的集合
         private Dictionary<string, ChannelRTData> _chsValueLook;
@@ -81,6 +85,11 @@ namespace LabMCESystem.Servers.HS
             }
         }
 
+        /// <summary>
+        /// 获取/设置实验室的报警温度上限。
+        /// </summary>
+        public double LabFaultTemprature { get; set; } = 45;
+
         #endregion
 
         #region Operators
@@ -93,6 +102,8 @@ namespace LabMCESystem.Servers.HS
         {
             LabDevice dev = new LabDevice("PLC&加热器控制", 01);
 
+            InitialExceptionWatcher();
+
             InitialMeasureChannels(dev);
 
             InitialPLCChannels(dev);
@@ -101,10 +112,11 @@ namespace LabMCESystem.Servers.HS
 
             InitialFanDevice(dev);
 
+            InitialStatusChannel(dev);
             // 单独为FT0101 与 FT0102创建绑定执行器。
 
             // 二冷
-            LabChannel ch = dev["FT0101"];
+            Channel ch = dev["FT0101"];
 
             System.Diagnostics.Debug.Assert(ch != null);
 
@@ -136,38 +148,73 @@ namespace LabMCESystem.Servers.HS
             // 赋值给设备。
             Device = dev;
 
-            // 为执行器添加反馈更新事件与执行事件。
-            foreach (var exe in _executerMap)
+            InitialEExceptions();
+
+            // 为可控制通道关联控制处理事件。
+
+            // 电动调节阀的控制事件。
+            var eovcs = Device.FeedbackChannels;
+            foreach (var ec in eovcs)
             {
-                // 电磁调节阀 执行器                
-                if (exe.Value is HS_EOVPIDExecuter)
+                if (ec.Unit == "%")
                 {
-                    HS_EOVPIDExecuter tempe = exe.Value as HS_EOVPIDExecuter;
-
-                    tempe.UpdateFedback += HS_EOVsUpdateFedback;
-
-                    tempe.ExecuteChanged += HS_EOVsExecuteChanged;
+                    ec.Execute += EOVChnannel_Execute;
+                    var eovex = ec.Controller as HS_EOVPIDExecuter;
+                    if (eovex != null)
+                    {
+                        eovex.ExecuteChanged += HS_EOVsExecuteChanged;
+                        eovex.UpdateFedback += HS_EOVsUpdateFedback;
+                    }
                 }
 
-                // 电磁开关阀执行器
-                if (exe.Value is DigitalExecuter)
+            }
+
+            // 电动控制阀控制事件。
+            var socs = Device.StatusOutputChannels;
+            foreach (var so in socs)
+            {
+                so.Execute += StatusOutput_Execute;
+                var ext = so.Controller as DigitalExecuter;
+                if (ext != null)
                 {
-                    exe.Value.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
+                    ext.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
                 }
             }
-            
+
+            // 为执行器添加反馈更新事件与执行事件。
+            //foreach (var exe in _executerMap)
+            //{
+            //    // 电磁调节阀 执行器
+            //    if (exe.Value is HS_EOVPIDExecuter)
+            //    {
+            //        HS_EOVPIDExecuter tempe = exe.Value as HS_EOVPIDExecuter;
+
+            //        tempe.UpdateFedback += HS_EOVsUpdateFedback;
+
+            //        tempe.ExecuteChanged += HS_EOVsExecuteChanged;
+            //    }
+
+            //    // 电磁开关阀执行器
+            //    if (exe.Value is DigitalExecuter)
+            //    {
+            //        exe.Value.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
+            //    }
+            //}
+
             // 为采集通道映射数据
             for (int i = 1; i <= 8; i++)
             {
                 for (int j = 1; j <= 6; j++)
                 {
-                    _measureValues.Add($"{i:D2}_Ch{j:D2}", 0);
+                    _measureValues.Add($"{i:D2}_Ch{j:D}", 0);
                 }
             }
 
+            _mvDicKeys = _measureValues.Keys.ToArray();
+
             // 为通道映射数据集合
             _chsValueLook = new Dictionary<string, ChannelRTData>();
-            foreach (var item in Device.SubElements)
+            foreach (var item in Device.Children)
             {
                 _chsValueLook.Add(item.Label, new ChannelRTData(item));
             }
@@ -177,7 +224,32 @@ namespace LabMCESystem.Servers.HS
         // 电磁开关阀控制。
         private void HS_DigitalEOV_ExecuteChanged(object sender, double executedVal)
         {
+            var de = sender as DigitalExecuter;
+            if (de != null)
+            {
+                HS_PLCReadWriter.WriteStatus(de.DesignMark, de.Enable);
+            }
+        }
 
+        // 电磁开关阀控制事件。
+        private void StatusOutput_Execute(object sender, ControllerEventArgs e)
+        {
+            var ev = sender as StatusOutputChannel;
+            if (ev != null)
+            {
+                var de = ev.Controller as DigitalExecuter;
+                if (de != null)
+                {
+                    if (ev.NextStatus)
+                    {
+                        de.ToHigh();
+                    }
+                    else
+                    {
+                        de.ToLow();
+                    }
+                }
+            }
         }
 
         #endregion
@@ -188,9 +260,21 @@ namespace LabMCESystem.Servers.HS
         /// 电磁阀反馈更新事件函数。
         /// </summary>
         /// <param name="sender">电磁执行器</param>
-        private void HS_EOVsUpdateFedback(IDataFedback sender)
+        private void HS_EOVsUpdateFedback(IDataFeedback sender)
         {
-
+            var eove = sender as HS_EOVPIDExecuter;
+            if (eove != null)
+            {
+                try
+                {
+                    eove.FedbackData = ReadAnaloge(eove.DesignMark);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -200,266 +284,37 @@ namespace LabMCESystem.Servers.HS
         /// <param name="executedVal">需要执行的值。</param>
         private void HS_EOVsExecuteChanged(object sender, double executedVal)
         {
+            var eove = sender as HS_EOVPIDExecuter;
+            if (eove != null)
+            {
+                try
+                {
+                    WriteAnaloge(eove.DesignMark, executedVal);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    throw;
+                }
+            }
+        }
 
+        // 通道控制执行事件。
+        private void EOVChnannel_Execute(object sender, ControllerEventArgs e)
+        {
+            var eovch = sender as FeedbackChannel;
+            if (eovch != null)
+            {
+                var eovexe = eovch.Controller as HS_EOVPIDExecuter;
+                if (eovexe != null)
+                {
+                    eovexe.TargetVal = eovch.AOValue;
+                    eovexe.ExecuteBegin();
+                }
+            }
         }
 
         #endregion
-
-        /// <summary>
-        /// 初始化所有采集通道
-        /// </summary>
-        private void InitialMeasureChannels(LabDevice dev)
-        {
-            #region 热边采集卡通道
-
-            // 热边入口流量
-            LabChannel mCh = new LabChannel("FT0102", ExperimentWorkStyle.Measure) { Unit = "Kg/h" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch1";
-
-            // 热边电炉入口压力
-            mCh = new LabChannel("PT0104", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch2";
-            // 热边电炉入口温度
-            mCh = new LabChannel("TT0102", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch3";
-            // 热边电炉出口压力
-            mCh = new LabChannel("PT0106", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch4";
-            // 热边电炉出口温度
-            mCh = new LabChannel("TT0104", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch5";
-            // 热边实验段入口压力
-            mCh = new LabChannel("PT0108", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "01_Ch6";
-            // 热边实验段入口温度
-            mCh = new LabChannel("TT0106", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch1";
-            // 热边实验段出口压力
-            mCh = new LabChannel("PT0109", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch2";
-            // 热边实验段出口温度
-            mCh = new LabChannel("TT0107", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch3";
-            #endregion
-
-            #region 二冷采集通道
-
-            // 二冷入口流量
-            mCh = new LabChannel("FT0101", ExperimentWorkStyle.Measure) { Unit = "Kg/h" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch4";
-
-            // 二冷电炉入口压力
-            mCh = new LabChannel("PT0103", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch5";
-            // 二冷电炉入口温度
-            mCh = new LabChannel("TT0101", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "02_Ch6";
-            // 二冷电炉出口压力
-            mCh = new LabChannel("PT0105", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch1";
-            // 二冷电炉出口温度
-            mCh = new LabChannel("TT0103", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch2";
-            // 二冷实验段入口压力
-            mCh = new LabChannel("PT0107", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch3";
-            // 二冷实验段入口温度
-            mCh = new LabChannel("TT0105", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch4";
-            // 二冷实验段出口压力
-            mCh = new LabChannel("PT0110", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch5";
-            // 二冷实验段出口温度
-            mCh = new LabChannel("TT0108", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "03_Ch6";
-            #endregion
-
-            #region 一冷实验段采集通道
-
-            // 一冷入口流量
-            mCh = new LabChannel("FT0103", ExperimentWorkStyle.Measure) { Unit = "Kg/h" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch1";
-            // 一冷入口压力
-            mCh = new LabChannel("PT01", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch2";
-            // 一冷入口温度
-            mCh = new LabChannel("TT01", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch3";
-            // 一冷入口压力
-            mCh = new LabChannel("PT02", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch4";
-            // 一冷入口温度
-            mCh = new LabChannel("TT02", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch5";
-            // 一冷出口压力
-            mCh = new LabChannel("PT03", ExperimentWorkStyle.Measure) { Unit = "KPa" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "04_Ch6";
-            // 一冷出口温度
-            mCh = new LabChannel("TT03", ExperimentWorkStyle.Measure) { Unit = "℃" };
-            dev.AddElement(mCh);
-            mCh.Prompt = "05_Ch1";
-            #endregion
-        }
-
-        /// <summary>
-        /// 初始化所有PLC通道
-        /// </summary>
-        private void InitialPLCChannels(LabDevice dev)
-        {
-            #region 热边PLC电磁阀 电动调节阀 AO IO通道
-
-            /// 热边PLC电磁阀 电动调节阀 AO通道
-            /// 
-            // 过滤器出口 DN80 常阀状态 可用于系统放气 去消音坑
-            LabChannel ch = new LabChannel("PV0104", ExperimentWorkStyle.Control) { Unit = "%", Range=new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0104", 0));
-
-            // 电炉入口 DN65 需要保证系统 加热器的基本流量 流量粗调作用 保证50%常开状态
-            ch = new LabChannel("FT0102A", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0102A", 50) { PipeDiameter = 65 });
-
-            // 电炉入口 DN40 流量细调作用 
-            ch = new LabChannel("FT0102B", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0102B", 0) { PipeDiameter = 40 });
-
-            // 电炉入口 DN50 电动开关阀， 为防止电炉干烧 紧急异常情况下需要打开此
-            ch = new LabChannel("EV0103", ExperimentWorkStyle.Control) { ConnectSignalType = SignalType.Digital };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0103" });
-
-            // 电炉出口应急状态、关机时使用 去消音坑 电动开关阀 常闭
-            ch = new LabChannel("EV0104", ExperimentWorkStyle.Control) { ConnectSignalType = SignalType.Digital };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0104" });
-
-            // 热边入实验段入口 DN80 电动调节阀 此处可处于常开状态
-            ch = new LabChannel("PV0108", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0108", 90) { PipeDiameter = 80 });
-
-            // 热边 出实验段出口 DN80 电动调节阀 此处可处于常开状态 配合使用可 以达到流阻调节 共同调节压力与流量的作用
-            ch = new LabChannel("PV0109", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0109", 90) { PipeDiameter = 80 });
-
-            #endregion
-
-            #region 二冷 PLC控制电磁阀 AO IO通道
-
-            // 过滤器出口 DN80  常阀状态 可用于系统放气 去消音坑
-            ch = new LabChannel("PV0103", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0103", 0));
-
-            // 电炉入口 DN150 需要保证系统 加热器的基本流量 流量粗调作用 保证50%常开状态
-            ch = new LabChannel("FT0101A", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0101A", 50) { PipeDiameter = 150 });
-
-            // 电炉入口 DN50 流量细调作用
-            ch = new LabChannel("FT0101B", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("FT0101B", 0) { PipeDiameter = 50 });
-
-            // 电炉入口 DN50 电动开关阀， 为防止电炉干烧 紧急异常情况下需要打开此
-            ch = new LabChannel("EV0101", ExperimentWorkStyle.Control) { ConnectSignalType = SignalType.Digital };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0101" });
-
-            // 电炉出口应急状态、关机时使用 去消音坑 电动开关阀 常闭
-            ch = new LabChannel("EV0102", ExperimentWorkStyle.Control) { ConnectSignalType = SignalType.Digital };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new DigitalExecuter() { DesignMark = "EV0102" });
-
-            // 二冷入实验段入口 DN80 电动调节阀 此处可处于常开状态
-            ch = new LabChannel("PV0107", ExperimentWorkStyle.Control) { Unit = "%", Range = new QRange(0, 100) };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_EOVPIDExecuter("PV0107", 80) { PipeDiameter = 80 });
-
-            #endregion
-
-            #region 一冷 实验段 PLC AO IO通道
-
-            #endregion
-
-        }
-
-        /// <summary>
-        /// 初始化所有电炉所需要的通道
-        /// </summary>
-        private void InitialDianluChannels(LabDevice dev)
-        {
-            // 加热器图纸为给出标记 所以自定义标记
-
-            // 热边电加热器 通道 
-            LabChannel ch = new LabChannel("HotRoadHeater", ExperimentWorkStyle.Control) { Unit = "℃" };
-            dev.AddElement(ch);
-
-            HS_ElectricHeaterExecuter hotRoadExe = new HS_HotRoadHeaterExe("HotRoadHeater", this) { RequireMinInFlow = Defualt_MinQ_HotRoad };
-            hotRoadExe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
-
-            _executerMap.Add(ch.Label, hotRoadExe);
-
-            // 二冷边加热器 通道
-            ch = new LabChannel("SecendColdHeater", ExperimentWorkStyle.Control) { Unit = "℃" };
-            dev.AddElement(ch);
-
-            HS_ElectricHeaterExecuter secHExe = new HS_SecendHeaterExe("SecendColdHeater", this) { RequireMinInFlow = Defualt_MinQ_SecendCold };
-            secHExe.ExecutePredicate = SecendColdHeaterExecuterPredicate;
-
-            _executerMap.Add(ch.Label, hotRoadExe);
-        }
-
-        /// <summary>
-        /// 初始化实验段风机变频器设备
-        /// </summary>
-        private void InitialFanDevice(LabDevice dev)
-        {
-            LabChannel ch = new LabChannel("FirstColdFan", ExperimentWorkStyle.Control) { Unit = "r/s" };
-            dev.AddElement(ch);
-
-            _executerMap.Add(ch.Label, new HS_FirstColdFanDevice("FirstColdFan"));
-        }
 
         /// <summary>
         /// 热边电加热器执行条件
@@ -495,13 +350,12 @@ namespace LabMCESystem.Servers.HS
 
             return true;
         }
-
+        //static int iio = 0;
         // 定时器进行数据的读取和更新。
         private void _updateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             // 从采集设备读取所有通道数据
-            //...
-            // 数据模拟
+
             Random r = new Random();
             double[] mvalues = new double[48];
 
@@ -510,37 +364,48 @@ namespace LabMCESystem.Servers.HS
                 mvalues[i] = r.NextDouble() * 100.0;
             }
 
-            int index = 0;
-            foreach (var mv in _measureValues)
+            int count = _mvDicKeys.Length;
+            for (int i = 0; i < count; i++)
             {
-                _measureValues[mv.Key] = mvalues[index++];                
+                _measureValues[_mvDicKeys[i]] = mvalues[i];
             }
-
+            
             // 获取 PLC 数据 如果有执行器则更新为执行器的反馈值。
-            DateTime rdt = DateTime.Now;
-            foreach (var item in _chsValueLook)
+            var chs = Device.Channels;
+            count = chs.Count;
+            
+            for(int i = 0; i < count; i++)
             {
-                item.Value.RefreshTime = rdt;
+                var ch = chs[i];
                 double val;
-                Executer ext;
-                if (_measureValues.TryGetValue(item.Value.Channel.Prompt, out val))
+                if (ch.Prompt != null && _measureValues.TryGetValue(ch.Prompt, out val))
                 {
-                    item.Value.RTValue = val;
+                    (ch as IAnalogueMeasure).MeasureValue = val;
                 }
-                else if (_executerMap.TryGetValue(item.Key, out ext))
+                else
                 {
-                    // 如果没有找到集合_measureValues的键值 则从通道执行器去查找
-
-                    IDataFedback cle = ext as IDataFedback;
-                    if (cle != null)
+                    // 如果没有找到集合_measureValues的键值 则从PLC OPC服务器中读取数据。
+                    switch (ch.Style)
                     {
-                        item.Value.RTValue = cle.FedbackData;
+                        case ExperimentStyle.Measure:
+                            (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
+                            break;
+                        case ExperimentStyle.Control:
+                            ch.Value = ReadAnaloge(ch.Prompt);
+                            break;
+                        case ExperimentStyle.Feedback:
+                            (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
+                            break;
+                        case ExperimentStyle.Status:
+                            (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
+                            break;
+                        case ExperimentStyle.StatusControl:
+                            (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
+                            break;
+                        default:
+                            ch.Value = ReadAnaloge(ch.Prompt);
+                            break;
                     }
-                    else
-                    {
-                        item.Value.RTValue = ext.ExecuteVal;
-                    }
-                    
                 }
             }
         }
@@ -551,11 +416,12 @@ namespace LabMCESystem.Servers.HS
 
         protected override void OnClosed()
         {
-
+            _updateTimer.Dispose();
         }
 
         protected override bool OnClosing()
         {
+            _updateTimer.Close();
             return true;
         }
 
@@ -571,6 +437,7 @@ namespace LabMCESystem.Servers.HS
 
         protected override bool OnRun()
         {
+            _updateTimer.Start();
             return true;
         }
 
@@ -586,6 +453,7 @@ namespace LabMCESystem.Servers.HS
 
         protected override bool OnStopping()
         {
+            _updateTimer.Stop();
             return true;
         }
 
@@ -599,15 +467,15 @@ namespace LabMCESystem.Servers.HS
             {
                 // 通道属于本设备
 
-                switch (chSetter.Channel.WorkStyle)
+                switch (chSetter.Channel.Style)
                 {
-                    case ExperimentWorkStyle.Measure:
+                    case ExperimentStyle.Measure:
                         {
                             // 在此实现各个测量通道的PID逻辑控制。
 
                         }
                         break;
-                    case ExperimentWorkStyle.Control:
+                    case ExperimentStyle.Control:
                         {
                             // 在此实现单个控制通道的逻辑控制。
 
@@ -622,11 +490,7 @@ namespace LabMCESystem.Servers.HS
                             }
                         }
                         break;
-                    case ExperimentWorkStyle.Both:
-                        {
 
-                        }
-                        break;
                     default:
                         break;
                 }

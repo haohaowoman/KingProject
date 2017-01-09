@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// 可周期动作的执行控制器

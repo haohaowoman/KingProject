@@ -26,28 +26,15 @@ namespace ExpRuntimeApp.UserControls
             InitializeComponent();
         }
 
-        public ChannelValue EOV
+        public MdChannel EOVChannel
         {
-            get { return (ChannelValue)GetValue(EOVProperty); }
+            get { return (MdChannel)GetValue(EOVProperty); }
             set { SetValue(EOVProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for EOV.  This enables animation, styling, binding, etc...
+        // Using a DependencyProperty as the backing store for EOVChannel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EOVProperty =
-            DependencyProperty.Register("EOV", typeof(ChannelValue), typeof(EOVCtrlControl), new PropertyMetadata());
-
-
-        public string Mark
-        {
-            get { return (string)GetValue(MarkProperty); }
-            set { SetValue(MarkProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Mark.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MarkProperty =
-            DependencyProperty.Register("Mark", typeof(string), typeof(EOVCtrlControl), new PropertyMetadata("haha"));
-
-
+            DependencyProperty.Register("EOVChannel", typeof(MdChannel), typeof(EOVCtrlControl), new PropertyMetadata());
 
     }
 }

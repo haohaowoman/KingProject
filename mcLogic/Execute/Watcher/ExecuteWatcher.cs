@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LabMCESystem.Logic.Execute;
-namespace LabMCESystem.Logic.Execute.Watcher
+using mcLogic.Execute;
+namespace mcLogic.Execute.Watcher
 {
     /// <summary>
     /// 表示执行器监视数据
@@ -57,7 +57,7 @@ namespace LabMCESystem.Logic.Execute.Watcher
         {
             var d = new EWatcherData() { Time = DateTime.Now, ExecuteValue = executedVal };
 
-            var fe = TargetExecuter as IDataFedback;
+            var fe = TargetExecuter as IDataFeedback;
             if (fe != null)
             {
                 d.FedbackValue = fe.FedbackData;

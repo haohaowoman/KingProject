@@ -7,7 +7,8 @@
       xmlns:modules="clr-namespace:ExpRuntimeApp.Modules"
       xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="600
+      " d:DesignWidth="600"
       Title="ChannelsValuePage"
       DataContext="{StaticResource ExpViewModule}"
       >
@@ -16,11 +17,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ExpRuntimeApp;component/ChannelDataTemplate.xaml"/>
+                <ResourceDictionary Source="/ExpRuntimeApp;component/CellDataTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <local:ChValueRowDetailsTemplateSelector x:Key="ChDetailsSelector" 
                                                      EOVChannelTemplate="{StaticResource EOVDataTemplate}" 
                                                      TemperatureTemplate="{StaticResource TemperatureDataTemplate}" 
-                                                     DigitalTemplate="{StaticResource DigitalDataTemplate}" 
+                                                     StatusOutputTemplate="{StaticResource StatusOutputDataTemplate}" 
                                                      FlowTemplate="{StaticResource FlowDataTemplate}"
                                                      DefualtMeasureDataTemplate="{StaticResource MeasureDataTemplate}">
 
@@ -38,27 +40,56 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=CurChannelVal}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="1" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="VisibleWhenSelected" RowDetailsTemplateSelector="{StaticResource ChDetailsSelector}" Button.Click="Button_Click">
+        <DataGrid x:Name="dataGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=MdChannels}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="1" AreRowDetailsFrozen="True" RowDetailsVisibilityMode="VisibleWhenSelected" RowDetailsTemplateSelector="{StaticResource ChDetailsSelector}" Button.Click="Button_Click">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Channel.Prompt}" Header="标记"/>
-                <DataGridTextColumn Binding="{Binding Path=Channel.Label}" Header="通道名" FontSize="16" FontStyle="Italic" FontWeight="SemiBold"/>
-                <DataGridTextColumn Binding="{Binding Path=Channel.Unit}" Header="单位"/>
-                
+                <DataGridTextColumn Binding="{Binding Path=Prompt}" Header="标记"/>
+                <DataGridTextColumn Binding="{Binding Path=Label}" Header="通道名" FontSize="16" FontStyle="Italic" FontWeight="SemiBold"/>
+                <DataGridTextColumn Binding="{Binding Path=Unit}" Header="单位"/>
+
                 <DataGridTemplateColumn Header="数据">
-                    <DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellTemplateSelector>
+                        <local:ChValueColumnCellTempateSelector
+                            StatusExpress="{StaticResource StatusCellDataTempalte}"
+                            ValueExpress="{StaticResource ValueCellDataTempalte}"
+                            />
+                    </DataGridTemplateColumn.CellTemplateSelector>
+                    <!--<DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Path=Value, StringFormat={}{0:F2}}" Margin="3,2" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" />
-                                <metro:MetroProgressBar MinWidth="100" MinHeight="7" Margin="3,1" Value="{Binding Path=Value}" Minimum="{Binding Path=Channel.Range.Low}" Maximum="{Binding Path=Channel.Range.Height}"/>
+                                <TextBlock Margin="3,2" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold"
+                                            Text="{Binding Path=Value, StringFormat={}{0:F2}}"
+                                           />
+                                <metro:MetroProgressBar MinWidth="100" MinHeight="7" Margin="3,1" 
+                                                        Value="{Binding Path=Value, Mode=OneWay}" 
+                                                        Minimum="{Binding Path=Range.Low}" 
+                                                        Maximum="{Binding Path=Range.Height}"
+                                                        />
                             </StackPanel>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn.CellTemplate>-->
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTextColumn Binding="{Binding Path=Channel.Summary}" Header="摘要"/>
 
             </DataGrid.Columns>
-            
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding Name}" FontWeight="Bold" FontStyle="Italic" FontSize="16" TextDecorations="Underline">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFF0CF3C"/>
+                                        <GradientStop Color="#FF7C8D14" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
         </DataGrid>
 
     </Grid>

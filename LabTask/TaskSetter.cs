@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LabMCESystem.LabElement;
 using LabMCESystem.BaseService;
 
-namespace LabMCESystem.Task
+namespace LabMCESystem.ETask
 {
     /// <summary>
     /// 控制设定项
@@ -38,11 +38,11 @@ namespace LabMCESystem.Task
     [Serializable]
     public class ChannelSetter : IOwnTaskSetter
     {
-        private LabChannel _channel;
+        private Channel _channel;
         /// <summary>
         /// 获取/设置指定项通道。
         /// </summary>
-        public LabChannel Channel
+        public Channel Channel
         {
             get
             {
@@ -75,7 +75,7 @@ namespace LabMCESystem.Task
         /// </summary>
         /// <param name="ch">指定通道</param>
         /// <param name="targetVal">设置目标值</param>
-        public ChannelSetter(LabChannel ch, double targetVal) : this(ch, new TaskSetter(ch.KeyCode, targetVal))
+        public ChannelSetter(Channel ch, double targetVal) : this(ch, new TaskSetter(/*ch.KeyCode*/1, targetVal))
         {
 
         }
@@ -84,7 +84,7 @@ namespace LabMCESystem.Task
         /// </summary>
         /// <param name="ch">指定通道</param>
         /// <param name="setter">任务指定项</param>
-        protected ChannelSetter(LabChannel ch, TaskSetter setter)
+        protected ChannelSetter(Channel ch, TaskSetter setter)
         {
             Channel = ch;
             Setter = setter;
@@ -98,7 +98,7 @@ namespace LabMCESystem.Task
         /// <returns>如果setter所指定的通道无效则返回null</returns>
         public static ChannelSetter FromTaskSetter(TaskSetter setter, IDeviceElementListen del)
         {
-            LabChannel ch = del.LookUpChannel(setter.ChannelKeyCode);
+            AnalogueMeasureChannel ch = del.LookUpChannel(setter.ChannelKeyCode);
 
             return new ChannelSetter(ch, setter.TargetValue);
         }
@@ -110,7 +110,7 @@ namespace LabMCESystem.Task
         /// <returns>如果setter所指定的通道无效则返回null</returns>
         public static ChannelSetter FromTaskSetter(TaskSetter setter, LabDevice dev)
         {
-            LabChannel ch = dev[setter.ChannelKeyCode];
+            AnalogueMeasureChannel ch = null;//dev[setter.ChannelKeyCode];
 
             return new ChannelSetter(ch, setter.TargetValue);
         }
@@ -135,11 +135,11 @@ namespace LabMCESystem.Task
             }
         }
 
-        private ExperimentPoint _expPoint;
+        private ExperimentalPoint _expPoint;
         /// <summary>
         /// 获取指定项的测试点。
         /// </summary>
-        public ExperimentPoint ExpPoint
+        public ExperimentalPoint ExpPoint
         {
             get { return _expPoint; }
             private set
@@ -166,12 +166,12 @@ namespace LabMCESystem.Task
         /// </summary>
         /// <param name="exp">测试点</param>
         /// <param name="targetVal">目标值</param>
-        public ExpPointSetter(ExperimentPoint exp, double targetVal)
+        public ExpPointSetter(ExperimentalPoint exp, double targetVal)
         {
             ExpPoint = exp;
             if (exp != null)
             {
-                _chSetter = new ChannelSetter(exp.PairedChannel, targetVal);
+                //_chSetter = new ChannelSetter(exp.PairedChannel, targetVal);
             }
         }
 

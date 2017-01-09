@@ -5,61 +5,110 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:Gauges="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges" x:Class="ExpRuntimeApp.UserControls.EOVCtrlControl"
+        x:Class="ExpRuntimeApp.UserControls.EOVCtrlControl"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" BorderThickness="2"
-             >
-    <UserControl.BorderBrush>
-        <SolidColorBrush Color="#FF7F72AC" Opacity="0.8"/>
-    </UserControl.BorderBrush>
+             d:DesignHeight="200" d:DesignWidth="200" BorderThickness="2"
 
-    <Grid>
+             >
+
+    <Grid ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},Path=EOVChannel.Summary}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="38*"/>
-            <RowDefinition Height="197*"/>
-            <RowDefinition Height="61*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"><InlineUIContainer/><InlineUIContainer>
-        		<Ellipse Height="48" Stroke="#FF6B26BD" Width="51" StrokeThickness="2">
-        			<Ellipse.Fill>
-        				<RadialGradientBrush>
-        					<GradientStop Color="#FFE5E6F0" Offset="1"/>
-        					<GradientStop Color="#FF85F099" Offset="0.113"/>
-        					<GradientStop Color="#FF66F058" Offset="0.477"/>
-        				</RadialGradientBrush>
-        			</Ellipse.Fill>
-        		</Ellipse>
-        	</InlineUIContainer></TextBlock>
-
-        <Gauges:Gauge Grid.Row="1" Height="162.628" Width="201.642" OuterBorderThickness="0.25" Background="#FF3E3A44" RenderTransformOrigin="0,0" BorderBrush="#FFAC4848" Foreground="#FFC9BFBF" OuterBackground="#FF4B236C" OuterBorderBrush="#FF2821A6">
-
-            <Gauges:Gauge.Indicators>
-                <Gauges:BarIndicator Value="60"></Gauges:BarIndicator>
-                <Gauges:NeedleIndicator LabelEnabled="True" CapBorderThickness="12" CapWidth="1" RenderTransformOrigin="0.5,0.5" BorderThickness="1">
-                    <Gauges:NeedleIndicator.CapBackground>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <LinearGradientBrush.RelativeTransform>
-                                <TransformGroup>
-                                    <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="-0.95" ScaleX="1.05"/>
-                                    <SkewTransform AngleY="0" AngleX="0" CenterY="0.5" CenterX="0.5"/>
-                                    <RotateTransform CenterY="0.5" CenterX="0.5" Angle="10"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </LinearGradientBrush.RelativeTransform>
-                            <GradientStop Color="#FFC2D0F3"/>
-                            <GradientStop Color="#FF8E9299" Offset="0.536"/>
-                            <GradientStop Color="#FF5F437C" Offset="0.933"/>
+        <Viewbox Margin="0" Grid.Row="1" Stretch="Fill">
+            <Canvas Height="196" Width="196">
+                <Path Canvas.Top="54.667" Stroke="#FF1B0A0A" Height="130.333" Canvas.Left="1.334" Width="192.332" Data="M167.832,70.499999 L191.832,70.499999 191.832,99.499999 167.832,99.499999 z M0.5,70.499999 L24.5,70.499999 24.5,99.499999 0.5,99.499999 z M84.166,0.5 L113.166,0.5 113.166,38.671221 113.39972,38.760073 C122.11546,42.196887 129.55704,48.163462 134.81967,55.755038 L134.98289,55.999999 157.666,55.999999 C163.18884,55.999999 167.666,60.477153 167.666,65.999999 L167.666,104 C167.666,109.52285 163.18884,114 157.666,114 L131.04437,114 130.95625,114.10174 C122.35864,123.56121 109.95586,129.5 96.166,129.5 82.376144,129.5 69.973358,123.56121 61.375748,114.10174 L61.287621,114 34.666,114 C29.143152,114 24.666,109.52285 24.666,104 L24.666,65.999999 C24.666,60.477153 29.143152,55.999999 34.666,55.999999 L57.354111,55.999999 57.735134,55.436457 C63.853199,46.764567 72.832306,40.255641 83.299171,37.282973 L84.166,37.048407 z" Stretch="Fill" StrokeThickness="2" d:IsLocked="True">
+                    <Path.Fill>
+                        <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
+                            <GradientStop Color="#FF635F5F" Offset="0.054"/>
+                            <GradientStop Color="#FF2B1919" Offset="0.768"/>
+                            <GradientStop Color="#FF483E3E" Offset="0.23"/>
+                            <GradientStop Color="#FF3C2F2F" Offset="0.358"/>
+                            <GradientStop Color="#FF352525" Offset="0.517"/>
                         </LinearGradientBrush>
-                    </Gauges:NeedleIndicator.CapBackground>
-                </Gauges:NeedleIndicator>
-                <Gauges:StateIndicator Value="40"></Gauges:StateIndicator>
-                <Gauges:MarkerIndicator Value="100"></Gauges:MarkerIndicator>
-            </Gauges:Gauge.Indicators>
-            <Gauges:Gauge.CircularScales>
-                <Gauges:CircularScale StartAngle="120" SweepAngle="240" Radius="0.9" Minimum="0" Maximum="200"/>
-            </Gauges:Gauge.CircularScales>
-        </Gauges:Gauge>
+                    </Path.Fill>
+                </Path>
+                <Canvas Height="55.162" Canvas.Left="10" Canvas.Top="4.838" Width="176">
+                    <Rectangle Height="55.162" Width="176" RadiusX="10" RadiusY="10" Stroke="#FF1B1616" StrokeThickness="2">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.457,0.79" StartPoint="0.379,0.144">
+                                <GradientStop Color="#FF575261" Offset="0.027"/>
+                                <GradientStop Color="#FF1D2636" Offset="0.893"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBox x:Name="textBox" Height="30.162" Canvas.Left="25"
+                             Canvas.Top="6" Width="125" IsReadOnly="True" CaretBrush="Black"
+                             Text="{
+                        Binding RelativeSource=
+                        {RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},
+                        Mode=OneWay,Path=EOVChannel.MeasureValue,StringFormat={}{0:F2}%
+                        }" FontSize="16" FontWeight="Bold" FontStyle="Italic" IsHitTestVisible="False"/>
+                    <ProgressBar Height="5" Value="{
+                        Binding RelativeSource=
+                        {RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},
+                        Mode=OneWay,Path=EOVChannel.MeasureValue,StringFormat={}{0:F2}
+                        }" Canvas.Left="10" Canvas.Top="40.162" Width="155"
+                             />
+                </Canvas>
+                <Rectangle Height="4.333" Canvas.Left="82.333" RadiusY="2" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="90" Width="35.334" Fill="Black"/>
+                <Rectangle Height="20" Canvas.Left="61" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="145" Width="75">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.929,1.016" StartPoint="0.048,0.02">
+                            <GradientStop Color="#FF635F5F" Offset="0.018"/>
+                            <GradientStop Color="#FF2B1919" Offset="0.826"/>
+                            <GradientStop Color="#FF483E3E" Offset="0.144"/>
+                            <GradientStop Color="#FF3C2F2F" Offset="0.35"/>
+                            <GradientStop Color="#FF352525" Offset="0.551"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle Height="15" Canvas.Left="55" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="100" Width="5">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
+                            <GradientStop Color="#FF635F5F" Offset="0.054"/>
+                            <GradientStop Color="#FF2B1919" Offset="0.768"/>
+                            <GradientStop Color="#FF483E3E" Offset="0.23"/>
+                            <GradientStop Color="#FF3C2F2F" Offset="0.358"/>
+                            <GradientStop Color="#FF352525" Offset="0.517"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle Height="15" Canvas.Left="135" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="100" Width="5">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
+                            <GradientStop Color="#FF635F5F" Offset="0.054"/>
+                            <GradientStop Color="#FF2B1919" Offset="0.768"/>
+                            <GradientStop Color="#FF483E3E" Offset="0.23"/>
+                            <GradientStop Color="#FF3C2F2F" Offset="0.358"/>
+                            <GradientStop Color="#FF352525" Offset="0.517"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Path Data="M52.667082,111.33392 C78.166954,129.33131 116.50009,131.49792 139.99997,112.00048" Height="16.416" Canvas.Left="51.667" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="110.333" Width="89.333"/>
+                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="5" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="20"/>
+                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="171.998" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="20"/>
+                <Path Data="M33.333333,112 C41.333333,138.66667 34.000325,168.66596 34.000325,168.66596" Height="58.667" Canvas.Left="32.333" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="111" Width="5.736"/>
+                <Path Data="M161.99907,112.667 C154.00206,148.66737 161.33231,167.33372 162.66587,168.66739" Height="58" Canvas.Left="157.319" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="111.667" Width="6.348"/>
+                <Path Data="M36.000671,126.66968 L158.667,126.00181" Height="2.667" Canvas.Left="35" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="124.667">
+                    <Path.Fill>
+                        <LinearGradientBrush EndPoint="0.929,1.016" StartPoint="0.048,0.02">
+                            <GradientStop Color="#FF635F5F" Offset="0.018"/>
+                            <GradientStop Color="#FF2B1919" Offset="0.826"/>
+                            <GradientStop Color="#FF483E3E" Offset="0.144"/>
+                            <GradientStop Color="#FF3C2F2F" Offset="0.35"/>
+                            <GradientStop Color="#FF352525" Offset="0.551"/>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Ellipse Height="5.75" Canvas.Left="38.069" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="111.667" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="151.319" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="111.667" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="38.069" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="161.417" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="151.319" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="161.417" Width="6"/>
+            </Canvas>
+
+        </Viewbox>
 
     </Grid>
 </UserControl>

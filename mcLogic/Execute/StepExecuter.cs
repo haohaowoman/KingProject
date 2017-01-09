@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// 表式步进的执行方向
@@ -162,7 +162,7 @@ namespace LabMCESystem.Logic.Execute
     /// <summary>
     /// 带反馈的步进执行器
     /// </summary>
-    public class FedbackStepExecuter : StepExecuter, IDataFedback
+    public class FedbackStepExecuter : StepExecuter, IDataFeedback
     {
         public FedbackStepExecuter(double targetVal, SafeRange srange) : base(targetVal, srange)
         {

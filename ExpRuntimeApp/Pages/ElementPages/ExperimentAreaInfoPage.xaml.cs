@@ -37,7 +37,7 @@ namespace ExpRuntimeApp.Pages.ElementPages
 
         //    if (v.CanGroup)
         //    {
-        //        v.GroupDescriptions.Add(new PropertyGroupDescription("LabGroup"));
+        //        v.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
         //    }
         //}
     }

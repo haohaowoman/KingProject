@@ -13,13 +13,13 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get all experiment areas.
         /// </summary>
-        IReadOnlyList<ExperimentArea> ExperimnetAreas { get; }
+        IReadOnlyList<ExperimentalArea> ExperimnetAreas { get; }
 
 
         /// <summary>
         /// Get all experiment points.
         /// </summary>
-        List<ExperimentPoint> AllExperimentPoints { get; }
+        List<ExperimentalPoint> AllExperimentPoints { get; }
 
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace LabMCESystem.BaseService
         /// </summary>
         /// <param name="label">Assign a experiment area label.</param>
         /// <returns>Return null if there is no this area as label.</returns>
-        ExperimentArea LookUpExpArea(string label);
+        ExperimentalArea LookUpExpArea(string label);
 
         /// <summary>
         /// Invoke this event when experiment area's points have been changed.

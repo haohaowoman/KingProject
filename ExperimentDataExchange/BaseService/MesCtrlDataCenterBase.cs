@@ -91,7 +91,7 @@ namespace LabMCESystem.BaseService
 
         private void InitialFromElemntManager(ILabElementManageable eManager)
         {
-            List<LabChannel> chs = eManager.AllChannels;
+            List<Channel> chs = eManager.AllChannels;
             // Update RTDataLoadTable
             _expDataSet.RTDataLoadTable.Clear();
             foreach (var ch in chs)
@@ -99,7 +99,7 @@ namespace LabMCESystem.BaseService
                 //_expDataSet.RTDataLoadTable.AddRTDataLoadTableRow(ch.KeyCode, DateTime.Now, DateTime.Now, 0, 0, 0);
             }
 
-            List<MeasureSensor> mss = eManager.AllSensors;
+            List<LinerSensor> mss = eManager.AllSensors;
             foreach (var ms in mss)
             {
 

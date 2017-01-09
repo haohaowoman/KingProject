@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.HS_GKUI_SecendCold"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+        mc:Ignorable="d"
+        Height="1050" Width="1680"
+             DataContext="{StaticResource ExpViewModule}">
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="PieFillBrush" EndPoint="0.137,-0.036" StartPoint="0.758,0.939">
+            <GradientStop Color="#FF878080" Offset="0.94"/>
+            <GradientStop Color="#FF1D1919" Offset="0.078"/>
+            <GradientStop Color="#FF5B4848" Offset="0.592"/>
+            <GradientStop Color="#FF433535" Offset="0.453"/>
+            <GradientStop Color="#FF7F7676" Offset="0.866"/>
+            <GradientStop Color="#FF878080" Offset="0.996"/>
+            <GradientStop Color="#FF392D2D" Offset="0.318"/>
+            <GradientStop Color="#FF685959" Offset="0.747"/>
+            <GradientStop Color="#FF2E2525" Offset="0.191"/>
+            <GradientStop Color="#FF1D1919" Offset="0.027"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    <Grid>
+        <Canvas>
+            <Border Height="316.5" Canvas.Left="868.167" Canvas.Top="40" Width="407"
+                    BorderThickness="5,5,5,2" CornerRadius="5">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFEE4242" Offset="0.141"/>
+                        <GradientStop Color="#FFECE0E0" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
+                </Border.BorderBrush>
+                <Canvas>
+                    <local:HeaterControl Height="300" Width="188" d:IsLocked="True"
+                                         TemperatureChannel="{Binding Path=MdChannels[SecendCold1#Heater]}"
+                                         RemoteStatusChannel="{Binding Path=MdChannels[二冷1#加热器远程控制]}"/>
+                    <local:HeaterControl Height="300" Canvas.Left="193" Width="188" d:IsLocked="True"
+                                         TemperatureChannel="{Binding Path=MdChannels[SecendCold2#Heater]}"
+                                         RemoteStatusChannel="{Binding Path=MdChannels[二冷2#加热器远程控制]}"/>
+                </Canvas>
+            </Border>
+            <Path Data="M290,2 L332,2 332,443 290,443 290,248 2,248 C9.7908051,239.36169 10.310192,235.57098 2,237.66667 10.23772,231.11657 9.8258343,228.41074 2,229 8.1184053,226.16667 10.065171,223.33333 2,220.5 L290,220.5 z" Fill="{DynamicResource PieFillBrush}" Height="445" Canvas.Left="10" Stretch="Fill" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="605" Width="334"/>
+            <Path Data="M90.080811,223.16668 L90.080811,408.66695 353.78412,408.66695 353.78412,230.00035 352.04367,225.33368 347.71033,223.16668 z M90.080811,31.666389 L90.080811,194.16663 347.04367,194.16663 350.8385,190.30302 353.24561,185.9697 353.78412,180.66702 353.78412,173.91702 353.75201,161.16702 347.87701,161.16702 347.87701,148.66701 353.78412,148.41702 353.78412,31.666389 z M63.710205,2 L376.87704,2.1670227 384.50204,9.1045227 386.87704,20.167015 386.96686,97.166996 395.37701,97.166996 395.54367,90.667015 399.54367,90.667015 399.71033,97.167015 464.54404,97.166996 464.54404,219.33368 463.877,222.50034 462.54366,223.16702 449.04367,223.16702 446.87698,224.33367 446.04404,227.00034 446.04404,287.33367 448.71036,294.33367 455.04369,297.33401 706.98891,297.33401 706.98911,296.84011 C706.98996,295.75414 706.99123,294.75817 706.99302,293.87096 706.99571,292.53509 699.0384,295.2791 699.04371,294.50035 697.28241,288.40243 704.9713,284.42393 707.37704,281.66702 718.37704,272.66701 698.87686,266.16702 707.87686,256.16702 716.87686,246.16702 723.2102,255.50034 730.87687,255.167 L919.04372,255.167 922.37705,253.50035 923.37691,250.16701 C917.13529,248.15358 917.53798,246.50928 923.37691,245.16701 L923.37691,222.66701 922.37692,220.00035 919.54358,218.667 884.37691,218.667 877.87691,215.66702 875.54391,209.66699 875.54391,118.16698 917.71025,118.16698 C920.76581,118.16698 923.59862,117.87259 925.12692,119.66698 927.04358,121.91735 926.87691,122.72253 926.87691,125.00032 L926.87691,170.66698 C927.41858,173.66699 927.37692,178.54201 928.50192,179.667 929.62692,180.79201 935.52969,180.66699 939.04358,181.16698 L952.71025,181.16698 C954.84567,181.22951 955.65817,181.79201 956.54358,182.83367 957.8793,184.4051 957.90817,185.22951 958.00491,186.66698 L958.00491,245.16701 C965.10377,246.65724 963.54956,249.36163 957.87706,251.16701 L957.87706,252.91701 958.00491,255.167 963.54372,255.167 967.37706,256.83368 969.00491,261.66701 969.00491,295.41702 C978.88822,306.91028 979.59417,309.97527 969.00491,302.66702 L970.21039,307.33368 975.37706,308.667 1266.377,308.667 C1275.1367,309.73247 1274.9615,312.51617 1266.377,316.91702 1272.4818,320.36271 1272.291,322.05971 1266.377,322.16702 1275.2647,328.3759 1275.0585,329.83493 1266.377,326.41702 1259.6567,323.66407 1262.0659,327.93398 1266.377,333.667 L974.54372,333.667 970.37706,334.66702 969.00491,339.00035 C978.8395,332.58155 978.28503,335.41769 968.87706,344.91702 L969.00491,360.16702 951.87692,360.16702 919.37691,360.16702 919.37691,447.38702 875.54391,447.38702 875.54391,360.16702 739.37722,360.66703 C730.4199,360.66703 715.63274,368.167 707.00486,360.16702 698.37698,352.16702 715.87724,345.66702 707.00486,339.667 704.46796,337.41328 699.62738,328.66703 699.71037,327.33368 699.71038,325.49476 707.12812,330.23699 707.12704,328.16702 L707.00262,325.66702 446.71072,325.66702 433.04367,325.66702 421.71036,322.667 417.87701,311.667 417.87701,226.33369 416.87701,224.00034 414.54367,223.16702 390.37701,223.16702 388.37701,224.00034 387.08005,226.16701 387.08005,437.66702 364.08008,437.66702 353.78412,437.66702 90.080811,437.66702 54.376892,437.66702 2,437.66702 2,408.66695 54.376892,408.66695 54.376892,223.16668 54.376892,194.16663 54.376892,24.667023 54.376892,10.000015&#xD;&#xA; z" Fill="{DynamicResource PieFillBrush}" Height="449.387" Canvas.Left="401.623" Stretch="Fill" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="131.333" Width="1274.965"/>
+            <Rectangle Height="60" Canvas.Left="1412.204" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="855" Width="267.796" Fill="{DynamicResource PieFillBrush}"/>
+            <local:EOVCtrlControl Height="200" Canvas.Left="39.896" Canvas.Top="697.78" Width="200" RenderTransformOrigin="0.5,0.5"
+                                  EOVChannel="{Binding Path=MdChannels[PV0103]}"/>
+            <local:EOVCtrlControl Height="200" Canvas.Left="511.704" Canvas.Top="6" Width="200"
+                                  EOVChannel="{Binding Path=MdChannels[FT0101A]}"/>
+            <local:EOVCtrlControl Height="200" Canvas.Left="511.704" Canvas.Top="197.5" Width="200"
+                                  EOVChannel="{Binding Path=MdChannels[FT0101B]}"/>
+            <local:SwtichEOVControl Height="200" Canvas.Left="511.704" Canvas.Top="410" Width="200"
+                                    SwitchEOVChannel="{Binding Path=MdChannels[EV0101]}"/>
+            <local:SwtichEOVControl Height="200" Canvas.Left="1425.204" Canvas.Top="310.5" Width="200"
+                                    SwitchEOVChannel="{Binding Path=MdChannels[EV0102]}"/>
+            <Rectangle Fill="#FF373746" Height="57" Canvas.Left="1139" Stroke="#FF4F3232" Canvas.Top="410" Width="207" RadiusX="10" RadiusY="10" StrokeThickness="7"/>
+            <Canvas Height="420" Canvas.Left="93.623" Canvas.Top="190" Width="326" d:IsLocked="True">
+                <Path Data="M282,373.66699 C277.58173,373.66699 274,377.24872 274,381.66699 274,386.08527 277.58173,389.66699 282,389.66699 286.41827,389.66699 290,386.08527 290,381.66699 290,377.24872 286.41827,373.66699 282,373.66699 z M32.000004,373.66699 C27.581722,373.66699 24,377.24872 23.999996,381.66699 24,386.08527 27.581722,389.66699 32.000004,389.66699 36.418278,389.66699 40,386.08527 40.000004,381.66699 40,377.24872 36.418278,373.66699 32.000004,373.66699 z M282,18.166996 C277.58173,18.167 274,21.748722 274,26.167004 274,30.585278 277.58173,34.167 282,34.167004 286.41827,34.167 290,30.585278 290,26.167004 290,21.748722 286.41827,18.167 282,18.166996 z M32.000004,18.166996 C27.581722,18.167 24,21.748722 23.999996,26.167004 24,30.585278 27.581722,34.167 32.000004,34.167004 36.418278,34.167 40,30.585278 40.000004,26.167004 40,21.748722 36.418278,18.167 32.000004,18.166996 z M22.000002,2 L294,2 C305.04568,2 314,10.954305 314,22.000002 L314,398 C314,409.04568 305.04568,418 294,418 L22.000002,418 C10.954305,418 2,409.04568 2,398 L2,22.000002 C2,10.954305 10.954305,2 22.000002,2 z" Fill="#FF424249" Height="420" Stretch="Fill" Stroke="#FF342B2B" StrokeThickness="4" Width="316" d:IsLocked="True"/>
+                <TextBox Style="{StaticResource HeaderTextBox}" Height="80" Canvas.Left="55.5" TextWrapping="Wrap" Canvas.Top="39" Width="190.5" FontSize="24" FontWeight="Bold"
+            		local:TextHeaderHelper.TextHeader="二冷空气流量" d:IsLocked="True">
+                    <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                        <Binding Path="MdExperPoints[二冷空气流量].MeasureValue"/>
+                        <Binding Path="MdExperPoints[二冷空气流量].Unit"/>
+                    </MultiBinding>
+                </TextBox>
+                <TextBox Style="{StaticResource HeaderTextBox}" Height="80" Canvas.Left="55.5" TextWrapping="Wrap" Canvas.Top="161" Width="190.5" FontSize="24" FontWeight="Bold"
+            		local:TextHeaderHelper.TextHeader="{Binding MdChannels[PT0103].Summary}" d:IsLocked="True">
+                    <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                        <Binding Path="MdChannels[PT0103].MeasureValue"/>
+                        <Binding Path="MdChannels[PT0103].Unit"/>
+                    </MultiBinding>
+                </TextBox>
+                <TextBox Style="{StaticResource HeaderTextBox}" Height="80" Canvas.Left="55.5" TextWrapping="Wrap" Canvas.Top="284.5" Width="190.5" FontSize="24" FontWeight="Bold"
+            		local:TextHeaderHelper.TextHeader="{Binding MdChannels[TT0101].Summary}" d:IsLocked="True">
+                    <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                        <Binding Path="MdChannels[TT0101].MeasureValue"/>
+                        <Binding Path="MdChannels[TT0101].Unit"/>
+                    </MultiBinding>
+                </TextBox>
+
+            </Canvas>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="77.5" Canvas.Left="407.623" Stroke="#FF4F3232" Canvas.Top="514" Width="30.377"/>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="32.5" Canvas.Left="277.623" Stroke="#FF4F3232" Canvas.Top="610" Width="84.377"/>
+            <Rectangle Fill="#FF3E3232" Height="10.167" Canvas.Left="344" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="641.168" Width="6.333"/>
+            <Rectangle Fill="#FF3E3232" Height="10.167" Canvas.Left="292" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="641.168" Width="6.333"/>
+            <Rectangle Fill="#FF3E3232" Height="10.5" Canvas.Left="438" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="529" Width="12"/>
+            <Rectangle Fill="#FF3E3232" Height="10.5" Canvas.Left="438" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="570.22" Width="12"/>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="26.613" Canvas.Left="277.623" Stroke="#FF4F3232" Canvas.Top="1023.387" Width="84.377"/>
+            <Rectangle Fill="#FF4F3B3B" Height="12" Canvas.Left="285.333" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="1012.387" Width="13"/>
+            <Rectangle Fill="#FF4F3B3B" Height="12" Canvas.Left="344" Stroke="#FF4F3232" StrokeThickness="3" Canvas.Top="1012.387" Width="13"/>
+            <Canvas Height="420" Canvas.Left="1106.628" Canvas.Top="580.72" Width="326" d:IsLocked="True">
+                <Path Data="M282,373.66699 C277.58173,373.66699 274,377.24872 274,381.66699 274,386.08527 277.58173,389.66699 282,389.66699 286.41827,389.66699 290,386.08527 290,381.66699 290,377.24872 286.41827,373.66699 282,373.66699 z M32.000004,373.66699 C27.581722,373.66699 24,377.24872 23.999996,381.66699 24,386.08527 27.581722,389.66699 32.000004,389.66699 36.418278,389.66699 40,386.08527 40.000004,381.66699 40,377.24872 36.418278,373.66699 32.000004,373.66699 z M282,18.166996 C277.58173,18.167 274,21.748722 274,26.167004 274,30.585278 277.58173,34.167 282,34.167004 286.41827,34.167 290,30.585278 290,26.167004 290,21.748722 286.41827,18.167 282,18.166996 z M32.000004,18.166996 C27.581722,18.167 24,21.748722 23.999996,26.167004 24,30.585278 27.581722,34.167 32.000004,34.167004 36.418278,34.167 40,30.585278 40.000004,26.167004 40,21.748722 36.418278,18.167 32.000004,18.166996 z M22.000002,2 L294,2 C305.04568,2 314,10.954305 314,22.000002 L314,398 C314,409.04568 305.04568,418 294,418 L22.000002,418 C10.954305,418 2,409.04568 2,398 L2,22.000002 C2,10.954305 10.954305,2 22.000002,2 z" Fill="#FF424249" Height="420" Stretch="Fill" Stroke="#FF342B2B" StrokeThickness="4" Width="316"/>
+                <TextBox Style="{StaticResource HeaderTextBox}" Height="80" Canvas.Left="57.5" TextWrapping="Wrap" Canvas.Top="109" Width="190.5" FontSize="24" FontWeight="Bold"
+            		local:TextHeaderHelper.TextHeader="{Binding MdChannels[PT0105].Summary}">
+                    <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                        <Binding Path="MdChannels[PT0105].MeasureValue"/>
+                        <Binding Path="MdChannels[PT0105].Unit"/>
+                    </MultiBinding>
+                </TextBox>
+                <TextBox Style="{StaticResource HeaderTextBox}" Height="80" Canvas.Left="57.5" TextWrapping="Wrap" Canvas.Top="231" Width="190.5" FontSize="24" FontWeight="Bold"
+            		local:TextHeaderHelper.TextHeader="{Binding MdChannels[TT0104].Summary}">
+                    <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                        <Binding Path="MdChannels[TT0103].MeasureValue"/>
+                        <Binding Path="MdChannels[TT0103].Unit"/>
+                    </MultiBinding>
+                </TextBox>
+
+            </Canvas>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="22.22" Canvas.Left="1254" Stroke="#FF342B2B" Canvas.Top="559.5" Width="92"/>
+            <Rectangle Fill="#FF2B2424" Height="12.167" Canvas.Left="1266" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="547.333" Width="9.167"/>
+            <Rectangle Fill="#FF2B2424" Height="12.167" Canvas.Left="1322" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="547.333" Width="9.167"/>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="88.667" Canvas.Left="1418.871" Stroke="#FF342B2B" Canvas.Top="839.997" Width="20.424"/>
+            <Rectangle Fill="Black" Height="7" Canvas.Left="1439.295" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="915" Width="5.955"/>
+            <Rectangle Fill="Black" Height="7" Canvas.Left="1439.295" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="848" Width="5.955"/>
+            <Rectangle Fill="{DynamicResource PieFillBrush}" Height="88.667" Canvas.Left="1660" Stroke="#FF342B2B" Canvas.Top="839.997" Width="20"/>
+            <Rectangle Fill="#FF4F3D3D" Height="10.667" Canvas.Left="1648.833" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="915" Width="11.167"/>
+            <Rectangle Fill="#FF4B4646" Height="10.667" Canvas.Left="1648.833" Stroke="#FF342B2B" StrokeThickness="4" Canvas.Top="844.333" Width="11.167"/>
+        </Canvas>
+    </Grid>
+</UserControl>

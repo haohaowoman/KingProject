@@ -1,0 +1,63 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             x:Class="ExpRuntimeApp.UserControls.HeaterControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="188.5">
+    <Viewbox Stretch="Fill" ToolTip="{Binding TemperatureChannel.Summary, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaterControl}}}">
+        <Canvas Height="300" Width="188.5">
+            <Path Data="M73.499998,185.49998 L75.499998,185.49998 C77.156851,185.49998 78.499998,186.84312 78.499998,188.49998 L78.499998,228.49998 C78.499998,230.15685 77.156851,231.49998 75.499998,231.49998 L73.499998,231.49998 C71.843146,231.49998 70.499998,230.15685 70.499998,228.49998 L70.499998,188.49998 C70.499998,186.84312 71.843146,185.49998 73.499998,185.49998 z M69.999998,102.074 L72.999998,102.074 72.999998,126.333 69.999998,126.333 z M7.6665009,42.241001 C6.6538866,42.241001 5.833001,43.584145 5.8330005,45.241001 L5.8330005,228.50002 C5.833001,230.15688 6.6538866,231.50002 7.6665009,231.50002 8.6791146,231.50002 9.5000003,230.15688 9.5000013,228.50002 L9.5000013,45.241001 C9.5000003,43.584145 8.6791146,42.241001 7.6665009,42.241001 z M34.999998,0.5 C54.053824,0.5 69.499998,16.863756 69.499998,37.049477 L69.499998,232.99529 C69.499998,253.181 54.053824,252.83362 34.999998,252.83362 15.946176,252.83362 0.5000006,253.181 0.5,232.99529 L0.5,37.049477 C0.5000006,16.863756 15.946176,0.5 34.999998,0.5 z" Height="253.334" Canvas.Left="10" Stretch="Fill" Stroke="Black" Canvas.Top="24" Width="79">
+                <Path.Fill>
+                    <LinearGradientBrush EndPoint="0.669,0.973" StartPoint="0.032,0.116">
+                        <GradientStop Color="#FFD8AEAE" Offset="0.023"/>
+                        <GradientStop Color="#FF36120A" Offset="0.916"/>
+                        <GradientStop Color="#FFE8B4A5" Offset="0.308"/>
+                        <GradientStop Color="#FFB28686" Offset="0.013"/>
+                        <GradientStop Color="#FFC29184" Offset="0.431"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+            <Path Data="M23.286943,12.011415 C22.969597,12.018881 22.521376,12.12738 21.916498,12.386028 17.319614,14.351682 9.1322575,24.213972 11.384189,24.333972 11.384189,24.333972 13.546802,24.357681 13.715773,23.00562 13.924105,21.338588 15.360432,20.153001 16.757523,18.75555 19.298922,16.213497 21.035372,14.111924 22.853428,13.559821 23.884359,13.246749 24.420321,11.984749 23.286943,12.011415 z M45.833332,0.5 C70.962288,0.4999997 90.5,22.464403 90.5,35.167057 90.5,47.869712 70.62896,45.167213 45.5,45.167213 20.371044,45.167213 0.5,47.869617 0.5,35.166961 0.5,22.464307 20.704378,0.4999997 45.833332,0.5 z" Height="45.908" Canvas.Left="-0.5" Stretch="Fill" Stroke="Black" Canvas.Top="14.833" Width="91" >
+                <Path.Fill>
+                    <LinearGradientBrush EndPoint="0.836,0.689" StartPoint="0.322,0.262">
+                        <GradientStop Color="#FF7E817A" Offset="0.771"/>
+                        <GradientStop Color="#FFC6DCBF" Offset="0.086"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+            <Path Data="M5.2499998,8.4999994 L85.25,8.4999994 C85.802284,8.4999995 86.25,9.1715724 86.25,10.000001 86.25,10.828427 85.802284,11.5 85.25,11.499999 L5.2499998,11.499999 C4.6977152,11.5 4.25,10.828427 4.2500011,10.000001 4.25,9.1715724 4.6977152,8.4999995 5.2499998,8.4999994 z M1.5,4.4999995 L88.5,4.4999995 C89.052284,4.4999995 89.5,4.9477148 89.5,5.4999995 L89.5,6.4999995 C89.5,7.0522843 89.052284,7.4999995 88.5,7.4999994 L1.5,7.4999994 C0.94771528,7.4999995 0.5,7.0522843 0.5,6.4999995 L0.5,5.4999995 C0.5,4.9477148 0.94771528,4.4999995 1.5,4.4999995 z M2.7499999,0.5 L87.75,0.5 C88.854568,0.49999952 89.75,0.94771481 89.75,1.4999986 L89.75,2.4999986 C89.75,3.0522842 88.854568,3.4999995 87.75,3.4999995 L2.7499999,3.4999995 C1.6454306,3.4999995 0.75,3.0522842 0.75,2.4999986 L0.75,1.4999986 C0.75,0.94771481 1.6454306,0.49999952 2.7499999,0.5 z" Fill="#FF9CDFE6" Height="12" Stretch="Fill" Stroke="Black" Canvas.Top="44.667" Width="90.25"/>
+            <Path Data="M29.93,18.165998 L44.68,18.165998 C45.232285,18.165998 45.68,19.061431 45.68,20.166 L43.346664,28.165666 45.68,38.749 C45.68,39.853569 45.232285,40.749 44.68,40.749 L29.93,40.749 C29.377716,40.749 28.93,39.853569 28.93,38.749 L31.18,28.124 28.93,20.166 C28.93,19.061431 29.377716,18.165998 29.93,18.165998 z M67.014,5.1659994 C66.323647,5.1659994 65.764,5.7256436 65.764,6.4159999 65.764,7.1063557 66.323647,7.6659994 67.014,7.6659994 67.704353,7.6659994 68.264,7.1063557 68.264,6.4159999 68.264,5.7256436 67.704353,5.1659994 67.014,5.1659994 z M35.847,5.1659994 C35.156643,5.1659994 34.597,5.7256436 34.597,6.4159999 34.597,7.1063557 35.156643,7.6659994 35.847,7.6659994 36.537357,7.6659994 37.097,7.1063557 37.097,6.4159999 37.097,5.7256436 36.537357,5.1659994 35.847,5.1659994 z M5.3470006,5.1659994 C4.6566439,5.1659994 4.0970001,5.7256436 4.0970001,6.4159999 4.0970001,7.1063557 4.6566439,7.6659994 5.3470006,7.6659994 6.0373559,7.6659994 6.5970001,7.1063557 6.5970001,6.4159999 6.5970001,5.7256436 6.0373559,5.1659994 5.3470006,5.1659994 z M2.6799996,2.9990001 L2.7446358,2.9990001 17.115492,2.9990001 55.244507,2.9990001 69.615364,2.9990001 69.68,2.9990001 C70.232285,2.9989989 70.68,3.8944294 70.68,4.9990005 L70.68,10.165999 70.679871,10.17113 70.679871,38.999 C70.679871,40.103569 70.70327,40.749 70.115364,40.749 L57.596668,40.665668 C57.520573,40.665668 57.637756,37.875911 58.346664,36.499 59.204422,34.832981 59.929279,34.538852 60.331734,33.578762 62.305138,28.87104 64.144272,26.580423 63.415066,21.24543 62.998791,18.199893 61.596043,15.153853 60.005211,12.535969 L59.775215,12.165999 12.584786,12.165999 12.354789,12.535969 C10.763957,15.153853 9.361207,18.199893 8.9449301,21.24543 8.215724,26.580421 10.054863,28.87104 12.028267,33.578762 12.430717,34.538852 13.322243,34.832981 14.18,36.499 14.888908,37.875911 14.839428,40.665668 14.763331,40.665668 L2.2446361,40.749 C1.6567301,40.749 1.6801293,40.103569 1.6801296,38.999 L1.6801296,10.17113 1.6799994,10.165999 1.6799994,4.9990005 C1.6800001,3.8944294 2.1277153,2.9989989 2.6799996,2.9990001 z M50.833,0.5 L71,0.5 71,2.5000005 50.833,2.5000005 z M25.667,0.5 L45.834,0.5 45.834,2.4999995 25.667,2.4999995 z M0.5,0.5 L20.667,0.5 20.667,2.4999995 0.5,2.4999995 z" Fill="#FF251A12" Height="41.249" Canvas.Left="8.82" Stretch="Fill" Stroke="Black" Canvas.Top="258.501" Width="71.5"/>
+            <Canvas Height="150" Canvas.Left="90.5" Canvas.Top="150" Width="97.5">
+                <Rectangle Fill="#FF3A3736" Height="150" RadiusY="3" RadiusX="3" Stroke="Black" Width="97.5"/>
+                <ToggleButton Height="39.333" Canvas.Left="10" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="0.934" Width="29.334" BorderBrush="#FF2F3030"
+					IsChecked="{Binding RemoteStatusChannel.Status, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}}"/>
+                <TextBox x:Name="textBox" Height="37.961" Canvas.Left="4.307" Canvas.Top="37.372" Width="89.324" BorderBrush="#FF2F3030"
+                         IsReadOnly="True"
+                         FontSize="18.667" FontWeight="Bold" IsHitTestVisible="False" FontStyle="Italic">
+                    <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}" Path="TemperatureChannel.MeasureValue"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}" Path="TemperatureChannel.Unit"/>
+                    </MultiBinding>
+
+                </TextBox>
+                <Ellipse Fill="#FF8FBB43" Height="9" Canvas.Left="47.333" Stroke="Black" Canvas.Top="17.934" Width="9"/>
+                <Ellipse Fill="#FF8FBB43" Height="9" Canvas.Left="60.334" Stroke="Black" Canvas.Top="17.934" Width="9"/>
+                <Ellipse Fill="#FF8FBB43" Height="9" Canvas.Left="73.167" Stroke="Black" Canvas.Top="17.934" Width="9"/>
+                <Rectangle Fill="#FFE6643E" Height="7.334" Canvas.Left="76.333" Stroke="Black" Canvas.Top="77.333" Width="11.167"/>
+                <Rectangle Fill="#FFE6643E" Height="7.334" Canvas.Left="58.834" Stroke="Black" Canvas.Top="77.333" Width="11.167"/>
+                <Rectangle Fill="#FFE6643E" Height="7.334" Canvas.Left="42" Stroke="Black" Canvas.Top="77.333" Width="11.167"/>
+                <Rectangle Height="49.5" Canvas.Left="10" Stroke="Black" Canvas.Top="95.167" Width="77.5" Fill="#FF5B5050"/>
+                <Ellipse Fill="#FF3A3232" Height="5.333" Canvas.Left="77.333" Stroke="Black" Canvas.Top="117" Width="4.834"/>
+            </Canvas>
+            <Rectangle Fill="#FF484864" Height="8" Canvas.Left="90" RadiusY="3" RadiusX="3" Stroke="Black" Canvas.Top="232.003" Width="99"/>
+            <ProgressBar Height="122.667" Canvas.Left="58.835" Canvas.Top="65.741" Width="4.666" Orientation="Vertical"
+				Value="{Binding TemperatureChannel.MeasureValue, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}}"
+				Minimum="{Binding TemperatureChannel.Range.Low, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}}"
+				Maximum="{Binding TemperatureChannel.Range.Height, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:HeaterControl}, Mode=FindAncestor}}" BorderBrush="#FF6D6D6D" Background="#FFE67777" Foreground="#FFF01414"/>
+        </Canvas>
+
+    </Viewbox>
+</UserControl>

@@ -6,12 +6,21 @@
         xmlns:local="clr-namespace:ExpRuntimeApp"
         xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls" 
+    xmlns:sys="clr-namespace:System;assembly=System"
         x:Class="ExpRuntimeApp.MainWindow"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        Title="环散系统测控程序" Height="955.991" Width="1600.097" Padding="10" FontSize="21">
+        Title="环散系统测控程序" Height="955.991" Width="1600.097" Padding="10" FontSize="21"
+    DataContext="{StaticResource ExpViewModule}">
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ExpRuntimeApp;component/IndControls/IndustryGeometries.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -36,7 +45,7 @@
                 <TextBlock Text="姓名:" Margin="1,0" FontSize="12"/>
                 <ComboBox Margin="2" MinWidth="120" MaxWidth="250" IsEditable="True"/>
                 <TextBlock Text="工号:" Margin="1,0" FontSize="12"/>
-                <TextBox Margin="2"/>
+                <TextBox Margin="2" />
             </StackPanel>
 
             <Button DockPanel.Dock="Left" Content="登录" Margin="10" Padding="20,3" VerticalAlignment="Center" Style="{DynamicResource AccentedSquareButtonStyle}"/>
@@ -53,7 +62,7 @@
                 <uc:TesttingMakeSure x:Name="MakeSure"/>
             </WrapPanel>
         </ScrollViewer>
-        
+
 
         <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="2">
             <TabControl.Resources>
@@ -63,7 +72,7 @@
                 <TabItem Header="通道">
                     <Frame Source="Pages/MeasureAndControlPages/ChannelsValuePage.xaml"/>
                 </TabItem>
-                
+
                 <TabItem Header="测试点">
                     <Frame Source="Pages/MeasureAndControlPages/ExpPointDataGridShowPage.xaml"/>
                 </TabItem>
@@ -79,6 +88,19 @@
 
             <Button Content="数据分析" Margin="10" Padding="10" FontSize="24"/>
 
+            <Image Width="42" Height="42">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <GeometryDrawing Geometry="{StaticResource AirFunGeometry}" Brush="#FFBB1B1B">
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="#FF2673B4"/>
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
         </UniformGrid>
     </Grid>
 </metro:MetroWindow>

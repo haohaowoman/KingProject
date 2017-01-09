@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using mcLogic.Execute;
 namespace LabMCESystem.Servers.HS
 {
     /// <summary>
@@ -28,7 +28,7 @@ namespace LabMCESystem.Servers.HS
         }
 
         // 热边电炉反馈更新事件。
-        private void HS_HotRoadHeaterExe_UpdateFedback(Logic.Execute.IDataFedback sender)
+        private void HS_HotRoadHeaterExe_UpdateFedback(IDataFeedback sender)
         {
             // 读取热边空气入口温度。
             System.Diagnostics.Debug.Assert(HS_Device != null);

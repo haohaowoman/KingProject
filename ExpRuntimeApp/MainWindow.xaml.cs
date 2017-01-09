@@ -56,7 +56,7 @@ namespace ExpRuntimeApp
         }
 
         private void UniformGrid_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             Button btn = e.Source as Button;
             if (btn != null)
             {

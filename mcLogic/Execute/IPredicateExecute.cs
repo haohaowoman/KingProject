@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// 定义可附加条件执行控制的方法

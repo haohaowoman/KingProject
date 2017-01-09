@@ -11,13 +11,24 @@ using System.Windows.Threading;
 using LabMCESystem.BaseService.ExperimentDataExchange;
 using LabMCESystem.Servers.HS;
 using System.Windows.Data;
+using LabMCESystem.LabElement;
 
 namespace ExpRuntimeApp.ViewModules
-{
+{    
     class ExperimentViewModule : IDisposable
     {
+
+        public ExperimentViewModule()
+        {
+            // 每100ms从服务读取一次数据
+            _readValueTimer = new Timer(150);
+            _readValueTimer.Elapsed += _readValueTimer_Elapsed;
+        }
+
         private Timer _readValueTimer;
-        
+
+        public MdChannelsCollection Test { get; set; } = new MdChannelsCollection();
+
         private HS_Server _service;
 
         public HS_Server Service
@@ -34,54 +45,50 @@ namespace ExpRuntimeApp.ViewModules
                     // 在此进行各项初始化
 
                     // 通道当前数据初始化
-                    _curChannelVal = new ObservableCollection<ChannelValue>();
+                    _mdChannels = new MdChannelsCollection();
 
-                    var chs = _service.ElementManager.AllChannels;
+                    var chs = _service.ElementManager.Devices[0].Channels;
 
                     foreach (var ch in chs)
                     {
-                        _curChannelVal.Add(new ChannelValue(ch));
+                        _mdChannels.Add(new MdChannel(ch));
+                        Test.Add(new MdChannel(ch));
                     }
 
                     // 为集合设备Group CollectionView
                     // 通道以工作方式分类
-                    CollectionView cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curChannelVal);
+                    CollectionView cCView = (CollectionView)CollectionViewSource.GetDefaultView(_mdChannels);
                     if (cCView.CanGroup)
                     {
-                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Channel.Unit"));
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Style"));
                     }
 
                     // 试验点当前数据初始化
-                    _curExpPointVal = new ObservableCollection<ExpPointValue>();
+                    _mdExperPoints = new MdChannelsCollection();
 
                     var eps = _service.ElementManager.AllExperimentPoints;
 
                     foreach (var ep in eps)
                     {
-                        var epv = new ExpPointValue(ep);
-                        foreach (var item in _curChannelVal)
-                        {
-                            epv.PairedChannelValue = item;
-                            if (epv.PairedChannelValue != null)
-                            {
-                                break;
-                            }
-                        }
-                        _curExpPointVal.Add(epv);
+                        var epv = new MdExperPoint(ep);
+                        _mdExperPoints.Add(epv);
                     }
 
-                    cCView = (CollectionView)CollectionViewSource.GetDefaultView(_curExpPointVal);
+                    cCView = (CollectionView)CollectionViewSource.GetDefaultView(_mdExperPoints);
                     if (cCView.CanGroup)
                     {
-                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("ExpPoint.LabGroup"));
+                        cCView.GroupDescriptions.Add(new PropertyGroupDescription("Area"));
                     }
 
                     _service.ElementManager.ExperimentAreaesChanged += ElementManager_ExperimentAreaesChanged;
 
                     _service.ElementManager.ExperimentPointsChanged += ElementManager_ExperimentPointsChanged;
 
-                    // 开始定义读取数据                   
-                    _readValueTimer.Start();
+                    // 开始定义读取数据    
+                    //_readValueTimer_Elapsed(_readValueTimer, null);
+
+                    //_readValueTimer.Start();
+
                 }
             }
         }
@@ -102,35 +109,26 @@ namespace ExpRuntimeApp.ViewModules
         }
 
         // 当前所有通道的数据值集合
-        private ObservableCollection<ChannelValue> _curChannelVal;
+        private MdChannelsCollection _mdChannels;
         /// <summary>
         /// 获取当前通道的数据值集合
         /// </summary>
-        public ObservableCollection<ChannelValue> CurChannelVal
+        public MdChannelsCollection MdChannels
         {
-            get { return _curChannelVal; }
+            get { return _mdChannels; }
         }
 
         // 当前所有测试点的数据值集合
-        private ObservableCollection<ExpPointValue> _curExpPointVal;
+        private MdChannelsCollection _mdExperPoints;
 
         /// <summary>
         /// 获取当前试验测试点的数据值集合
         /// </summary>
-        public ObservableCollection<ExpPointValue> CurExpPointVal
+        public MdChannelsCollection MdExperPoints
         {
-            get { return _curExpPointVal; }
+            get { return _mdExperPoints; }
         }
-
-
-        public ExperimentViewModule()
-        {
-            // 每100ms从服务读取一次数据
-            _readValueTimer = new Timer(100);
-            _readValueTimer.Elapsed += _readValueTimer_Elapsed;
-
-        }
-
+        
         private void _readValueTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_service != null)
@@ -138,35 +136,23 @@ namespace ExpRuntimeApp.ViewModules
                 // 读取数据
                 var eReader = _service.ExpDataExchange.SingleDataReader;
 
-                ExpSingleRTDataArgs args = new ExpSingleRTDataArgs();
-
+                Random r = new Random();
                 // 更新通道数据
-                foreach (var item in _curChannelVal)
+                foreach (var item in _mdChannels)
                 {
-                    args.ChKeyCode = item.Channel.KeyCode;
-                    //eReader.Read(args);
-                    item.Value += 1.1f;
-                    if (item.Value > 100.0)
-                    {
-                        item.Value = 0;
-                    }
-                    //item.Value = args.RTValue;
-                }
+                    IAnalogueMeasure iam = item.Channel as IAnalogueMeasure;
 
-                // 更新试验测试点数据
-                foreach (var item in _curExpPointVal)
-                {
-                    if (item.ExpPoint.PairedChannel != null)
+                    if (iam != null)
                     {
-                        args.ChKeyCode = item.ExpPoint.PairedChannel.KeyCode;
-                        //eReader.Read(args);
-                        //item.Value += 2.1f;
-                        
-                        if (item.Value > 100.0)
+                        iam.MeasureValue = r.Next(0, 100) / 1.0;
+                    }
+                    else
+                    {
+                        IStatusExpress ise = item.Channel as IStatusExpress;
+                        if (ise != null)
                         {
-                            item.Value = 0;
+                            ise.Status = !ise.Status;
                         }
-                        //item.Value = args.RTValue;
                     }
                 }
             }

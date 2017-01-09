@@ -19,11 +19,11 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            ExpPointValue epv = item as ExpPointValue;
+            MdExperPoint epv = item as MdExperPoint;
             if (epv != null)
             {
                 // 根据通道的单位判断类型而选择模板
-                string unit = epv.ExpPoint.Unit;
+                string unit = epv.Unit;
                 DataTemplate tdt = null;
                 switch (unit)
                 {

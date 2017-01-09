@@ -1,4 +1,5 @@
 ﻿using ExpRuntimeApp.Modules;
+using LabMCESystem.LabElement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,36 +23,112 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 
         public DataTemplate FlowTemplate { get; set; }
 
-        public DataTemplate DigitalTemplate { get; set; }
+        public DataTemplate StatusOutputTemplate { get; set; }
+
+        public DataTemplate StatusTemplate { get; set; }
 
         public DataTemplate DefualtMeasureDataTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            ChannelValue cv = item as ChannelValue;
-            if (cv != null)
+            MdChannel cv = item as MdChannel;
+            if (cv != null && (container as FrameworkElement) != null)
             {
-
-                if (cv.Channel.Unit == null && cv.Channel.Label.Contains("EV"))
+                DataTemplate rt = null;
+                switch (cv.Style)
                 {
-                    return DigitalTemplate;
-                }
+                    case ExperimentStyle.Measure:
+                        {
+                            IAnalogueMeasure am = cv.Channel as IAnalogueMeasure;
+                            if (am != null)
+                            {
+                                switch (am.Unit)
+                                {
+                                    case "%":
+                                        rt = EOVChannelTemplate;
+                                        break;
+                                    case "℃":
+                                        rt = TemperatureTemplate;
+                                        break;
+                                    case "Kg/h":
+                                        rt = FlowTemplate;
+                                        break;
+                                    default:
+                                        rt = DefualtMeasureDataTemplate;
+                                        break;
+                                }
+                            }
+                        }
+                        break;
+                    case ExperimentStyle.Control:
 
-                switch (cv.Channel.Unit)
-                {
-                    case "%":
-                        return EOVChannelTemplate;
-
-                    case "℃":
-                        return TemperatureTemplate;
-                    case "Kg/h":
-                        return FlowTemplate;
+                        break;
+                    case ExperimentStyle.Feedback:
+                        {
+                            IFeedback fb = cv.Channel as IFeedback;
+                            if (fb != null)
+                            {
+                                switch (fb.Unit)
+                                {
+                                    case "%":
+                                        rt = EOVChannelTemplate;
+                                        break;                                    
+                                    default:
+                                        rt = DefualtMeasureDataTemplate;
+                                        break;
+                                }
+                            }
+                        }
+                        break;
+                    case ExperimentStyle.Status:
+                        {
+                            IStatusExpress se = cv.Channel as IStatusExpress;
+                            if (se != null)
+                            {
+                                rt = StatusTemplate;
+                            }
+                        }
+                        break;
+                    case ExperimentStyle.StatusControl:
+                        {
+                            IStatusController se = cv.Channel as IStatusController;
+                            if (se != null)
+                            {
+                                rt = StatusOutputTemplate;
+                            }
+                        }
+                        break;
                     default:
-                        return DefualtMeasureDataTemplate;
-                        //break;
+                        break;
                 }
-
+                return rt;
             }
+            return base.SelectTemplate(item, container);
+        }
+    }
+
+    class ChValueColumnCellTempateSelector : DataTemplateSelector
+    {
+        public DataTemplate StatusExpress { get; set; }
+
+        public DataTemplate ValueExpress { get; set; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            var cv = item as MdChannel;
+            var el = container as FrameworkElement;
+            if (cv != null && el != null)
+            {
+                if ((cv.Style & ExperimentStyle.Status) == ExperimentStyle.Status)
+                {
+                    return StatusExpress;
+                }
+                else
+                {
+                    return ValueExpress;
+                }
+            }    
+
             return base.SelectTemplate(item, container);
         }
     }

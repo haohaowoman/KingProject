@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LabMCESystem.Task;
+using LabMCESystem.ETask;
 using LabMCESystem.BaseService.LabTask;
 namespace LabMCESystem.LabDeviceModule
 {

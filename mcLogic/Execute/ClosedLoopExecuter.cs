@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabMCESystem.Logic.Execute
+namespace mcLogic.Execute
 {
     /// <summary>
     /// 表示公差范围
@@ -47,7 +47,7 @@ namespace LabMCESystem.Logic.Execute
     /// 闭环执行控制器
     /// 实现IDataFedback接口
     /// </summary>
-    public abstract class ClosedLoopExecuter : Executer, IDataFedback
+    public abstract class ClosedLoopExecuter : Executer, IDataFeedback
     {
         public ClosedLoopExecuter(double targetVal, SafeRange srange) : base(targetVal, srange)
         {

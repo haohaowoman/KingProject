@@ -26,7 +26,7 @@
 
         <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=ExperimnetAreas}">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type label:ExperimentArea}" ItemsSource="{Binding Path=SubElements}">
+                <HierarchicalDataTemplate DataType="{x:Type label:ExperimentalArea}" ItemsSource="{Binding Path=SubElements}">
                     <StackPanel Margin="3">
                         <TextBlock Text="{Binding Path=Label, Mode=TwoWay}"/>
 

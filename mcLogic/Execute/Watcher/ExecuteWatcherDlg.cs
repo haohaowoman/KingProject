@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LabMCESystem.Logic.Execute.Watcher
+namespace mcLogic.Execute.Watcher
 {
     public partial class ExecuteWatcherDlg : Form
     {
@@ -54,7 +54,7 @@ namespace LabMCESystem.Logic.Execute.Watcher
         {
             var sEv = EChart.Series.FindByName("ExeValue");
             var sFv = EChart.Series.FindByName("FedbackValue");
-            var fe = _watcher.TargetExecuter as IDataFedback;
+            var fe = _watcher.TargetExecuter as IDataFeedback;
             foreach (var item in _watcher.WatchData)
             {
                 sEv.Points.AddXY(item.Time, item.ExecuteValue);

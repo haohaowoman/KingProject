@@ -1,6 +1,6 @@
 ﻿using LabMCESystem.LabElement;
 
-namespace LabMCESystem.Task
+namespace LabMCESystem.ETask
 {
     public interface IOwnTaskSetter
     {

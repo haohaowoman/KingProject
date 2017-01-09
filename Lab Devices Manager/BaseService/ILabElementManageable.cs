@@ -20,9 +20,9 @@ namespace LabMCESystem.BaseService
 
         #region Operations
 
-        bool AddNewSensor(MeasureSensor newSensor);
+        bool AddNewSensor(LinerSensor newSensor);
 
-        bool RemoveSensor(MeasureSensor newSensor);
+        bool RemoveSensor(LinerSensor newSensor);
 
         bool RemoveSensorAsNumber(string sensorNumber);
 

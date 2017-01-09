@@ -5,6 +5,12 @@
                     xmlns:module="clr-namespace:ExpRuntimeApp.Modules"
                     xmlns:vfgauge="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges">
 
+    <Style TargetType="{x:Type vfgauge:Gauge}">
+        <Style.Setters>
+            <Setter Property="AnimationEnabled" Value="False"/>
+        </Style.Setters>
+    </Style>
+    
     <Style x:Key="VGroupBorderStyle" TargetType="{x:Type Border}">
         <Style.Setters>
             <Setter Property="BorderThickness" Value="2"/>
@@ -17,8 +23,8 @@
 
     <Thickness x:Key="TextBlockMargin">3,1</Thickness>
 
-    <DataTemplate x:Key="MeasureDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+    <DataTemplate x:Key="MeasureDataTemplate" DataType="{x:Type module:MdChannel}">
+        <GroupBox Header="{Binding Path=Label}" Margin="5,10">
             <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
                 <Grid Margin="1" HorizontalAlignment="Left" Background="White">
 
@@ -35,14 +41,14 @@
                     <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
 
                         <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
                         <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ~ {1}">
-                                    <Binding Path="Channel.Range.Low"></Binding>
-                                    <Binding Path="Channel.Range.Height"></Binding>
+                                    <Binding Path="Range.Low"></Binding>
+                                    <Binding Path="Range.Height"></Binding>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -103,8 +109,8 @@
         </GroupBox>
     </DataTemplate>
 
-    <DataTemplate x:Key="FlowDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+    <DataTemplate x:Key="FlowDataTemplate" DataType="{x:Type module:MdChannel}">
+        <GroupBox Header="{Binding Path=Label}" Margin="5,10">
             <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
                 <Grid Margin="1" HorizontalAlignment="Left" Background="White">
 
@@ -121,14 +127,14 @@
                     <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
 
                         <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
                         <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ~ {1}">
-                                    <Binding Path="Channel.Range.Low"></Binding>
-                                    <Binding Path="Channel.Range.Height"></Binding>
+                                    <Binding Path="Range.Low"></Binding>
+                                    <Binding Path="Range.Height"></Binding>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -175,8 +181,8 @@
         </GroupBox>
     </DataTemplate>
 
-    <DataTemplate x:Key="EOVDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+    <DataTemplate x:Key="EOVDataTemplate" DataType="{x:Type module:MdChannel}">
+        <GroupBox Header="{Binding Path=Label}" Margin="5,10">
             <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
                 <Grid Margin="1" HorizontalAlignment="Left" Background="White">
 
@@ -193,14 +199,14 @@
                     <UniformGrid Grid.Row="0" Grid.Column="0" Columns="2" HorizontalAlignment="Left">
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
 
                         <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
                         <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ~ {1}">
-                                    <Binding Path="Channel.Range.Low"></Binding>
-                                    <Binding Path="Channel.Range.Height"></Binding>
+                                    <Binding Path="Range.Low"></Binding>
+                                    <Binding Path="Range.Height"></Binding>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -269,7 +275,7 @@
                                                      Minimum="0"
                                          Maximum="100"
                                                      TextAlignment="Left"                                        
-                                                     Value="{Binding Path=ValueSetter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Value="{Binding Path=AOValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Speedup="True" StringFormat="{}{0:F2}" />
 
                             <Slider DockPanel.Dock="Top" 
@@ -293,8 +299,8 @@
 
     <module:ADigitalValueConverter x:Key="AorDigitalConverter"/>
 
-    <DataTemplate x:Key="DigitalDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+    <DataTemplate x:Key="StatusOutputDataTemplate" DataType="{x:Type module:MdChannel}">
+        <GroupBox Header="{Binding Path=Label}" Margin="5,10">
             <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
                 <Grid Margin="1" HorizontalAlignment="Left" Background="White">
 
@@ -311,7 +317,7 @@
                     <UniformGrid Grid.Row="0" Grid.Column="0" Columns="2" HorizontalAlignment="Left">
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
 
                     </UniformGrid>
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="状态" Margin="1">
@@ -326,7 +332,11 @@
                     </GroupBox>
                     <GroupBox Grid.Row="1" Grid.Column="1" Header="控制" Margin="1">
                         <DockPanel Margin="3" Cursor="Hand">
-                            <metro:ToggleSwitch DockPanel.Dock="Top" OffLabel="关" OnLabel="开" Margin="3" Padding="10" Style="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding Path=ValueSetter,Converter={StaticResource AorDigitalConverter}}"></metro:ToggleSwitch>
+                            <metro:ToggleSwitch DockPanel.Dock="Top" 
+                                                OffLabel="关" OnLabel="开" 
+                                                Margin="3" Padding="10" 
+                                                Style="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}" 
+                                                IsChecked="{Binding Path=NextStatus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></metro:ToggleSwitch>
                             <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
                         </DockPanel>
                     </GroupBox>
@@ -334,7 +344,7 @@
             </Border>
         </GroupBox>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=Value}" Value="0">
+            <DataTrigger Binding="{Binding Path=Value}" Value="false">
                 <DataTrigger.Setters>
                     <Setter TargetName="StatusLight" Property="Fill">
                         <Setter.Value>
@@ -348,9 +358,9 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
-    <DataTemplate x:Key="TemperatureDataTemplate" DataType="{x:Type module:ChannelValue}">
-        <GroupBox Header="{Binding Path=Channel.Label}" Margin="5,10">
+
+    <DataTemplate x:Key="TemperatureDataTemplate" DataType="{x:Type module:MdChannel}">
+        <GroupBox Header="{Binding Path=Label}" Margin="5,10">
             <Border Style="{StaticResource VGroupBorderStyle}" HorizontalAlignment="Left">
                 <Grid Margin="1" HorizontalAlignment="Left" Background="White">
 
@@ -367,14 +377,14 @@
                     <UniformGrid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="摘要：" Margin="{StaticResource TextBlockMargin}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Channel.Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=Summary}"  Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left" FontStyle="Italic"></TextBlock>
 
                         <TextBlock Text="范围：" Margin="{StaticResource TextBlockMargin}"/>
                         <TextBlock Margin="{StaticResource TextBlockMargin}" HorizontalAlignment="Left">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ~ {1}">
-                                    <Binding Path="Channel.Range.Low"></Binding>
-                                    <Binding Path="Channel.Range.Height"></Binding>
+                                    <Binding Path="Range.Low"></Binding>
+                                    <Binding Path="Range.Height"></Binding>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -439,7 +449,7 @@
         </GroupBox>
     </DataTemplate>
     <!--测试点数据模板-->
-    <DataTemplate x:Key="EPPressureDataTemplate" DataType="{x:Type module:ExpPointValue}">
+    <DataTemplate x:Key="EPPressureDataTemplate" DataType="{x:Type module:MdExperPoint}">
         <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -448,7 +458,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                <TextBlock Grid.Row="0" Text="{Binding Path=Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
                     <TextBlock.Foreground>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FFE6714F" Offset="0.067"/>
@@ -494,7 +504,7 @@
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:F2} {1}">
                                 <Binding Path="Value"/>
-                                <Binding Path="ExpPoint.Unit"/>
+                                <Binding Path="Unit"/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
@@ -503,7 +513,7 @@
         </Border>
     </DataTemplate>
 
-    <DataTemplate x:Key="EPFlowDataTemplate" DataType="{x:Type module:ExpPointValue}">
+    <DataTemplate x:Key="EPFlowDataTemplate" DataType="{x:Type module:MdExperPoint}">
         <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -512,7 +522,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                <TextBlock Grid.Row="0" Text="{Binding Path=Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
                     <TextBlock.Foreground>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FFE6714F" Offset="0.067"/>
@@ -558,7 +568,7 @@
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:F2} {1}">
                                 <Binding Path="Value"/>
-                                <Binding Path="ExpPoint.Unit"/>
+                                <Binding Path="Unit"/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
@@ -567,7 +577,7 @@
         </Border>
     </DataTemplate>
 
-    <DataTemplate x:Key="EPTemperatureDataTemplate" DataType="{x:Type module:ExpPointValue}">
+    <DataTemplate x:Key="EPTemperatureDataTemplate" DataType="{x:Type module:MdExperPoint}">
         <Border BorderThickness="2" Background="{x:Null}" BorderBrush="DarkSlateBlue" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -576,7 +586,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="{Binding Path=ExpPoint.Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
+                <TextBlock Grid.Row="0" Text="{Binding Path=Label}" HorizontalAlignment="Center" TextAlignment="Center" FontSize="24" FontWeight="Bold" FontStretch="Condensed">
                     <TextBlock.Foreground>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FFE6714F" Offset="0.067"/>
@@ -639,7 +649,7 @@
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:F2} {1}">
                                 <Binding Path="Value"/>
-                                <Binding Path="ExpPoint.Unit"/>
+                                <Binding Path="Unit"/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>

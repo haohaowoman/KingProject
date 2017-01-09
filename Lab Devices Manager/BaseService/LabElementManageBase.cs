@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LabMCESystem.LabElement;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
-using LabMCESystem.DataBase;
 namespace LabMCESystem.BaseService
 {
     /// <summary>
@@ -22,7 +21,7 @@ namespace LabMCESystem.BaseService
         private List<LabDevice> _registedDevices;
 
         // registed experiment areaes collection.
-        private List<ExperimentArea> _expAreaes;
+        private List<ExperimentalArea> _expAreaes;
 
 
         protected List<LabDevice> RegistedDevices
@@ -31,7 +30,7 @@ namespace LabMCESystem.BaseService
             set { _registedDevices = value; }
         }
 
-        protected List<ExperimentArea> ExpAreaes
+        protected List<ExperimentalArea> ExpAreaes
         {
             get { return _expAreaes; }
             set { _expAreaes = value; }
@@ -39,11 +38,8 @@ namespace LabMCESystem.BaseService
 
         // the key is channel's key code, the dictionary remenber all of the manage channels .
         [NonSerialized]
-        private Dictionary<int, LabChannel> _channelKeyDic;
+        private Dictionary<int, AnalogueMeasureChannel> _channelKeyDic;
 
-
-        // lab element data set.
-        LabElementDataSet _elDataSet;
 
         #endregion
 
@@ -54,14 +50,13 @@ namespace LabMCESystem.BaseService
         /// </summary>
         public LabElementManageBase()
         {
-            ExpAreaes = new List<ExperimentArea>();
+            ExpAreaes = new List<ExperimentalArea>();
             RegistedDevices = new List<LabDevice>();
 
-            _channelKeyDic = new Dictionary<int, LabChannel>();
+            _channelKeyDic = new Dictionary<int, AnalogueMeasureChannel>();
 
             DevicesChanged += LabElementManageBase_DevicesChanged;
 
-            _elDataSet = new LabElementDataSet();
             // deserialize el data set form xml file.
             //_elDataSet.ReadXml(@".\Element Data Set.xml");
 
@@ -107,7 +102,7 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get management experiment areaes readonly list.
         /// </summary>
-        public IReadOnlyList<ExperimentArea> ExperimnetAreas
+        public IReadOnlyList<ExperimentalArea> ExperimnetAreas
         {
             get
             {
@@ -118,15 +113,15 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get all channels.
         /// </summary>
-        public List<LabChannel> AllChannels
+        public List<Channel> AllChannels
         {
             get
             {
-                List<LabChannel> temp = new List<LabChannel>();
+                List<Channel> temp = new List<Channel>();
 
                 foreach (var dev in _registedDevices)
                 {
-                    temp.AddRange(dev.SubElements);
+                    temp.AddRange(dev.Children);
                 }
                 return temp;
             }
@@ -135,22 +130,22 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get all experiment points.
         /// </summary>
-        public List<ExperimentPoint> AllExperimentPoints
+        public List<ExperimentalPoint> AllExperimentPoints
         {
             get
             {
-                List<ExperimentPoint> temp = new List<ExperimentPoint>();
+                List<ExperimentalPoint> temp = new List<ExperimentalPoint>();
 
                 foreach (var area in _expAreaes)
                 {
-                    temp.AddRange(area.SubElements);
+                    temp.AddRange(area.Children);
                 }
 
                 return temp;
             }
         }
 
-        public List<MeasureSensor> AllSensors
+        public List<LinerSensor> AllSensors
         {
             get
             {
@@ -207,7 +202,7 @@ namespace LabMCESystem.BaseService
         /// </summary>
         /// <param name="label">Area label.</param>
         /// <returns>If there is no area named as label return null.</returns>
-        public ExperimentArea LookUpExpArea(string label)
+        public ExperimentalArea LookUpExpArea(string label)
         {
             return _expAreaes.Find(o => label == o.Label);
         }
@@ -227,9 +222,9 @@ namespace LabMCESystem.BaseService
         /// </summary>
         /// <param name="chKeyCode">Assign a channle key code.</param>
         /// <returns>Return null if there is no this lab channel as key code.</returns>
-        public LabChannel LookUpChannel(int chKeyCode)
+        public AnalogueMeasureChannel LookUpChannel(int chKeyCode)
         {
-            LabChannel temp = null;
+            AnalogueMeasureChannel temp = null;
             try
             {
                 temp = _channelKeyDic[chKeyCode];
@@ -267,12 +262,12 @@ namespace LabMCESystem.BaseService
 
                 nDev.State = DeviceState.Registed;
                 // add to data set .
-                _elDataSet.LabDevices.AddLabDevicesRow(nDev.RegistID, nDev.Label, nDev.SubElements.Count);
+                //_elDataSet.LabDevices.AddLabDevicesRow(nDev.RegistID, nDev.Label, nDev.Children.Count);
 
                 DevicesChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, nDev));
 
                 // add a event callback for device subelements changed.
-                nDev.ElementGroupChanged += NDev_ElementGroupChanged;
+                nDev.GroupChanged += NDev_ElementGroupChanged;
                 return true;
             }
 
@@ -326,7 +321,7 @@ namespace LabMCESystem.BaseService
             throw new NotImplementedException();
         }
 
-        public bool RegistNewExpArea(ExperimentArea nArea)
+        public bool RegistNewExpArea(ExperimentalArea nArea)
         {
             bool bc = _expAreaes.Contains(nArea);
             if (!bc)
@@ -341,18 +336,18 @@ namespace LabMCESystem.BaseService
             throw new NotImplementedException();
         }
 
-        public bool DischargeExpArea(ExperimentArea area)
+        public bool DischargeExpArea(ExperimentalArea area)
         {
             throw new NotImplementedException();
         }
 
 
-        public bool AddNewSensor(MeasureSensor newSensor)
+        public bool AddNewSensor(LinerSensor newSensor)
         {
             throw new NotImplementedException();
         }
 
-        public bool RemoveSensor(MeasureSensor newSensor)
+        public bool RemoveSensor(LinerSensor newSensor)
         {
             throw new NotImplementedException();
         }
@@ -362,7 +357,7 @@ namespace LabMCESystem.BaseService
             throw new NotImplementedException();
         }
 
-        public MeasureSensor LookUpSensor(string sensorNumber)
+        public LinerSensor LookUpSensor(string sensorNumber)
         {
             throw new NotImplementedException();
         }
@@ -380,23 +375,23 @@ namespace LabMCESystem.BaseService
             {
                 case NotifyCollectionChangedAction.Add:
 
-                    foreach (var item in e.NewItems)
-                    {
-                        LabChannel ch = item as LabChannel;
+                    //foreach (var item in e.NewItems)
+                    //{
+                    //    AnalogueMeasureChannel ch = item as AnalogueMeasureChannel;
 
-                        if (_channelKeyDic.ContainsKey(ch.KeyCode))
-                        {
-                            throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", sender as LabDevice);
+                    //    if (_channelKeyDic.ContainsKey(ch.KeyCode))
+                    //    {
+                    //        throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", sender as LabDevice);
 
-                        }
-                        else
-                        {
-                            _channelKeyDic.Add(ch.KeyCode, ch);
+                    //    }
+                    //    else
+                    //    {
+                    //        _channelKeyDic.Add(ch.KeyCode, ch);
 
-                            // add channel's key code changed event callback.k
-                            ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
-                        }
-                    }
+                    //        // add channel's key code changed event callback.k
+                    //        ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+                    //    }
+                    //}
 
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -420,59 +415,59 @@ namespace LabMCESystem.BaseService
             {
                 case NotifyCollectionChangedAction.Add:
                     {
-                        foreach (var dev in e.NewItems)
-                        {
-                            LabDevice ndev = dev as LabDevice;
+                        //foreach (var dev in e.NewItems)
+                        //{
+                        //    LabDevice ndev = dev as LabDevice;
 
-                            if (e.NewItems != null && ndev != null)
-                            {
-                                // add dictionary item
-                                foreach (var ch in ndev.SubElements)
-                                {
-                                    if (_channelKeyDic.ContainsKey(ch.KeyCode))
-                                    {
-                                        throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", ndev);
+                        //    if (e.NewItems != null && ndev != null)
+                        //    {
+                        //        // add dictionary item
+                        //        foreach (var ch in ndev.Children)
+                        //        {
+                        //            if (_channelKeyDic.ContainsKey(ch.KeyCode))
+                        //            {
+                        //                throw new InvalidChannelKeyCodeException("Invalid channel has been add in lab element management repetitive key code.", ndev);
 
-                                    }
-                                    else
-                                    {
-                                        _channelKeyDic.Add(ch.KeyCode, ch);
+                        //            }
+                        //            else
+                        //            {
+                        //                _channelKeyDic.Add(ch.KeyCode, ch);
 
-                                        // add channel's key code changed event callback.k
-                                        ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                throw new ArgumentNullException("Lab element management devices changed item is null");
-                            }
-                        }
+                        //                // add channel's key code changed event callback.k
+                        //                ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+                        //            }
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        throw new ArgumentNullException("Lab element management devices changed item is null");
+                        //    }
+                        //}
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     {
-                        foreach (var dev in e.OldItems)
-                        {
-                            LabDevice odev = dev as LabDevice;
-                            if (e.OldItems != null && odev != null)
-                            {
-                                // remove dictionary item
-                                foreach (var ch in odev.SubElements)
-                                {
-                                    bool br = _channelKeyDic.Remove(ch.KeyCode);
-                                    if (br)
-                                    {
-                                        // remove key code changed event callback at the same time.
-                                        ch.ChannelKeyCodeChanged -= Ch_ChannelKeyCodeChanged;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                throw new ArgumentNullException("Lab element management devices changed item is null");
-                            }
-                        }
+                        //foreach (var dev in e.OldItems)
+                        //{
+                        //    LabDevice odev = dev as LabDevice;
+                        //    if (e.OldItems != null && odev != null)
+                        //    {
+                        //        // remove dictionary item
+                        //        foreach (var ch in odev.Children)
+                        //        {
+                        //            bool br = _channelKeyDic.Remove(ch.KeyCode);
+                        //            if (br)
+                        //            {
+                        //                // remove key code changed event callback at the same time.
+                        //                ch.ChannelKeyCodeChanged -= Ch_ChannelKeyCodeChanged;
+                        //            }
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        throw new ArgumentNullException("Lab element management devices changed item is null");
+                        //    }
+                        //}
                     }
                     break;
                 case NotifyCollectionChangedAction.Replace:
@@ -488,7 +483,7 @@ namespace LabMCESystem.BaseService
         }
 
         // There should update the dictionary key value when channel key code changed.
-        private void Ch_ChannelKeyCodeChanged(LabChannel ch, ChannelKeyCodeChangedEventArgs e)
+        private void Ch_ChannelKeyCodeChanged(AnalogueMeasureChannel ch, ChannelKeyCodeChangedEventArgs e)
         {
             try
             {
@@ -509,40 +504,40 @@ namespace LabMCESystem.BaseService
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
-            if (_channelKeyDic == null)
-            {
-                _channelKeyDic = new Dictionary<int, LabChannel>();
-            }
-            // Refresh this key code dictionary of channel.
-            foreach (var dev in _registedDevices)
-            {
-                foreach (var ch in dev.SubElements)
-                {
-                    _channelKeyDic.Add(ch.KeyCode, ch);
-                    // channel key code changed event.
-                    ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
-                }
-                // device element group changed event.
-                dev.ElementGroupChanged += Dev_ElementGroupChanged;
-            }
+            //if (_channelKeyDic == null)
+            //{
+            //    _channelKeyDic = new Dictionary<int, AnalogueMeasureChannel>();
+            //}
+            //// Refresh this key code dictionary of channel.
+            //foreach (var dev in _registedDevices)
+            //{
+            //    foreach (var ch in dev.Children)
+            //    {
+            //        _channelKeyDic.Add(ch.KeyCode, ch);
+            //        // channel key code changed event.
+            //        ch.ChannelKeyCodeChanged += Ch_ChannelKeyCodeChanged;
+            //    }
+            //    // device element group changed event.
+            //    dev.GroupChanged += Dev_ElementGroupChanged;
+            //}
 
-            // Check this experiment element collection all of experiment areaes,
-            // if experiment point's paired channel key code is not zero, then find channel in key code dictionary
-            // and paired it for point.
-            foreach (var area in _expAreaes)
-            {
-                foreach (var p in area.SubElements)
-                {
-                    try
-                    {
-                        p.PairedChannel = _channelKeyDic[p.PairedChannelKeyCode];
-                    }
-                    catch (KeyNotFoundException kex)
-                    {
-                        Console.WriteLine($"{kex.Message}\nExperiment point {p} paired key code {p.PairedChannelKeyCode} can not find is channel key code dictionary.");
-                    }
-                }
-            }
+            //// Check this experiment element collection all of experiment areaes,
+            //// if experiment point's paired channel key code is not zero, then find channel in key code dictionary
+            //// and paired it for point.
+            //foreach (var area in _expAreaes)
+            //{
+            //    foreach (var p in area.Children)
+            //    {
+            //        try
+            //        {
+            //            p.PairedChannel = _channelKeyDic[p.PairedChannelKeyCode];
+            //        }
+            //        catch (KeyNotFoundException kex)
+            //        {
+            //            Console.WriteLine($"{kex.Message}\nExperiment point {p} paired key code {p.PairedChannelKeyCode} can not find is channel key code dictionary.");
+            //        }
+            //    }
+            //}
         }
 
         private void Dev_ElementGroupChanged(object sender, NotifyCollectionChangedEventArgs e)

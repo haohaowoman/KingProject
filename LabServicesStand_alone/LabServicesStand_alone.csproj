@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -42,13 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
-    <Compile Include="HS\HS_FirstColdFanDevice.cs" />
-    <Compile Include="HS\HS_FIRQExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_FirstColdFanDevice.cs" />
+    <Compile Include="HS\HS_Executers\HS_FIRQExecuter.cs" />
     <Compile Include="HS\HS_HotRoadHeaterExe.cs" />
+    <Compile Include="HS\HS_MCDEExceptionCode.cs" />
+    <Compile Include="HS\HS_MCDeviceInitial.cs" />
     <Compile Include="HS\HS_MeasCtrlDevice.cs" />
-    <Compile Include="HS\HS_ElectricHeaterExecuter.cs" />
-    <Compile Include="HS\HS_EOVPIDExecuter.cs" />
-    <Compile Include="HS\HS_MultipelEOVExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_ElectricHeaterExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_EOVPIDExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_MultipelEOVExecuter.cs" />
+    <Compile Include="HS\HS_PLCReadWriter.cs" />
     <Compile Include="HS\HS_SecendHeaterExe.cs" />
     <Compile Include="HS\HS_Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

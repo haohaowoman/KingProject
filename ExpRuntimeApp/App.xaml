@@ -18,11 +18,15 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 
                 <ResourceDictionary Source="/Resources/Icons.xaml"/>
+                <ResourceDictionary Source="TempDictionary.xaml"/>
+                <ResourceDictionary Source="IndControls/Styles/StatusStyles.xaml"/>
+
+                <!--<ResourceDictionary Source="/UserControls/IndustryGeometries.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
             <srv:HS_Server x:Key="SingleService"/>
 
             <viewm:ExperimentViewModule x:Key="ExpViewModule" Service="{StaticResource SingleService}"/>
-            
+
         </ResourceDictionary>
     </Application.Resources>
 

@@ -16,12 +16,12 @@ namespace LabMCESystem.BaseService
         /// <summary>
         /// Get all channels.
         /// </summary>
-        List<LabChannel> AllChannels { get; }
+        List<Channel> AllChannels { get; }
 
         /// <summary>
         /// Get all sensors.
         /// </summary>
-        List<MeasureSensor> AllSensors { get; }
+        List<LinerSensor> AllSensors { get; }
 
         /// <summary>
         /// Get all devices.
@@ -40,14 +40,14 @@ namespace LabMCESystem.BaseService
         /// </summary>
         /// <param name="chKeyCode">Assign a channle key code.</param>
         /// <returns>Return null if there is no this lab channel as key code.</returns>
-        LabChannel LookUpChannel(int chKeyCode);
+        AnalogueMeasureChannel LookUpChannel(int chKeyCode);
 
         /// <summary>
         /// Look up a sensor with sensor number.
         /// </summary>
         /// <param name="sensorNumber">Assgin a sensor number.</param>
         /// <returns>Return null if there is no this sensor as the number.</returns>
-        MeasureSensor LookUpSensor(string sensorNumber);
+        LinerSensor LookUpSensor(string sensorNumber);
 
         /// <summary>
         /// Invoke this event when channels key code have been changed.

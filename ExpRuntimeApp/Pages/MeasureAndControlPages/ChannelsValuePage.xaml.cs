@@ -1,6 +1,7 @@
 ﻿using ExpRuntimeApp.Modules;
 using ExpRuntimeApp.ViewModules;
-using LabMCESystem.Task;
+using LabMCESystem.LabElement;
+using LabMCESystem.ETask;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,13 +37,11 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
             if (btn != null && btn.Tag != null)
             {
                 // 通道行
-                ChannelValue cv = btn.Tag as ChannelValue;
+                MdChannel cv = btn.Tag as MdChannel;
 
-                if (cv != null)
+                if (cv != null && (cv.Channel.Style & ExperimentStyle.Control) == ExperimentStyle.Control)
                 {
-                    ChannelSetter cs = new ChannelSetter(cv.Channel, cv.ValueSetter);
-
-                    vm.Service.ExperimentTasker.OutSetter(cs.Setter);
+                    cv.ControllerExecute();
                 }
 
             }

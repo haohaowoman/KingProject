@@ -1,0 +1,48 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ExpRuntimeApp"
+                    xmlns:md="clr-namespace:ExpRuntimeApp.Modules"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
+
+    <DataTemplate x:Key="StatusCellDataTempalte" DataType="{x:Type md:MdChannel}">
+        <Border Margin="3">
+            <Ellipse x:Name="StatusLight" Margin="3"
+                     Width="30" Height="30"
+                     
+                     >
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FF8AAC61" Offset="1"/>
+                        <GradientStop Color="#FFA6F04E" Offset="0"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Border>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Status}" Value="false">
+                <Setter TargetName="StatusLight" Property="Fill">
+                    <Setter.Value>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#FFEE3B5C" Offset="1"/>
+                            <GradientStop Color="#FFA84E63" Offset="0"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ValueCellDataTempalte" DataType="{x:Type md:MdChannel}">
+        <StackPanel Margin="1" VerticalAlignment="Center">
+            <TextBlock Margin="3,2" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold"
+                                            Text="{Binding Path=Value, StringFormat={}{0:F2}}"
+                                           />
+            <metro:MetroProgressBar MinWidth="100" MinHeight="7" Margin="3,1" 
+                                                        Value="{Binding Path=Value, Mode=OneWay}" 
+                                                        Minimum="{Binding Path=Range.Low}" 
+                                                        Maximum="{Binding Path=Range.Height}"
+                                                        />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

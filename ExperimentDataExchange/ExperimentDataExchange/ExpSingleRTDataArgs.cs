@@ -36,9 +36,9 @@ namespace LabMCESystem.BaseService.ExperimentDataExchange
 
     public class ChannelRTData : ExpSingleRTDataArgs
     {
-        public LabChannel Channel { get; private set; }
+        public Channel Channel { get; private set; }
 
-        public ChannelRTData(LabChannel ch) : base(ch.KeyCode)
+        public ChannelRTData(Channel ch) : base(1/*ch.KeyCode*/)
         {
             Channel = ch;
         }

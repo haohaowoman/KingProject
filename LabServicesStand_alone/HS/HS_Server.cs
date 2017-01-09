@@ -8,6 +8,7 @@ using LabMCESystem.BaseService;
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using LabMCESystem.EException;
 
 namespace LabMCESystem.Servers.HS
 {
@@ -56,6 +57,7 @@ namespace LabMCESystem.Servers.HS
             set { _hs_Device = value; }
         }
 
+        public EExceptionManager ExcepManager { get; private set; }
 
         #endregion
 
@@ -68,13 +70,16 @@ namespace LabMCESystem.Servers.HS
 
             ExperimentTasker = new TaskDistributeCenter();
 
+            ExcepManager = new EExceptionManager();
+
             ExpDataExchange.WriteXml();
             ExpDataExchange.ReadXml();
 
             _hs_Device = new HS_MeasCtrlDevice();
-            _hs_Device.ConnectElementManagerment(ElementManager);
+            _hs_Device.ConnectElementManager(ElementManager);
             _hs_Device.ConnectMultipleDevDataExchange(ExpDataExchange);
             _hs_Device.ConnectTaskDistributeCenter(ExperimentTasker);
+            _hs_Device.ConnectEExceptionManager(ExcepManager);
 
             if (_hs_Device.RegistMain())
             {
@@ -87,6 +92,8 @@ namespace LabMCESystem.Servers.HS
 
             InitialExpArea();
 
+            // Deivce 开始工作。
+            _hs_Device.Run();
         }
 
         #endregion
@@ -99,15 +106,13 @@ namespace LabMCESystem.Servers.HS
         private void InitialExpArea()
         {
             // 一冷
-            ExperimentArea area = new ExperimentArea("一冷");
-
-            area.AddElement(new ExperimentPoint("一冷空气流量") { Unit = "Kg/h" });
-
-
-            area.AddElement(new ExperimentPoint("一冷空气进口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("一冷空气出口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("一冷空气进口压力") { Unit = "KPa" });
-            area.AddElement(new ExperimentPoint("一冷空气出口压力") { Unit = "KPa" });
+            ExperimentalArea area = new ExperimentalArea("一冷");
+            
+            area.CreatePointIn("一冷空气流量");
+            area.CreatePointIn("一冷空气进口温度");
+            area.CreatePointIn("一冷空气出口温度");
+            area.CreatePointIn("一冷空气进口压力");
+            area.CreatePointIn("一冷空气出口压力");
 
             ElementManager?.RegistNewExpArea(area);
 
@@ -119,14 +124,13 @@ namespace LabMCESystem.Servers.HS
             area.GetElementAsLabel("一冷空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT03");
 
             // 二冷
-            area = new ExperimentArea("二冷");
-
-            area.AddElement(new ExperimentPoint("二冷空气流量") { Unit = "Kg/h" });
-
-            area.AddElement(new ExperimentPoint("二冷空气进口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("二冷空气出口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("二冷空气进口压力") { Unit = "KPa" });
-            area.AddElement(new ExperimentPoint("二冷空气出口压力") { Unit = "KPa" });
+            area = new ExperimentalArea("二冷");
+            
+            area.CreatePointIn("二冷空气流量");
+            area.CreatePointIn("二冷空气进口温度");
+            area.CreatePointIn("二冷空气出口温度");
+            area.CreatePointIn("二冷空气进口压力");
+            area.CreatePointIn("二冷空气出口压力");
 
             ElementManager?.RegistNewExpArea(area);
 
@@ -138,14 +142,13 @@ namespace LabMCESystem.Servers.HS
             area.GetElementAsLabel("二冷空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT0110");
 
             //热边
-            area = new ExperimentArea("热边");
-
-            area.AddElement(new ExperimentPoint("热边空气流量") { Unit = "Kg/h" });
-
-            area.AddElement(new ExperimentPoint("热边空气进口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("热边空气出口温度") { Unit = "℃" });
-            area.AddElement(new ExperimentPoint("热边空气进口压力") { Unit = "KPa" });
-            area.AddElement(new ExperimentPoint("热边空气出口压力") { Unit = "KPa" });
+            area = new ExperimentalArea("热边");
+            
+            area.CreatePointIn("热边空气流量");
+            area.CreatePointIn("热边空气进口温度");
+            area.CreatePointIn("热边空气出口温度");
+            area.CreatePointIn("热边空气进口压力");
+            area.CreatePointIn("热边空气出口压力");
 
             ElementManager?.RegistNewExpArea(area);
 
@@ -202,7 +205,7 @@ namespace LabMCESystem.Servers.HS
         //{
         //    //XmlSerializer xmlser = new XmlSerializer(typeof(SingleServer));
         //    BinaryFormatter xmlser = new BinaryFormatter();
-        //    using (FileStream fStream = new FileStream(xmlFlie, FileMode.Open, FileAccess.Read))
+        //    using (FileStream fStream = new FileStream(xmlFlie, FileMode.ToHigh, FileAccess.Read))
         //    {
         //        CurrentLabServer = xmlser.Deserialize(fStream) as SingleServer;
         //    }

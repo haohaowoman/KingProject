@@ -12,10 +12,10 @@ namespace LabMCESystem.BaseService
     /// </summary>
     public interface IExpAreaOperator
     {
-        bool RegistNewExpArea(ExperimentArea nArea);
+        bool RegistNewExpArea(ExperimentalArea nArea);
 
         bool DischargeExpArea(string eaLabel);
 
-        bool DischargeExpArea(ExperimentArea area);
+        bool DischargeExpArea(ExperimentalArea area);
     }
 }

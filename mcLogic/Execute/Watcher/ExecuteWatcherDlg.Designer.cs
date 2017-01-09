@@ -1,4 +1,4 @@
-﻿namespace LabMCESystem.Logic.Execute.Watcher
+﻿namespace mcLogic.Execute.Watcher
 {
     partial class ExecuteWatcherDlg
     {

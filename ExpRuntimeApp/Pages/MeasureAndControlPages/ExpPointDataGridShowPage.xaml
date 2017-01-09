@@ -41,7 +41,7 @@
                 <GroupBox Grid.Row="0" Grid.Column="0" Header="热边控制">
                     <UniformGrid Columns="3">
                         <TextBlock Text="热边空气进口温度" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <metro:NumericUpDown Margin="3" MinWidth="80" Minimum="0" VerticalAlignment="Center"></metro:NumericUpDown>
+                        <metro:NumericUpDown Margin="3" MinWidth="80" Minimum="0" VerticalAlignment="Center" Value="{Binding Path=MdExperPoints[0].Value, Mode=OneWay}"></metro:NumericUpDown>
                         <Button Content="控制" HorizontalAlignment="Center" VerticalAlignment="Center"></Button>
 
                         <TextBlock Text="热边空气进口流量" Margin="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -73,8 +73,10 @@
             </Grid>
         </Border>
         <ListView Grid.Row="1" 
-                  ItemsSource="{Binding Path=CurExpPointVal}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderBrush="#7F224DAA" BorderThickness="1">
+                  ItemsSource="{Binding Path=MdExperPoints}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  BorderBrush="#7F224DAA" 
+                  BorderThickness="1">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListView}, Path=Width}"/>
@@ -92,7 +94,11 @@
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}" Foreground="DarkGoldenrod" FontSize="24" FontStyle="Italic" TextDecorations="Underline" Margin="5,10"/>
+                            <TextBlock Text="{Binding Path=Name}" 
+                                       Foreground="DarkGoldenrod" 
+                                       FontSize="24" FontStyle="Italic" 
+                                       TextDecorations="Underline" 
+                                       Margin="5,10"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
