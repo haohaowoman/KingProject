@@ -124,7 +124,7 @@
     <Style x:Key="HeaderTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+        <Setter Property="BorderBrush" Value="#FF569FDE"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CaretBrush" Value="{DynamicResource BlackBrush}"/>
         <Setter Property="SelectionBrush" Value="{DynamicResource HighlightBrush}"/>
@@ -133,6 +133,8 @@
         <Setter Property="Custom:TextBoxHelper.ButtonFontSize" Value="{DynamicResource ClearTextButtonFontSize}"/>
         <Setter Property="Custom:ControlsHelper.FocusBorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}"/>
         <Setter Property="Custom:ControlsHelper.MouseOverBorderBrush" Value="{DynamicResource TextBoxMouseOverBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        
         <Setter Property="Custom:TextBoxHelper.IsMonitoring" Value="True"/>
         <Setter Property="FontFamily" Value="{DynamicResource ContentFontFamily}"/>
         <Setter Property="FontSize" Value="{DynamicResource ContentFontSize}"/>

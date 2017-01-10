@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
-    /// MeasureAndControlWnd.xaml 的交互逻辑
+    /// AllChannelsPointsWnd.xaml 的交互逻辑
     /// </summary>
-    public partial class MeasureAndControlWnd
+    public partial class AllChannelsPointsWnd
     {
-        public MeasureAndControlWnd()
+        public AllChannelsPointsWnd()
         {
             InitializeComponent();
         }

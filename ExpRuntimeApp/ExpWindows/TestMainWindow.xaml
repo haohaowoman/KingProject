@@ -1,0 +1,308 @@
+﻿<metro:MetroWindow x:Class="ExpRuntimeApp.ExpWindows.TestMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        mc:Ignorable="d"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+        Title="环控系统测控试验" Height="1080" Width="1920"
+        FontSize="24"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Closing="MetroWindow_Closing"
+        DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}"
+        >
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <Button Margin="1"
+                Click="ShowAllChannelsBtn_Click"
+                ToolTip="查看所有及试验点视图"
+                    Content="查看"/>
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环散系统测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="64" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display">
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="0.935,0.778" StartPoint="0.035,0.018">
+                    <GradientStop Color="#FF738E9E"/>
+                    <GradientStop Color="#FF0E1338" Offset="0.854"/>
+                    <GradientStop Color="#FF1B2057" Offset="0.485"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
+        
+        <!--fualt status-->
+        <Border Grid.Row="1" Grid.Column="0" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
+            <DockPanel d:LayoutOverrides="Height">
+                <UniformGrid DockPanel.Dock="Top" Columns="1" VerticalAlignment="Top" >
+                    <ToggleButton Margin="10" Content="风机报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+                    <ToggleButton Margin="10" Content="试验室温度报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+
+                    <ToggleButton Margin="10" Content="加热器报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+
+                </UniformGrid>
+                <DockPanel DockPanel.Dock="Bottom">
+                    <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                        Content="故障列表："/>
+                    <ListBox BorderThickness="2" BorderBrush="DarkGray" Margin="0,3" Width="208.1">
+                        <ListBoxItem Content="时间： 故障，原因"/>
+                    </ListBox>
+                </DockPanel>
+            </DockPanel>
+
+        </Border>
+        
+        <Border Grid.Column="1" Grid.Row="1" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
+            <UniformGrid Columns="2">
+                <GroupBox Header="热路段" Margin="5">
+                    <UniformGrid Margin="5" Columns="2">
+                        <TextBlock Text="热路空气流量：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="热路空气入口压力：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="热路空气入口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="热路空气出口压力：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="热路空气出口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+                    </UniformGrid>
+                </GroupBox>
+                <GroupBox Header="二冷路段" Margin="5">
+                    <UniformGrid Margin="5" Columns="2">
+                        <TextBlock Text="二冷路空气流量：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="二冷路空气入口压力：" VerticalAlignment="Bottom" Margin="0,0,0,15.56"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="二冷路空气入口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="二冷路空气出口压力：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="二冷路空气出口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+                    </UniformGrid>
+                </GroupBox>
+                <GroupBox Header="一冷路段" Margin="5">
+                    <UniformGrid Margin="5" Columns="2">
+                        <TextBlock Text="一冷路空气流量：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="一冷路空气入口压力：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="一冷路空气入口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="一冷路空气出口压力：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+
+                        <TextBlock Text="一冷路空气出口温度：" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
+                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
+                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                            </MultiBinding>
+                        </TextBox>
+                    </UniformGrid>
+                </GroupBox>
+
+                <GroupBox Header="试验快速设置" Margin="5">
+                    <uc:HS_ExpPointSet Margin="5"/>
+                </GroupBox>
+                
+            </UniformGrid>
+            
+        </Border>
+
+        <Border Grid.Column="2" Grid.Row="1" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
+            <UniformGrid Columns="1">
+                <Button Content="试验设置" Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10"/>
+                <Button Content="打开工况" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"
+                        Click="OpenGKUIsBtn_Click"/>
+                <Button Content="历史数据" Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"/>
+                
+                <Button Content="试验报表" Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"/>
+                
+                <ToggleButton Content="开始试验" Click="BegainExpTgBtn_Click" Margin="10" BorderThickness="2" BorderBrush="Black" Foreground="White" FontWeight="SemiBold" FontSize="24" Style="{DynamicResource ToggleButtonStyle2}">
+                    <ToggleButton.Resources>
+                        <Style x:Key="ToggleButtonStyle2" TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            <Setter Property="Background" Value="#CC119EDA"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="metro:ControlsHelper.CornerRadius" Value="3"/>
+                            <Setter Property="FontFamily" Value="{DynamicResource DefaultFont}"/>
+                            <Setter Property="FontSize" Value="{DynamicResource UpperCaseContentFontSize}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="MinHeight" Value="25"/>
+                            <Setter Property="Padding" Value="5,6"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid>
+                                            <Border x:Name="Background" Background="{TemplateBinding Background}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{x:Null}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            <Border x:Name="DisabledVisualElement" Background="{DynamicResource ControlsDisabledBrush}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" IsHitTestVisible="False" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            <metro:ContentControlEx x:Name="PART_ContentPresenter" ContentCharacterCasing="{Binding (metro:ControlsHelper.ContentCharacterCasing), RelativeSource={RelativeSource TemplatedParent}}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" TargetName="DisabledVisualElement" Value="0.7"/>
+                                                <Setter Property="Opacity" TargetName="PART_ContentPresenter" Value="0.3"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush2}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush5}"/>
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush8}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush3}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush7}"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource ButtonMouseOverBorderBrush}"/>
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Resources>
+                </ToggleButton>
+            </UniformGrid>
+        </Border>
+        <Button Content="退出试验" IsCancel="True" Click="ExitExpBtn_Click" Grid.Column="2" Grid.Row="2" Margin="10" BorderBrush="Black" Background="DarkRed" Foreground="White" FontWeight="SemiBold" FontSize="24" />
+
+        <!--Remote status bar-->
+        <!--#region Status bar-->
+        
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" BorderThickness="2" CornerRadius="3" BorderBrush="DarkGray">
+            <StackPanel Orientation="Horizontal">
+                <Label Grid.Row="2" Content="设备在线状态：" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="PLC在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="数采设备在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="风机在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="热路1#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="热路2#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="热路3#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="热路4#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="热路5#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="二冷路1#加热器在线状态"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="二冷路2#加热器在线状态"/>
+
+                <Label Margin="8,3" VerticalAlignment="Center" Content="信息:"/>
+                <TextBlock Margin="3" Text="" TextDecorations="Underline"/>
+            </StackPanel>
+        </Border>
+        <!--#endregion-->
+    </Grid>
+</metro:MetroWindow>

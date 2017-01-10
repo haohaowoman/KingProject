@@ -1,0 +1,59 @@
+﻿<Page x:Class="ExpRuntimeApp.Pages.MeasureAndControlPages.HistoryExperimentReportPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ExpRuntimeApp.Pages.MeasureAndControlPages"
+      xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="800"
+      Title="历史试验查看"
+      FontSize="24">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="46*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="3">
+            <Label Margin="5,3" VerticalAlignment="Center" Content="按时间查询试验记录："/>
+            <metro:DateTimePicker Margin="5,3" MinWidth="200" VerticalAlignment="Center" FontSize="24"/>
+
+            <Button Margin="5,3" Padding="8,3" VerticalAlignment="Center" Style="{DynamicResource SquareButtonStyle}"
+                    Content="查看全部"/>
+
+        </StackPanel>
+        
+        <Grid Grid.Column="1" Grid.Row="1" Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--Search Edite-->
+            <TextBox Margin="20,5" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource SearchMetroTextBox}"/>
+            <DataGrid Grid.Row="1" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridHyperlinkColumn Header="试验时间"/>
+
+                    <DataGridTextColumn Header="试验名称"/>
+
+                    <DataGridTextColumn Header="试验人员"/>
+
+                    <DataGridTextColumn Header="试验结束时间"/>
+
+                    <DataGridTextColumn Header="试验数据文件"/>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+
+    </Grid>
+</Page>

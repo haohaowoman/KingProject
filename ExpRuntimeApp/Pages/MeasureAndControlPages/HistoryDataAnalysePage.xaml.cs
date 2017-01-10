@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ExpRuntimeApp.ExpWindows
+namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 {
     /// <summary>
-    /// MeasureAndControlWnd.xaml 的交互逻辑
+    /// HistoryDataAnalysePage.xaml 的交互逻辑
     /// </summary>
-    public partial class MeasureAndControlWnd
+    public partial class HistoryDataAnalysePage : Page
     {
-        public MeasureAndControlWnd()
+        public HistoryDataAnalysePage()
         {
             InitializeComponent();
         }

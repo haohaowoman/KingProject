@@ -34,9 +34,10 @@ namespace LabMCESystem.Servers.HS
             return true;
         }
 
+        static double testValue = 0;
         public static double ReadAnaloge(string design)
         {
-            return new Random().Next(0, 100);
+            return testValue += 0.01;
         }
 
         public static bool State { get { return false; } }

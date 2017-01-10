@@ -68,7 +68,7 @@ namespace LabMCESystem.Servers.HS
         }
 
         // 数据更新定时器
-        private Timer _updateTimer = new Timer(100);
+        private Timer _updateTimer = new Timer(250);
 
         #endregion
 
@@ -350,7 +350,7 @@ namespace LabMCESystem.Servers.HS
 
             return true;
         }
-        //static int iio = 0;
+        static double iio = 0;
         // 定时器进行数据的读取和更新。
         private void _updateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -358,12 +358,12 @@ namespace LabMCESystem.Servers.HS
 
             Random r = new Random();
             double[] mvalues = new double[48];
-
+            
             for (int i = 0; i < 48; i++)
             {
-                mvalues[i] = r.NextDouble() * 100.0;
+                mvalues[i] = iio;
             }
-
+            iio += 0.01;
             int count = _mvDicKeys.Length;
             for (int i = 0; i < count; i++)
             {

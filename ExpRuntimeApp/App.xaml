@@ -5,7 +5,7 @@
              xmlns:srv="clr-namespace:LabMCESystem.Servers.HS;assembly=LabServicesStand_alone"
              xmlns:viewm="clr-namespace:ExpRuntimeApp.ViewModules"
              xmlns:Gauges="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges" x:Class="ExpRuntimeApp.App"
-             StartupUri="MainWindow.xaml" Startup="Application_Startup">
+             StartupUri="ExpWindows/UserLogin.xaml" Startup="Application_Startup">
     <Application.Resources>
 
         <ResourceDictionary>
@@ -26,6 +26,7 @@
             <srv:HS_Server x:Key="SingleService"/>
 
             <viewm:ExperimentViewModule x:Key="ExpViewModule" Service="{StaticResource SingleService}"/>
+            <SolidColorBrush x:Key="HS_BackgroundBrush" Color="#FFE5E5E5"/>
 
         </ResourceDictionary>
     </Application.Resources>

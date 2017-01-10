@@ -15,13 +15,21 @@ using System.Windows.Shapes;
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
-    /// MeasureAndControlWnd.xaml 的交互逻辑
+    /// UserLogin.xaml 的交互逻辑
     /// </summary>
-    public partial class MeasureAndControlWnd
+    public partial class UserLogin
     {
-        public MeasureAndControlWnd()
+        public UserLogin()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var tmWnd = new TestMainWindow();
+            tmWnd.Show();
+            Close();
+            
         }
     }
 }

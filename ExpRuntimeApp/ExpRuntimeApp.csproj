@@ -88,6 +88,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ExpWindows\AllChannelsPointsWnd.xaml.cs">
+      <DependentUpon>AllChannelsPointsWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\ExperimentSetWnd.xaml.cs">
+      <DependentUpon>ExperimentSetWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\HistoryAnalyseWnd.xaml.cs">
+      <DependentUpon>HistoryAnalyseWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\TestMainWindow.xaml.cs">
+      <DependentUpon>TestMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\UserLogin.xaml.cs">
+      <DependentUpon>UserLogin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\ChannelValues.cs" />
     <Compile Include="Modules\Initialization.cs" />
     <Compile Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml.cs">
@@ -102,6 +117,12 @@
     </Compile>
     <Compile Include="Pages\MeasureAndControlPages\ChValueRowDetailsTemplateSelector.cs" />
     <Compile Include="Pages\MeasureAndControlPages\EPItemDataTemplateSelector.cs" />
+    <Compile Include="Pages\MeasureAndControlPages\HistoryDataAnalysePage.xaml.cs">
+      <DependentUpon>HistoryDataAnalysePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MeasureAndControlPages\HistoryExperimentReportPage.xaml.cs">
+      <DependentUpon>HistoryExperimentReportPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\EOVCtrlControl.xaml.cs">
       <DependentUpon>EOVCtrlControl.xaml</DependentUpon>
     </Compile>
@@ -117,11 +138,17 @@
     <Compile Include="UserControls\HeaterControl.xaml.cs">
       <DependentUpon>HeaterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HS_ExpPointSet.xaml.cs">
+      <DependentUpon>HS_ExpPointSet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\HS_GKUI_HotRoad.xaml.cs">
       <DependentUpon>HS_GKUI_HotRoad.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HS_GKUI_SecendCold.xaml.cs">
       <DependentUpon>HS_GKUI_SecendCold.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_HotRoadList.xaml.cs">
+      <DependentUpon>HS_HotRoadList.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SwtichEOVControl.xaml.cs">
       <DependentUpon>SwtichEOVControl.xaml</DependentUpon>
@@ -138,11 +165,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ExpWindows\AllChannelsPointsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\ExperimentSetWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\HistoryAnalyseWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExpWindows\MeasureAndControlWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExpWindows\PrepareOrLookWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\TestMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\UserLogin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -192,6 +239,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\MeasureAndControlPages\HistoryDataAnalysePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MeasureAndControlPages\HistoryExperimentReportPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -232,11 +287,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\HS_ExpPointSet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\HS_GKUI_HotRoad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\HS_GKUI_SecendCold.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_HotRoadList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

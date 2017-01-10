@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
-    /// MeasureAndControlWnd.xaml 的交互逻辑
+    /// ExperimentSetWnd.xaml 的交互逻辑
     /// </summary>
-    public partial class MeasureAndControlWnd
+    public partial class ExperimentSetWnd
     {
-        public MeasureAndControlWnd()
+        public ExperimentSetWnd()
         {
             InitializeComponent();
         }
