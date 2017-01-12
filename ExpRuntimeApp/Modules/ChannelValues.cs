@@ -196,7 +196,7 @@ namespace ExpRuntimeApp.Modules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Collector"));
             }
         }
-
+        
         public string Unit
         {
             get
@@ -225,6 +225,32 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+        public double RangeLow
+        {
+            get
+            {
+                return AsAIChannel?.Range.Low ?? 0;
+            }
+            set
+            {
+                AsAIChannel.Range = new QRange(value, AsAIChannel.Range.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+        
+        public double RangeHigh
+        {
+            get
+            {
+                return AsAIChannel?.Range.Height ?? 0;
+            }
+            set
+            {
+                AsAIChannel.Range = new QRange(AsAIChannel.Range.Low, value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+        
         public double AOValue
         {
             get
@@ -454,6 +480,47 @@ namespace ExpRuntimeApp.Modules
             {
                 ExperPoint.Range = value;
                 NotifyPorpertyChanged("Range");
+            }
+        }
+
+
+        public new double RangeLow
+        {
+            get
+            {
+                return _exeprPoint?.Range.Low ?? 0;
+            }
+            set
+            {
+                _exeprPoint.Range = new QRange(value, _exeprPoint.Range.Height);
+                NotifyPorpertyChanged("Range");
+            }
+        }
+
+        public new double RangeHigh
+        {
+            get
+            {
+                return _exeprPoint?.Range.Height ?? 0;
+            }
+            set
+            {
+                _exeprPoint.Range = new QRange(_exeprPoint.Range.Low, value);
+                NotifyPorpertyChanged("Range");
+            }
+        }
+
+
+        public Channel PairedChannel
+        {
+            set
+            {
+                _exeprPoint.PairedChannel = value;
+                NotifyPorpertyChanged("PairedChannel");
+            }
+            get
+            {
+                return _exeprPoint.PairedChannel;
             }
         }
 

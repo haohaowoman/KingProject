@@ -137,11 +137,12 @@
         
         <Setter Property="Custom:TextBoxHelper.IsMonitoring" Value="True"/>
         <Setter Property="FontFamily" Value="{DynamicResource ContentFontFamily}"/>
-        <Setter Property="FontSize" Value="{DynamicResource ContentFontSize}"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="MinHeight" Value="26"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}"/>
+        <Setter Property="MinWidth" Value="110"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">

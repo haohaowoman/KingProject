@@ -7,12 +7,14 @@
         mc:Ignorable="d"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
-        Title="环控系统测控试验" Height="1080" Width="1920"
-        FontSize="24"
+                   xmlns:Charts="clr-namespace:Visifire.Charts;assembly=WPFVisifire.Charts"
+        Title="环控系统测控试验" Height="980" Width="1900"
+        FontSize="18"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         Closing="MetroWindow_Closing"
-        DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}"
+                   Closed="MetroWindow_Closed"
+        DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}" ShowCloseButton="False" ShowDialogsOverTitleBar="False" ShowMaxRestoreButton="False"
         >
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
@@ -33,189 +35,227 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环散系统测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="64" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display">
-            <TextBlock.Foreground>
-                <LinearGradientBrush EndPoint="0.935,0.778" StartPoint="0.035,0.018">
-                    <GradientStop Color="#FF738E9E"/>
-                    <GradientStop Color="#FF0E1338" Offset="0.854"/>
-                    <GradientStop Color="#FF1B2057" Offset="0.485"/>
-                </LinearGradientBrush>
-            </TextBlock.Foreground>
-        </TextBlock>
-        
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环散系统测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display" Foreground="Black"/>
+
+        <TextBlock Grid.Row="0" Grid.Column="2" Margin="8" VerticalAlignment="Center"
+                   FontSize="28" FontWeight="UltraBold"
+                   Text="试验时间："/>
         <!--fualt status-->
-        <Border Grid.Row="1" Grid.Column="0" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
-            <DockPanel d:LayoutOverrides="Height">
-                <UniformGrid DockPanel.Dock="Top" Columns="1" VerticalAlignment="Top" >
-                    <ToggleButton Margin="10" Content="风机报警" Style="{DynamicResource ErrorStatusLight}"
-                        FontSize="24"/>
-                    <ToggleButton Margin="10" Content="试验室温度报警" Style="{DynamicResource ErrorStatusLight}"
-                        FontSize="24"/>
+        <DockPanel Grid.Row="1" Margin="5">
+            <StackPanel DockPanel.Dock="Top">
+                <Label Margin="8,3" VerticalAlignment="Center"
+                       Content="试验类型:"/>
+                <ComboBox Margin="8,5" VerticalAlignment="Center" IsEditable="True">
+                    <ComboBox.Items>
+                        <ComboBoxItem Margin="5,1" Content="流体阻力试验"/>
+                        <ComboBoxItem Margin="5,1" Content="产品散热性能试验"/>
+                    </ComboBox.Items>
+                </ComboBox>
+            </StackPanel>
+            <Border DockPanel.Dock="Top" Margin="5" Padding="5"
+                    BorderThickness="3" CornerRadius="5"
+                    BorderBrush="DarkGray">
+                <DockPanel>
+                    <uc:HS_ProductInforCtrl DockPanel.Dock="Top" Margin="8,3"/>
 
-                    <ToggleButton Margin="10" Content="加热器报警" Style="{DynamicResource ErrorStatusLight}"
-                        FontSize="24"/>
 
-                </UniformGrid>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
-                        Content="故障列表："/>
-                    <ListBox BorderThickness="2" BorderBrush="DarkGray" Margin="0,3" Width="208.1">
-                        <ListBoxItem Content="时间： 故障，原因"/>
-                    </ListBox>
                 </DockPanel>
-            </DockPanel>
+            </Border>
+            <Border DockPanel.Dock="Top" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
+                <DockPanel d:LayoutOverrides="Height">
 
-        </Border>
-        
+                    <UniformGrid DockPanel.Dock="Top" Columns="1" VerticalAlignment="Top" >
+                        <ToggleButton Margin="10" Content="风机报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+                        <ToggleButton Margin="10" Content="试验室温度报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+
+                        <ToggleButton Margin="10" Content="加热器报警" Style="{DynamicResource ErrorStatusLight}"
+                        FontSize="24"/>
+
+                    </UniformGrid>
+                    <DockPanel DockPanel.Dock="Bottom">
+                        <UniformGrid DockPanel.Dock="Top" Columns="2">
+                            <Button 
+                                Style="{DynamicResource AccentedSquareButtonStyle}"
+                                Margin="3" Padding="8,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+                                FontSize="18"
+                                Click="ShowFaultListButton_Click"
+                                Content="故障列表"/>
+                            <Button 
+                                Style="{DynamicResource AccentedSquareButtonStyle}"
+                                Margin="3" Padding="8,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+                                FontSize="18"
+                                Content="故障清除"/>
+                        </UniformGrid>
+                        <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                        Content="当前故障信息："/>
+                        <ListBox DockPanel.Dock="Top" BorderThickness="2" BorderBrush="DarkGray" Margin="0,3">
+                            <ListBoxItem Content="类型："/>
+                            <ListBoxItem Content="时间： "/>
+                            <ListBoxItem Content="定位：" ToolTip="{Binding RelativeSource={RelativeSource Self},Path=Content}"/>
+                        </ListBox>
+                    </DockPanel>
+                </DockPanel>
+            </Border>
+        </DockPanel>
         <Border Grid.Column="1" Grid.Row="1" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
-            <UniformGrid Columns="2">
-                <GroupBox Header="热路段" Margin="5">
-                    <UniformGrid Margin="5" Columns="2">
-                        <TextBlock Text="热路空气流量：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                        <TextBlock Text="热路空气入口压力：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                <DockPanel Grid.Row="0" Margin="5">
+                    <Charts:Chart AnimationEnabled="False" BorderBrush="Gray">
+                        <Charts:Chart.Titles>
+                            <Charts:Title Text="试验特性曲线" FontSize="18" HorizontalAlignment="Right"/>
+                        </Charts:Chart.Titles>
+                        <Charts:Chart.Legends>
+                            <Charts:Legend x:Name="HotRoadLengend" TitleFontSize="18" Title="热路" FontSize="18" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
+                            <Charts:Legend x:Name="SecendColdRoadLegend" TitleFontSize="18" Title="二冷" FontSize="18" TitleBackground="{x:Null}"/>
 
-                        <TextBlock Text="热路空气入口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:Legend x:Name="FirstColdRoadLegend" TitleFontSize="18" Title="一冷" FontSize="18" TitleBackground="{x:Null}"/>
+                            
+                        </Charts:Chart.Legends>
 
-                        <TextBlock Text="热路空气出口压力：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                        <Charts:Chart.AxesX>
+                            <Charts:Axis Title="时间"/>
+                        </Charts:Chart.AxesX>
 
-                        <TextBlock Text="热路空气出口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
-                    </UniformGrid>
-                </GroupBox>
-                <GroupBox Header="二冷路段" Margin="5">
-                    <UniformGrid Margin="5" Columns="2">
-                        <TextBlock Text="二冷路空气流量：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                        <Charts:Chart.AxesY>
+                            <Charts:Axis Title="试验数据"/>
+                        </Charts:Chart.AxesY>
+                        <Charts:Chart.Series>
+                            <!--Hot Road Charts-->
+                            <Charts:DataSeries 
+                                LegendText="空气流量" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine">
+                                <Charts:DataSeries.DataPoints>
+                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
+                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
+                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
+                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
+                                </Charts:DataSeries.DataPoints>
 
-                        <TextBlock Text="二冷路空气入口压力：" VerticalAlignment="Bottom" Margin="0,0,0,15.56"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            </Charts:DataSeries>
 
-                        <TextBlock Text="二冷路空气入口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:DataSeries  LegendText="入口压力" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
 
-                        <TextBlock Text="二冷路空气出口压力：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:DataSeries 
+                                LegendText="入口温度" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
 
-                        <TextBlock Text="二冷路空气出口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
-                    </UniformGrid>
-                </GroupBox>
-                <GroupBox Header="一冷路段" Margin="5">
-                    <UniformGrid Margin="5" Columns="2">
-                        <TextBlock Text="一冷路空气流量：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:DataSeries 
+                                LegendText="出口压力" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
 
-                        <TextBlock Text="一冷路空气入口压力：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:DataSeries 
+                                LegendText="出口温度" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
+                            <!--Secend Cold Road Charts-->
+                            <Charts:DataSeries 
+                                LegendText="空气流量" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine">
+                                <Charts:DataSeries.DataPoints>
+                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
+                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
+                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
+                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
+                                </Charts:DataSeries.DataPoints>
 
-                        <TextBlock Text="一冷路空气入口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            </Charts:DataSeries>
 
-                        <TextBlock Text="一冷路空气出口压力：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
+                            <Charts:DataSeries  LegendText="入口压力" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
 
-                        <TextBlock Text="一冷路空气出口温度：" VerticalAlignment="Center"/>
-                        <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" FontSize="24" VerticalAlignment="Center">
-                            <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                                <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                                <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                            </MultiBinding>
-                        </TextBox>
-                    </UniformGrid>
-                </GroupBox>
+                            <Charts:DataSeries 
+                                LegendText="入口温度" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
 
-                <GroupBox Header="试验快速设置" Margin="5">
-                    <uc:HS_ExpPointSet Margin="5"/>
-                </GroupBox>
+                            <Charts:DataSeries 
+                                LegendText="出口压力" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+
+                            <Charts:DataSeries 
+                                LegendText="出口温度" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+
+                            <!--First Cold Road Charts-->
+                            <Charts:DataSeries 
+                                LegendText="空气流量" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine">
+                                <Charts:DataSeries.DataPoints>
+                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
+                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
+                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
+                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
+                                </Charts:DataSeries.DataPoints>
+
+                            </Charts:DataSeries>
+
+                            <Charts:DataSeries  LegendText="入口压力" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+
+                            <Charts:DataSeries 
+                                LegendText="入口温度" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+
+                            <Charts:DataSeries 
+                                LegendText="出口压力" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+
+                            <Charts:DataSeries 
+                                LegendText="出口温度" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
+                        </Charts:Chart.Series>
+                    </Charts:Chart>
+                </DockPanel>
                 
-            </UniformGrid>
-            
+                <UniformGrid Grid.Row="1" Columns="4">
+                    <GroupBox Header="试验快速设置" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <uc:HS_ExpPointSet/>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox Header="热路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <uc:HotRoadExpPointsCtrl/>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox Header="二冷路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <uc:SecendColdRoadExpPointsCtrl/>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox Header="一冷路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer VerticalAlignment="Top" >
+                            <uc:FirstColdRoadExpPointsCtrl ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        </ScrollViewer>
+                    </GroupBox>
+                </UniformGrid>
+            </Grid>
         </Border>
 
         <Border Grid.Column="2" Grid.Row="1" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
             <UniformGrid Columns="1">
-                <Button Content="试验设置" Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10"/>
-                <Button Content="打开工况" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"
-                        Click="OpenGKUIsBtn_Click"/>
-                <Button Content="历史数据" Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"/>
-                
-                <Button Content="试验报表" Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"/>
-                
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_settings}"/>
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验设置"></TextBlock>
+                    </DockPanel>
+                </Button>
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10"
+                        Click="OpenGKUIsBtn_Click">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_layout_expand_right}"/>
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验工况"></TextBlock>
+                    </DockPanel>
+                </Button>
+                <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_console}"/>
+                        <TextBlock DockPanel.Dock="Bottom" Text="历史数据"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_office_excel}"/>
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验报表"></TextBlock>
+                    </DockPanel>
+                </Button>
+
                 <ToggleButton Content="开始试验" Click="BegainExpTgBtn_Click" Margin="10" BorderThickness="2" BorderBrush="Black" Foreground="White" FontWeight="SemiBold" FontSize="24" Style="{DynamicResource ToggleButtonStyle2}">
                     <ToggleButton.Resources>
                         <Style x:Key="ToggleButtonStyle2" TargetType="{x:Type ToggleButton}">
@@ -284,7 +324,7 @@
 
         <!--Remote status bar-->
         <!--#region Status bar-->
-        
+
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" BorderThickness="2" CornerRadius="3" BorderBrush="DarkGray">
             <StackPanel Orientation="Horizontal">
                 <Label Grid.Row="2" Content="设备在线状态：" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -299,8 +339,14 @@
                 <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="二冷路1#加热器在线状态"/>
                 <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" ToolTip="二冷路2#加热器在线状态"/>
 
-                <Label Margin="8,3" VerticalAlignment="Center" Content="信息:"/>
-                <TextBlock Margin="3" Text="" TextDecorations="Underline"/>
+                <DockPanel Margin="8,3">
+
+                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="信息:"/>
+                    <TextBlock DockPanel.Dock="Left" Margin="3" Text="" TextDecorations="Underline"/>
+
+                    <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" 
+                              FontWeight="Bold" Text=""/>
+                </DockPanel>
             </StackPanel>
         </Border>
         <!--#endregion-->

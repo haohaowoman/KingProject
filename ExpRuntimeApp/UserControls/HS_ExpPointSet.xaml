@@ -10,8 +10,7 @@
              DataContext="{StaticResource ExpViewModule}">
     <Grid Margin="1">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>            
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
@@ -22,36 +21,41 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
-            Text="热路空气流量调节：" Margin="2,3"/>
-        <metro:NumericUpDown Grid.Row="0" Grid.Column="1" 
-                            VerticalAlignment="Center" MinWidth="100" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-        <Button Grid.Row="0" Grid.Column="2" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+        <StackPanel Orientation="Vertical" d:LayoutOverrides="Height">
+            <TextBlock VerticalAlignment="Center"
+                Text="热路空气流量调节：" Margin="2" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Margin="2" MinWidth="100" FontSize="18" StringFormat="{}{0:F2}" d:LayoutOverrides="LeftPosition, RightPosition"/>
+        </StackPanel>
+        <Button Grid.Row="0" Grid.Column="1" Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="确定" FontSize="18" Cursor="Hand"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" d:LayoutOverrides="Height">
 
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-            Text="热路空气温度调节：" Margin="2,3"/>
-        <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                            VerticalAlignment="Center" MinWidth="100" Margin="8,3" StringFormat="{}{0:F2}" FontSize="18"/>
-        <Button Grid.Row="1" Grid.Column="2" Margin="5" Padding="5,3" Content="确定" FontSize="18"/>
+            <TextBlock VerticalAlignment="Center"
+                Text="热路空气温度调节：" Margin="2" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Margin="2" MinWidth="100" StringFormat="{}{0:F2}" FontSize="18" d:LayoutOverrides="LeftPosition, RightPosition"/>
+        </StackPanel>
+        <Button Grid.Row="1" Grid.Column="1" Margin="3" Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="确定" FontSize="18"/>
+        <StackPanel Margin="2" Orientation="Vertical" Grid.Row="2" d:LayoutOverrides="Height">
+            <TextBlock VerticalAlignment="Center"
+                Text="二冷路空气流量调节：" Margin="2"/>
+            <metro:NumericUpDown MinWidth="100" Margin="2" FontSize="18" StringFormat="{}{0:F2}"/>
+        </StackPanel>
+        <Button Grid.Row="2" Grid.Column="1" Margin="3" Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="确定" FontSize="18" Cursor="Hand"/>
+        <StackPanel Orientation="Vertical" Grid.Row="3" d:LayoutOverrides="Width">
+            <TextBlock VerticalAlignment="Center"
+                Text="二冷路空气温度调节：" Margin="2" Width="124"/>
+            <metro:NumericUpDown MinWidth="100" Margin="2" FontSize="18" StringFormat="{}{0:F2}" d:LayoutOverrides="Height"/>
+        </StackPanel>
+        <Button Grid.Row="3" Grid.Column="1" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="3"/>
+        <StackPanel Orientation="Vertical" Grid.Row="4" d:LayoutOverrides="Height">
 
-
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
-            Text="二冷路空气流量调节：" Margin="2,3"/>
-        <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                            VerticalAlignment="Center" MinWidth="100" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-        <Button Grid.Row="2" Grid.Column="2" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
-
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
-            Text="二冷路空气温度调节：" Margin="2,3"/>
-        <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                            VerticalAlignment="Center" MinWidth="100" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-        <Button Grid.Row="3" Grid.Column="2" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
-
-        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
-            Text="一冷路空气流量调节：" Margin="2,3"/>
-        <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                            VerticalAlignment="Center" MinWidth="100" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-        <Button Grid.Row="4" Grid.Column="2" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+            <TextBlock Margin="2" VerticalAlignment="Center"
+                Text="一冷路空气流量调节：" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Margin="2" MinWidth="100" FontSize="18" StringFormat="{}{0:F2}" d:LayoutOverrides="LeftPosition, RightPosition"/>
+        </StackPanel>
+        <Button Grid.Row="4" Grid.Column="1" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="3"/>
 
     </Grid>
 </UserControl>

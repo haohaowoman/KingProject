@@ -129,6 +129,30 @@ namespace ExpRuntimeApp.ViewModules
             get { return _mdExperPoints; }
         }
         
+        /// <summary>
+        /// 获取包含传感器的测量通道集合。
+        /// </summary>
+        public List<MdChannel> HasSensorChannels
+        {
+            get
+            {
+                List<MdChannel> schs = null;
+                if (_mdChannels != null)
+                {
+                    schs = new List<MdChannel>();
+                    foreach (var ch in _mdChannels)
+                    {
+                        if (ch.Channel.Style==ExperimentStyle.Measure)
+                        {
+                            schs.Add(ch);
+                        }
+                        
+                    }
+                }
+                return schs;
+            }
+        }
+
         private void _readValueTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_service != null)

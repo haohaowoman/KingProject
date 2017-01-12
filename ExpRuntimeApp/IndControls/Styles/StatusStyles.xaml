@@ -42,7 +42,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="PATA_HalfLight" 
-                                    Property="Fill" Value="#FF20DA64"/>
+                                    Property="Fill" Value="GreenYellow"/>
                             <Setter TargetName="PATA_HalfLight" 
                                     Property="Stroke" Value="#FF7ED8B3"/>
                         </Trigger>

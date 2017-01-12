@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.UserInfoCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{StaticResource ExpViewModule}">
+    <DockPanel Margin="5,10" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="LeftPosition, RightPosition">
+        <!--User heard image-->
+        <Image DockPanel.Dock="Left" Margin="3" Source="pack://siteoforigin:,,,/Images/DefualtUserImage.png" MinHeight="32" MinWidth="32" MaxHeight="72" MaxWidth="72"/>
+
+        <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
+            <TextBlock Text="姓名:" Margin="5,3"/>
+            <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True"/>
+            <TextBlock Text="工号:" Margin="5,3"/>
+            <TextBox Margin="5,3" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

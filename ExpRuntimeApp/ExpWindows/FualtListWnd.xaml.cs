@@ -15,26 +15,13 @@ using System.Windows.Shapes;
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
-    /// UserLogin.xaml 的交互逻辑
+    /// FualtListWnd.xaml 的交互逻辑
     /// </summary>
-    public partial class UserLogin
+    public partial class FualtListWnd
     {
-        public UserLogin()
+        public FualtListWnd()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var tmWnd = new TestMainWindow();
-            tmWnd.Show();
-            Close();
-            
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

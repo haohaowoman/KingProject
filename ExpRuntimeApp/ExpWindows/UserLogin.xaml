@@ -7,10 +7,10 @@
         xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
         xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
         mc:Ignorable="d"
-        Title="进入环散系统" Height="650" Width="800"
+        Title="进入环散系统" Height="697" Width="800"
         FontSize="24"
                    WindowStartupLocation="CenterScreen"
-                   WindowState="Normal">
+                   WindowState="Normal" ShowMaxRestoreButton="False">
     <Grid HorizontalAlignment="Center" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -18,17 +18,18 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <!--#region -->
-        <DockPanel Grid.Row="0" Margin="5,10" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <DockPanel Grid.Row="0" Margin="5,10" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <!--User heard image-->
             <Image DockPanel.Dock="Left" Margin="3" Source="pack://siteoforigin:,,,/Images/DefualtUserImage.png" MinHeight="16" MinWidth="16" MaxHeight="72" MaxWidth="72"/>
 
             <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
-                <TextBlock Text="姓名:" Margin="1,0" FontSize="18"/>
-                <ComboBox Margin="2" MinWidth="120" MaxWidth="250" IsEditable="True"/>
-                <TextBlock Text="工号:" Margin="1,0" FontSize="18"/>
-                <TextBox Margin="2" />
+                <TextBlock Text="姓名:" Margin="5,3"/>
+                <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True"/>
+                <TextBlock Text="工号:" Margin="5,3"/>
+                <TextBox Margin="5,3" />
             </StackPanel>
 
+            <uc:HS_ProductInforCtrl DockPanel.Dock="Right" Margin="20,5"/>
         </DockPanel>
         <!--#endregion-->
 
@@ -41,7 +42,8 @@
                     Padding="20,8" Style="{DynamicResource AccentedSquareButtonStyle}" Canvas.Left="317.571" IsDefault="True" Canvas.Top="8.224"
                     Click="Button_Click"/>
             <Button Content="取消" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" 
-                    FontSize="24" Canvas.Left="475.071" Height="47.923" IsCancel="True" Canvas.Top="8.224"/>
+                    FontSize="24" Canvas.Left="475.071" Height="47.923" IsCancel="True" Canvas.Top="8.224"
+                    Click="CancelButton_Click"/>
 
         </Canvas>
     </Grid>

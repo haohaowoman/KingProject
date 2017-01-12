@@ -10,31 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ExpRuntimeApp.ExpWindows
+namespace ExpRuntimeApp.Pages.ElementPages
 {
     /// <summary>
-    /// UserLogin.xaml 的交互逻辑
+    /// FaultListPage.xaml 的交互逻辑
     /// </summary>
-    public partial class UserLogin
+    public partial class FaultListPage : Page
     {
-        public UserLogin()
+        public FaultListPage()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var tmWnd = new TestMainWindow();
-            tmWnd.Show();
-            Close();
-            
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

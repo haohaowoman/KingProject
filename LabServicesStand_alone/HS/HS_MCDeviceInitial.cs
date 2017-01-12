@@ -246,6 +246,12 @@ namespace LabMCESystem.Servers.HS
             mCh.Prompt = "01_Ch1";
             mCh.Summary = "热边入口流量";
 
+            var sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 3000));
+            sensor.Unit = "Kg/h";
+            sensor.Label = "FT0102";
+            sensor.SensorNumber = "FT0102 000001";
+
+            mCh.Collector = sensor;
             // 热边电炉入口空气压力            
             mCh = dev.CreateAIChannelIn("PT0104");
             mCh.Unit = "KPa";

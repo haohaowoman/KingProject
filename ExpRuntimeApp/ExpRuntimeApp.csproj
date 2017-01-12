@@ -94,6 +94,9 @@
     <Compile Include="ExpWindows\ExperimentSetWnd.xaml.cs">
       <DependentUpon>ExperimentSetWnd.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExpWindows\FualtListWnd.xaml.cs">
+      <DependentUpon>FualtListWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExpWindows\HistoryAnalyseWnd.xaml.cs">
       <DependentUpon>HistoryAnalyseWnd.xaml</DependentUpon>
     </Compile>
@@ -105,8 +108,14 @@
     </Compile>
     <Compile Include="Modules\ChannelValues.cs" />
     <Compile Include="Modules\Initialization.cs" />
+    <Compile Include="Pages\ElementPages\AllHasSensorChannelsInfoPage.xaml.cs">
+      <DependentUpon>AllHasSensorChannelsInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml.cs">
       <DependentUpon>ExperimentAreaInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ElementPages\FaultListPage.xaml.cs">
+      <DependentUpon>FaultListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ElementPages\SensorsInforPage.xaml.cs">
       <DependentUpon>SensorsInforPage.xaml</DependentUpon>
@@ -129,14 +138,23 @@
     <Compile Include="UserControls\ExpCommandBar.xaml.cs">
       <DependentUpon>ExpCommandBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ExpDeviceControlCtrl.xaml.cs">
+      <DependentUpon>ExpDeviceControlCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\FirstColdControl.xaml.cs">
       <DependentUpon>FirstColdControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\FirstColdFan.xaml.cs">
       <DependentUpon>FirstColdFan.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FirstColdRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>FirstColdRoadExpPointsCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\HeaterControl.xaml.cs">
       <DependentUpon>HeaterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HotRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>HotRoadExpPointsCtrl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HS_ExpPointSet.xaml.cs">
       <DependentUpon>HS_ExpPointSet.xaml</DependentUpon>
@@ -150,11 +168,20 @@
     <Compile Include="UserControls\HS_HotRoadList.xaml.cs">
       <DependentUpon>HS_HotRoadList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HS_ProductInforCtrl.xaml.cs">
+      <DependentUpon>HS_ProductInforCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SecendColdRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>SecendColdRoadExpPointsCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SwtichEOVControl.xaml.cs">
       <DependentUpon>SwtichEOVControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\TesttingMakeSure.xaml.cs">
       <DependentUpon>TesttingMakeSure.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserInfoCtrl.xaml.cs">
+      <DependentUpon>UserInfoCtrl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModules\ExperimentViewModule.cs" />
     <Page Include="CellDataTemplate.xaml">
@@ -170,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExpWindows\ExperimentSetWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\FualtListWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,7 +250,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\ElementPages\AllHasSensorChannelsInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ElementPages\FaultListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -267,6 +306,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ExpDeviceControlCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\FirstColdControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -283,7 +326,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\FirstColdRoadExpPointsCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\HeaterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HotRoadExpPointsCtrl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,11 +354,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\HS_ProductInforCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SecendColdRoadExpPointsCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SwtichEOVControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\TesttingMakeSure.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UserInfoCtrl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +453,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\SettingIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,13 +12,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using MahApps.Metro.Controls.Dialogs;
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
     /// TestMainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class TestMainWindow
+    public partial class TestMainWindow : MahApps.Metro.Controls.MetroWindow
     {
         public TestMainWindow()
         {
@@ -44,17 +44,17 @@ namespace ExpRuntimeApp.ExpWindows
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show("是否退出当前试验，并退出应用程序？/n在退出前请做好试验结束工作，关闭相关设备", "退出注意", MessageBoxButton.OKCancel, MessageBoxImage.Hand) == MessageBoxResult.OK)
+            if (MessageBox.Show("是否退出当前试验，并退出应用程序？\n在退出前请做好试验结束工作，关闭相关设备", "退出注意", MessageBoxButton.OKCancel, MessageBoxImage.Hand) == MessageBoxResult.OK)
             {
-                e.Cancel = false;
+                e.Cancel = false;                
             }
             else
             {
-                e.Cancel = true;
+                e.Cancel = true;                
             }
         }
 
-        private void BegainExpTgBtn_Click(object sender, RoutedEventArgs e)
+        private async void BegainExpTgBtn_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton tb = sender as ToggleButton;
             if (tb != null)
@@ -62,6 +62,16 @@ namespace ExpRuntimeApp.ExpWindows
                 if (tb.IsChecked == true)
                 {
                     tb.Content = "停止试验";
+                    //var mySettings = new MetroDialogSettings()
+                    //{
+                    //    NegativeButtonText = "Close now",
+                    //    AnimateShow = false,
+                    //    AnimateHide = false
+                    //};
+                    //var edlg = this.ShowProgressAsync(
+                    //"退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序", true, mySettings
+                    //);
+                    
                 }
                 else
                 {
@@ -80,6 +90,27 @@ namespace ExpRuntimeApp.ExpWindows
         {
             AllChannelsPointsWnd mWnd = new AllChannelsPointsWnd();
             mWnd.Show();
+        }
+
+        private void ShowFaultListButton_Click(object sender, RoutedEventArgs e)
+        {
+            var flWnd = new FualtListWnd();
+
+            flWnd.Show();
+        }
+
+        /// <summary>
+        /// 异步执行试验关闭逻辑。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MetroWindow_Closed(object sender, EventArgs e)
+        {
+            var edlg = await this.ShowProgressAsync(
+                "退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序"
+                );
+            System.Threading.Thread.Sleep(3000);
+            // await edlg
         }
     }
 }

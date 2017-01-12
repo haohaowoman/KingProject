@@ -8,7 +8,7 @@
       xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
       xmlns:Charts="clr-namespace:Visifire.Charts;assembly=WPFVisifire.Charts" x:Class="ExpRuntimeApp.Pages.MeasureAndControlPages.HistoryDataAnalysePage"
       mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="1200" FontSize="24"
+      d:DesignHeight="800" d:DesignWidth="1200" FontSize="18"
       Title="历史数据分析">
 
     <Grid Margin="10">
@@ -26,37 +26,48 @@
         <DockPanel Grid.Row="1" Grid.RowSpan="2">
 
             <GroupBox DockPanel.Dock="Top" Margin="8,5"
-                Header="试验信息" d:LayoutOverrides="Height">
+                Header="试验信息" d:LayoutOverrides="Height"
+                      metro:ControlsHelper.HeaderFontSize="24">
                 <Grid>
-                    <UniformGrid Margin="3" Columns="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <uc:HS_ProductInforCtrl Grid.Row="0" Margin="3,5" HorizontalAlignment="Left"/>
+                    <UniformGrid Grid.Row="1" Margin="3" Columns="2">
                         <Label Margin="5,3" Padding="8,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                             Content="试验时间："/>
                         <TextBox IsReadOnly="True"
-                            Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                            Margin="5,3" VerticalAlignment="Center"
+                                 FontSize="18"
                             Text="2017/1/11 10：30：00"/>
 
                         <Label Margin="5,3" Padding="8,3" VerticalAlignment="Center" HorizontalAlignment="Left"
-                            Content="试验名称："/>
+                            Content="试验类型："/>
                         <TextBox IsReadOnly="True"
                             Margin="5,3" VerticalAlignment="Center"
+                                 FontSize="18"
                             Text="环形散热系统试验"/>
 
                         <Label Margin="5,3" Padding="8,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                             Content="试验人员："/>
                         <TextBox IsReadOnly="True"
                             Margin="5,3" VerticalAlignment="Center"
+                                 FontSize="18"
                             Text="某某"/>
 
                         <Label Margin="5,3" Padding="8,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                             Content="试验结束时间："/>
                         <TextBox IsReadOnly="True"
-                            Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                            Margin="5,3" VerticalAlignment="Center"
+                                 FontSize="18"
                             Text="2017/1/11 10：50：00"/>
 
                         <Label Margin="5,3" Padding="8,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                             Content="可查询路径："/>
                         <TextBox IsReadOnly="True"
-                            Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                            Margin="5,3" VerticalAlignment="Center" 
+                                 FontSize="18"
                             Text="C:/***.HSHD"/>
                     </UniformGrid>
                 </Grid>
@@ -74,24 +85,66 @@
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="8,5">
 
-            <Charts:Chart Margin="3" AnimationEnabled="False">
-                <Charts:Chart.Legends>
-                    <Charts:LegendCollection>
-                        <Charts:Legend x:Name="HrFlowLengend" Title="热路空气流量"/>
-                    </Charts:LegendCollection>
-                </Charts:Chart.Legends>
+            <metro:MetroAnimatedTabControl>
+                <metro:MetroAnimatedTabControl.Items>
+                    <TabItem Header="曲线分析">
+                        <Grid Margin="3">
+                            <Charts:Chart AnimationEnabled="False" BorderBrush="Gray">
+                                <Charts:Chart.Titles>
+                                    <Charts:Title Text="环散系统试验历史数据" FontSize="18" HorizontalAlignment="Right"/>
+                                </Charts:Chart.Titles>
+                                <Charts:Chart.Legends>
+                                    <Charts:Legend x:Name="HrFlowLengend" Title="热路空气流量" FontSize="18"/>
+                                    <Charts:Legend x:Name="HrTemperatureInLengend" Title="热路空气入口温度" FontSize="18"/>
 
-                <Charts:Chart.AxesX>
-                    <Charts:Axis Title="时间"/>
-                </Charts:Chart.AxesX>
+                                    <Charts:Legend x:Name="HrTemperatureOutLengend" Title="热路空气出口温度" FontSize="18"/>
 
-                <Charts:Chart.AxesY>
-                    <Charts:Axis Title="流量 Kg/h"/>
-                </Charts:Chart.AxesY>
-                <Charts:Chart.Series>
-                    <Charts:DataSeries Legend="HrFlowLengend" RenderAs="QuickLine"/>
-                </Charts:Chart.Series>
-            </Charts:Chart>
+                                    <Charts:Legend x:Name="HrPressureInLengend" Title="热路空气入口压力" FontSize="18"/>
+
+                                    <Charts:Legend x:Name="HrPressureOutLengend" Title="热路空气出口压力" FontSize="18"/>
+
+                                    <Charts:Legend x:Name="ScrFlowLengend" Title="二冷路空气流量" FontSize="18"/>
+                                    <Charts:Legend x:Name="ScrTemperatureInLengend" Title="二冷路空气入口温度" FontSize="18"/>
+
+                                    <Charts:Legend x:Name="ScrTemperatureOutLengend" Title="二冷路空气出口温度" FontSize="18"/>
+
+                                    <Charts:Legend x:Name="ScrPressureInLengend" Title="二冷路空气入口压力" FontSize="18"/>
+
+                                    <Charts:Legend x:Name="ScrPressureOutLengend" Title="二冷路空气出口压力" FontSize="18"/>
+                                </Charts:Chart.Legends>
+
+                                <Charts:Chart.AxesX>
+                                    <Charts:Axis Title="时间"/>
+                                </Charts:Chart.AxesX>
+
+                                <Charts:Chart.AxesY>
+                                    <Charts:Axis Title="试验数据"/>
+                                </Charts:Chart.AxesY>
+                                <Charts:Chart.Series>
+                                    <Charts:DataSeries Legend="HrFlowLengend" ShowInLegend="True" RenderAs="QuickLine">
+                                        <Charts:DataSeries.DataPoints>
+                                            <Charts:LightDataPoint XValue="10" YValue="100"/>
+                                            <Charts:LightDataPoint XValue="11" YValue="110"/>
+                                            <Charts:LightDataPoint XValue="12" YValue="120"/>
+                                            <Charts:LightDataPoint XValue="13" YValue="130"/>
+                                        </Charts:DataSeries.DataPoints>
+                                        
+                                    </Charts:DataSeries>
+
+                                    <Charts:DataSeries Legend="HrTemperatureInLengend" ShowInLegend="True" RenderAs="QuickLine"/>
+                                </Charts:Chart.Series>
+                            </Charts:Chart>
+                        </Grid>
+                    </TabItem>
+
+                    <TabItem Header="数据列表">
+                        <Grid>
+                            
+                        </Grid>
+                    </TabItem>
+                </metro:MetroAnimatedTabControl.Items>
+            </metro:MetroAnimatedTabControl>
+            
 
         </Grid>
     </Grid>
