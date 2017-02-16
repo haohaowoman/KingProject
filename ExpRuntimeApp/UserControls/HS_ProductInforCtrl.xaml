@@ -7,7 +7,7 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Margin="1" HorizontalAlignment="Left">
+    <StackPanel Margin="1" HorizontalAlignment="Stretch">
         <TextBlock Margin="3" VerticalAlignment="Center" Text="产品型号：" HorizontalAlignment="Left"/>
         <TextBox Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" MinWidth="100"/>
         <TextBlock Margin="3" VerticalAlignment="Center" Text="产品编号：" HorizontalAlignment="Left"/>

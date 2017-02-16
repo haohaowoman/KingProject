@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabElement", "Lab Devices Manager\LabElement.csproj", "{AA65FED6-969E-4D6F-8AB7-DFF6BFC1331C}"
 EndProject
@@ -18,6 +18,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpException", "ExpException\ExpException.csproj", "{44BA695A-F289-488D-8DB0-36D1EC0AA191}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mcLogic", "mcLogic\mcLogic.csproj", "{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HS_DeviceInteract", "HS_DeviceInteract\HS_DeviceInteract.csproj", "{3400094F-1619-4335-87BA-232205C2884E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HS_MeasureDevice", "HS_MeasureDevice", "{63F1AE6B-6439-4EF6-B7F1-6F939DF4D529}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EM9118", "HS_MeasureDevice\EM9118\EM9118\EM9118.csproj", "{7CD40878-4588-4C3D-8786-7B628C72ADE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newopcdll", "HS_MeasureDevice\newopcdll\newopcdll.csproj", "{D0B2B395-22F9-419B-9009-37BB5D3C0824}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FP23Cmd", "HS_MeasureDevice\FP23Cmd\FP23Cmd\FP23Cmd.csproj", "{976FAA7A-484D-4DC5-AAC3-6C56738AAD36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,8 +67,29 @@ Global
 		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AA6B9D7-B437-4E26-84C1-3E3C402ED4B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3400094F-1619-4335-87BA-232205C2884E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3400094F-1619-4335-87BA-232205C2884E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3400094F-1619-4335-87BA-232205C2884E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3400094F-1619-4335-87BA-232205C2884E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CD40878-4588-4C3D-8786-7B628C72ADE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CD40878-4588-4C3D-8786-7B628C72ADE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CD40878-4588-4C3D-8786-7B628C72ADE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CD40878-4588-4C3D-8786-7B628C72ADE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B2B395-22F9-419B-9009-37BB5D3C0824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B2B395-22F9-419B-9009-37BB5D3C0824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B2B395-22F9-419B-9009-37BB5D3C0824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B2B395-22F9-419B-9009-37BB5D3C0824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976FAA7A-484D-4DC5-AAC3-6C56738AAD36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976FAA7A-484D-4DC5-AAC3-6C56738AAD36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976FAA7A-484D-4DC5-AAC3-6C56738AAD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976FAA7A-484D-4DC5-AAC3-6C56738AAD36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7CD40878-4588-4C3D-8786-7B628C72ADE8} = {63F1AE6B-6439-4EF6-B7F1-6F939DF4D529}
+		{D0B2B395-22F9-419B-9009-37BB5D3C0824} = {63F1AE6B-6439-4EF6-B7F1-6F939DF4D529}
+		{976FAA7A-484D-4DC5-AAC3-6C56738AAD36} = {63F1AE6B-6439-4EF6-B7F1-6F939DF4D529}
 	EndGlobalSection
 EndGlobal

@@ -192,6 +192,11 @@ namespace mcLogic.Execute
         /// <returns>反回True进行执行状态，并产生Executed事件</returns>
         protected abstract bool OnExecute(ref double eVal);
 
+        public override string ToString()
+        {
+            return DesignMark;
+        }
+
         #endregion
     }
 

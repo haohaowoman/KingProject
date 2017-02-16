@@ -87,7 +87,7 @@ namespace mcLogic.Execute
 
                 if (_allowTolerance.IsInTolerance(TargetVal, _fedbackData))
                 {
-                    FedbackInTolerance?.Invoke(this);
+                    FedbackInTolerance?.Invoke(this, _fedbackData);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace mcLogic.Execute
         /// <summary>
         /// 反馈值达到了目标值的允许公差范围时发生
         /// </summary>
-        public event Action<object> FedbackInTolerance;
+        public event EventHandler<double> FedbackInTolerance;
         #region Override
 
         /// <summary>

@@ -5,7 +5,8 @@
              xmlns:srv="clr-namespace:LabMCESystem.Servers.HS;assembly=LabServicesStand_alone"
              xmlns:viewm="clr-namespace:ExpRuntimeApp.ViewModules"
              xmlns:Gauges="clr-namespace:Visifire.Gauges;assembly=WPFVisifire.Gauges" x:Class="ExpRuntimeApp.App"
-             StartupUri="ExpWindows/UserLogin.xaml" Startup="Application_Startup">
+             StartupUri="ExpWindows/UserLogin.xaml" Startup="Application_Startup" Exit="Application_Exit" Navigated="Application_Navigated" NavigationFailed="Application_NavigationFailed"
+    >
     <Application.Resources>
 
         <ResourceDictionary>

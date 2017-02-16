@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using LabMCESystem.LabElement;
 namespace LabMCESystem.Servers.HS
 {
     /// <summary>
@@ -20,12 +20,12 @@ namespace LabMCESystem.Servers.HS
     /// </summary>
     class HS_FIRQExecuter : PredicatePositionPID
     {
-        public HS_FIRQExecuter(string designMark, HS_MeasCtrlDevice dev, double minQ) :
-            base(200, new SafeRange(0, 5000), new PIDParam()
+        public HS_FIRQExecuter(string designMark, IAnalogueMeasure targetChannel, double minQ) :
+            base(minQ, new SafeRange(0, 5000), new PIDParam()
             {
-                Ts = 4000,
-                Kp = 0.78,
-                Ti = 6000,
+                Ts = 18000,
+                Kp = 0.58,
+                Ti = 54000,
                 Td = 0
             })
         {
@@ -34,9 +34,31 @@ namespace LabMCESystem.Servers.HS
 
             MinRequirQ = minQ;
 
+            TargetChannel = targetChannel;
+
+            UpdateFedback += HS_FIRQExecuter_UpdateFedback;
+
             ExecuteChanged += HS_FIRQExecuter_ExecuteChanged;
+
+            FedbackInTolerance += HS_FIRQExecuter_FedbackInTolerance;
         }
 
+        private void HS_FIRQExecuter_FedbackInTolerance(object sender, double e)
+        {
+            
+        }
+
+        // 更新目标通道的反馈。
+        private void HS_FIRQExecuter_UpdateFedback(IDataFeedback sender)
+        {
+            sender.FedbackData = TargetChannel?.MeasureValue ?? 0;
+        }
+
+        /// <summary>
+        /// 获取/设置控制目标通道。
+        /// </summary>
+        public IAnalogueMeasure TargetChannel { get; set; }
+        
         /// <summary>
         /// 获取/设置最低要求流量。
         /// </summary>
@@ -53,24 +75,42 @@ namespace LabMCESystem.Servers.HS
         }
 
         /// <summary>
-        /// 获取当前流量对应开度的比例系数。
+        /// 获取当前流量对应开度的比例系数。        
         /// </summary>
         public double QKParam { get; private set; } = 1;
 
         // 执行输出。
         private void HS_FIRQExecuter_ExecuteChanged(object sender, double executedVal)
         {
-            if (_mEOVExe != null)
+            if (TargetChannel != null && _mEOVExe != null)
             {
                 executedVal = Math.Max(MinRequirQ, ExecuteVal);
-                double Keov = executedVal / QKParam;
-                if (_mEOVExe.FedbackData != 0)
+                if (FedbackData != 0)
                 {
-                    QKParam = FedbackData / _mEOVExe.FedbackData;
+                    if (executedVal !=0 && _mEOVExe.GetCurrentMultiEovData() <= 0)
+                    {
+                        // 排除刚运行状态下的输出和反馈同时为零。
+                        QKParam = 50;
+                    }
+                    else
+                    {
+                        QKParam = _mEOVExe.GetCurrentMultiEovData() * executedVal / FedbackData;
+                    }                    
                 }
+                else
+                {
+                    QKParam = 50;
+                }
+
+                double Keov = QKParam;
+                
                 if (_mEOVExe.SafeRange.IsSafeIn(Keov))
                 {
                     _mEOVExe.TargetVal = Keov;
+                }
+                else
+                {
+                    _mEOVExe.TargetVal = _mEOVExe.SafeRange.Height;
                 }
 
                 _mEOVExe.ExecuteBegin();

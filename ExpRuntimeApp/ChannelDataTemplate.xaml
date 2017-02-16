@@ -424,7 +424,7 @@
                             <vfgauge:Gauge.Indicators>
                                 <vfgauge:BarIndicator                            
                                 Value="{Binding Path=Value}"
-                                ValueFormatString="F2"
+                                ValueFormatString="F1"
                                 Focusable="False"
                                 LabelEnabled="True"
                                 LabelStyle="Outside"
@@ -442,6 +442,34 @@
                             </vfgauge:Gauge.Indicators>
                         </vfgauge:Gauge>
                     </GroupBox>
+                    <!--#endregion-->
+                    <!--#region 控制部分-->                    
+                    <GroupBox Grid.Row="1"  Grid.Column="1" Margin="1" Header="控制">
+                        <DockPanel LastChildFill="False" VerticalAlignment="Center">
+                            <metro:NumericUpDown DockPanel.Dock="Top"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     MinWidth="100"
+                                                     x:Name="ValueNum"                                        
+                                                     HasDecimals="True" 
+                                                     Minimum="0"
+                                         Maximum="100"
+                                                     TextAlignment="Left"                                        
+                                                     Value="{Binding Path=AOValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Speedup="True" StringFormat="{}{0:F1}" />
+
+                            <Slider DockPanel.Dock="Top" 
+                                        Margin="3"                                        
+                                        Orientation="Horizontal"                            
+                                        LargeChange="10"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        SmallChange="1"
+                                        Value="{Binding Path=Value,ElementName=ValueNum}"/>
+                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                        </DockPanel>
+                    </GroupBox>
+
                     <!--#endregion-->
 
                 </Grid>

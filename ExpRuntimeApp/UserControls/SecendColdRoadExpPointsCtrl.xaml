@@ -26,54 +26,47 @@
             <TextBlock Text="二冷路空气出口温度：" VerticalAlignment="Center"/>
 
             <TextBlock Text="二冷路吸热量：" VerticalAlignment="Center"/>
-
-            <TextBlock Text="二冷路散热量：" VerticalAlignment="Center"/>
-
-            <TextBlock Text="二冷路空气热平衡：" VerticalAlignment="Center"/>
+            <TextBlock Text="二冷路压差△P：" VerticalAlignment="Center"/>
         </UniformGrid>
         <UniformGrid Grid.Column="1" Margin="5" Columns="1" Grid.ColumnSpan="2" d:LayoutOverrides="Width, Height">
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[二冷空气流量].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气流量].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[二冷空气进口压力].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气进口压力].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[二冷空气进口温度].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气进口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[二冷空气出口压力].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气出口压力].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[二冷空气出口温度].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气出口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
+
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[热边空气出口温度].MeasureValue"/>
+                    <Binding Path="MdExperPoints[热边空气出口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
-            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
-                </MultiBinding>
-            </TextBox>
+
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>

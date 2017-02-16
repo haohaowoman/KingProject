@@ -19,7 +19,25 @@
         <metro:MetroAnimatedTabControl Margin="1" metro:TabControlHelper.IsUnderlined="True">
             <TabItem Header="快速试验设置" metro:ControlsHelper.HeaderMargin="8,3">
                 <Grid Background="{DynamicResource HS_BackgroundBrush}" >
-                    <uc:HS_ExpPointSet HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" Margin="10"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" 
+                        Margin="5, 10" Padding="3" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            BorderThickness="2" BorderBrush="DarkGray" CornerRadius="3">
+                        <uc:HS_ExpPointSet HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" Margin="10"/>
+                    </Border>
+
+                    <Border Grid.Row="1" 
+                        Margin="5, 10" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                            BorderThickness="2" BorderBrush="DarkGray" CornerRadius="3">
+                        <uc:HS_ExpControlToleranceCtrl HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" Margin="10"/>
+                    </Border>
                 </Grid>
             </TabItem>
             <TabItem Header="试验设备控制" metro:ControlsHelper.HeaderMargin="8,3">

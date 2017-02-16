@@ -45,6 +45,9 @@
     <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
     <Compile Include="HS\HS_Executers\HS_FirstColdFanDevice.cs" />
     <Compile Include="HS\HS_Executers\HS_FIRQExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_HeaterContrller.cs" />
+    <Compile Include="HS\HS_Executers\HS_TempreatureExecute.cs" />
+    <Compile Include="HS\HS_HeaterLogical.cs" />
     <Compile Include="HS\HS_HotRoadHeaterExe.cs" />
     <Compile Include="HS\HS_MCDEExceptionCode.cs" />
     <Compile Include="HS\HS_MCDeviceInitial.cs" />
@@ -61,6 +64,22 @@
     <ProjectReference Include="..\ExperimentDataExchange\ExperimentDataExchange.csproj">
       <Project>{c84a8feb-b898-4a4c-a208-5e240f1c2db8}</Project>
       <Name>ExperimentDataExchange</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_DeviceInteract\HS_DeviceInteract.csproj">
+      <Project>{3400094f-1619-4335-87ba-232205c2884e}</Project>
+      <Name>HS_DeviceInteract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\EM9118\EM9118\EM9118.csproj">
+      <Project>{7cd40878-4588-4c3d-8786-7b628c72ade8}</Project>
+      <Name>EM9118</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\FP23Cmd\FP23Cmd\FP23Cmd.csproj">
+      <Project>{976faa7a-484d-4dc5-aac3-6c56738aad36}</Project>
+      <Name>FP23Cmd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\newopcdll\newopcdll.csproj">
+      <Project>{d0b2b395-22f9-419b-9009-37bb5d3c0824}</Project>
+      <Name>newopcdll</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>

@@ -40,9 +40,20 @@ namespace ExpRuntimeApp.UserControls
             if (SwitchEOVChannel != null && SwitchEOVChannel.AsStatusController != null)
             {
                 var sc = SwitchEOVChannel.AsStatusController;
-                sc.NextStatus = (bool)toggleSwitchButton.IsChecked;
+                bool ns = (bool)toggleSwitchButton.IsChecked;
+                string sstr = ns ? "打开" : "关闭";
+                if (ns == SwitchEOVChannel.Status)
+                {
+                    return;
+                }
 
-                sc.ControllerExecute();
+                if (
+                    MessageBox.Show($"是否{sstr} {SwitchEOVChannel.Label} 开关阀。", "注意",MessageBoxButton.YesNo,MessageBoxImage.Question,MessageBoxResult.No) == MessageBoxResult.Yes
+                    )
+                {
+                    sc.NextStatus = ns;
+                    sc.ControllerExecute();
+                }
             }
         }
     }

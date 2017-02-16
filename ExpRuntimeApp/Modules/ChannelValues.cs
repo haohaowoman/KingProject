@@ -332,7 +332,7 @@ namespace ExpRuntimeApp.Modules
 
         public void ControllerExecute()
         {
-            AsController.ControllerExecute();
+            AsController?.ControllerExecute();
         }
 
         private void NotifyValueUpdated(object obj, object e)

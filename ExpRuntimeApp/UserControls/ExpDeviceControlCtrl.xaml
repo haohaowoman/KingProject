@@ -6,8 +6,11 @@
              xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1000">
-    <UniformGrid Margin="0">
+             d:DesignHeight="800" d:DesignWidth="1000" DataContext="{StaticResource ExpViewModule}">
+    <UserControl.Resources>
+        <local:SwitchEOVStatusConverter x:Key="SwitchConterter"/>
+    </UserControl.Resources>
+    <UniformGrid Margin="0" Button.Click="UniformGrid_Click">
 
         <GroupBox Margin="5,8" Header="风机及加热器调节">
             <Grid>
@@ -51,7 +54,12 @@
             </Grid>
         </GroupBox>
 
-        <ContentControl/>
+        <ContentControl>
+            <UniformGrid Columns="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0101Watcher_BtnClick"></Button>
+                <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0102Watcher_BtnClick"></Button>
+            </UniformGrid>
+        </ContentControl>
 
         <GroupBox Margin="5,8" Header="热路阀门调节">
             <Grid>
@@ -73,63 +81,82 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0104：" Margin="2,3"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[PV0104].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[PV0104].AOValue}"
+                                     />
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0104]}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102A：" Margin="2,3"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[FT0102A].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="1" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[FT0102A].AOValue}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102A]}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102B：" Margin="2,3"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[FT0102B].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="2" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[FT0102B].AOValue}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102B]}"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0108：" Margin="2,3"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[PV0108].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="3" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[PV0108].AOValue}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0108]}"/>
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0109：" Margin="2,3"/>
                 <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[PV0109].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="4" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[PV0109].AOValue}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0109]}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0103：" Margin="2,3"/>
                 <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前状态 关" Margin="2,3" MinWidth="100"/>
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding StringFormat=当前状态：{0},Path=MdChannels[EV0103].Status,Converter={StaticResource SwitchConterter}}"/>
                 <metro:ToggleSwitch Grid.Row="5" Grid.Column="2" 
                                 VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
                                                 OffLabel="关"
-                                                OnLabel="开"/>
-                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0103].NextStatus}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0103]}"/>
 
                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0104：" Margin="2,3"/>
-                <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前状态 关" Margin="2,3" MinWidth="100"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,3" MinWidth="100"
+                           Text="{Binding StringFormat=当前状态：{0},Path=MdChannels[EV0104].Status,Converter={StaticResource SwitchConterter}}"/>
                 <metro:ToggleSwitch Grid.Row="6" Grid.Column="2" 
                                 VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
                                                 OffLabel="关"
-                                                OnLabel="开"/>
-                <Button Grid.Row="6" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0104].NextStatus}"/>
+                <Button Grid.Row="6" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0104]}"/>
             </Grid>
         </GroupBox>
 
@@ -152,55 +179,71 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0103：" Margin="2,3"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                Text="当前开度 0 %"  Margin="2,3" MinWidth="120"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[PV0103].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[PV0103].AOValue}"/>
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0103]}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101A：" Margin="2,3"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[FT0101A].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="1" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[FT0101A].AOValue}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101A]}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101B：" Margin="2,3"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[FT0101B].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="2" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[FT0101B].AOValue}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101B]}"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0107：" Margin="2,3"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前开度 0 %" Margin="2,3" MinWidth="120"/>
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding StringFormat=当前开度：{0:f1} %,Path=MdChannels[PV0107].MeasureValue}"/>
                 <metro:NumericUpDown Grid.Row="3" Grid.Column="2" 
-                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F2}"/>
-                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding Path=MdChannels[PV0107].AOValue}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0107]}"/>
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
-                                Text="PV0109：" Margin="2,3"/>
+                                Text="EV0101：" Margin="2,3"/>
                 <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前状态 关" Margin="2,3" MinWidth="100"/>
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding StringFormat=当前状态：{0},Path=MdChannels[EV0101].Status,Converter={StaticResource SwitchConterter}}"/>
                 <metro:ToggleSwitch Grid.Row="4" Grid.Column="2" 
                                 VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
                                 OffLabel="关"
-                                OnLabel="开"/>
-                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0101].NextStatus}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0101]}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0102：" Margin="2,3"/>
                 <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Text="当前状态 关" Margin="2,3" MinWidth="100"/>
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding StringFormat=当前状态：{0},Path=MdChannels[EV0102].Status,Converter={StaticResource SwitchConterter}}"/>
                 <metro:ToggleSwitch Grid.Row="5" Grid.Column="2" 
                                 VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
                                 OffLabel="关"
-                                OnLabel="开"/>
-                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand"/>
+                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0102].NextStatus}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0102]}"/>
             </Grid>
         </GroupBox>
 

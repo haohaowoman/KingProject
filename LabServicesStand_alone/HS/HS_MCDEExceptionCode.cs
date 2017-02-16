@@ -125,10 +125,36 @@ namespace LabMCESystem.Servers.HS
                 Label = "加热器报警",
                 Summary = "电炉加热器出现故障报警",
                 ExcepType = EExcepType.Fault,
-                DealOpinion = "请增大加热器的通过气流，并立即关闭所有相关加热设备。"
+                DealOpinion = "请增大加热器的通过气流，并立即关闭所有相关加热设备。"                
             };
 
+            var heaterETrigger = new StatusChannelTrigger(Device["RL_1#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
 
+            heaterETrigger = new StatusChannelTrigger(Device["RL_2#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
+
+            heaterETrigger = new StatusChannelTrigger(Device["RL_3#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
+
+            heaterETrigger = new StatusChannelTrigger(Device["RL_4#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
+
+            heaterETrigger = new StatusChannelTrigger(Device["RL_5#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
+            
+            heaterETrigger = new StatusChannelTrigger(Device["ELL_1#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
+
+            heaterETrigger = new StatusChannelTrigger(Device["ELL_2#_FAULT"] as StatusChannel);
+            heaterETrigger.ActionStatus = true;
+            ces.Triggers.Add(heaterETrigger);
 
             ExceptionWatcher.AddExceptionSrc(ces);
         }
@@ -139,7 +165,10 @@ namespace LabMCESystem.Servers.HS
         /// <param name="e"></param>
         protected override void OnExceptionWatcherReport(WatcherReportEExceptionEventArgs e)
         {
-            //Console.WriteLine($"{e.EExceptionInfor} {e.AppearTime} {e.Source} {e.OriginalSource}");
+
+#if DEBUG
+            //Console.WriteLine($"{e.EExceptionInfor} was actived on {e.AppearTime} from {e.Source} of {e.OriginalSource}"); 
+#endif
             base.OnExceptionWatcherReport(e);
         }
     }

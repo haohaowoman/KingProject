@@ -60,6 +60,7 @@
     <Compile Include="Execute\PredicatePositionPID.cs" />
     <Compile Include="Execute\SeparateIntegratingPID.cs" />
     <Compile Include="Execute\SerialExecuteSys.cs" />
+    <Compile Include="Execute\SimplePulseExecuter.cs" />
     <Compile Include="Execute\StepExecuter.cs" />
     <Compile Include="Execute\Watcher\ExecuteWatcher.cs" />
     <Compile Include="Execute\Watcher\ExecuteWatcherDlg.cs">

@@ -169,7 +169,7 @@ namespace mcLogic.Execute
             Execute();
         }
 
-        private void PIDExecuterBase_FedbackInToleranced(object obj)
+        private void PIDExecuterBase_FedbackInToleranced(object sender, double fValue)
         {
             // 自动停止执行
             if (AutoFinish)
@@ -314,6 +314,7 @@ namespace mcLogic.Execute
 
         public void Start()
         {
+            Execute();
             _periodTimer.Start();
         }
 

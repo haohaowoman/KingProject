@@ -12,10 +12,11 @@ using LabMCESystem.BaseService.ExperimentDataExchange;
 using LabMCESystem.Servers.HS;
 using System.Windows.Data;
 using LabMCESystem.LabElement;
+using System.ComponentModel;
 
 namespace ExpRuntimeApp.ViewModules
-{    
-    class ExperimentViewModule : IDisposable
+{
+    class ExperimentViewModule : IDisposable, INotifyPropertyChanged
     {
 
         public ExperimentViewModule()
@@ -84,23 +85,11 @@ namespace ExpRuntimeApp.ViewModules
 
                     _service.ElementManager.ExperimentPointsChanged += ElementManager_ExperimentPointsChanged;
 
-                    // 开始定义读取数据    
-                    //_readValueTimer_Elapsed(_readValueTimer, null);
-
-                    //_readValueTimer.Start();
-
+                    // 异常管理事件。
+                    _service.ExcepManager.ActivatedEException += ExcepManager_ActivatedEException;
+                    _service.ExcepManager.HandledEException += ExcepManager_HandledEException;
                 }
             }
-        }
-
-        private void ElementManager_ExperimentPointsChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ElementManager_ExperimentAreaesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         public ExperimentViewModule(HS_Server service) : this()
@@ -128,7 +117,25 @@ namespace ExpRuntimeApp.ViewModules
         {
             get { return _mdExperPoints; }
         }
-        
+
+        private string _expInformation;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// 获取/设置当前试验信息。
+        /// </summary>
+        public string ExpInformation
+        {
+            get { return _expInformation; }
+            set
+            {
+                _expInformation = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExpInformation)));
+            }
+        }
+
+
         /// <summary>
         /// 获取包含传感器的测量通道集合。
         /// </summary>
@@ -142,14 +149,40 @@ namespace ExpRuntimeApp.ViewModules
                     schs = new List<MdChannel>();
                     foreach (var ch in _mdChannels)
                     {
-                        if (ch.Channel.Style==ExperimentStyle.Measure)
+                        if (ch.Channel.Style == ExperimentStyle.Measure)
                         {
                             schs.Add(ch);
                         }
-                        
+
                     }
                 }
                 return schs;
+            }
+        }
+
+        /// <summary>
+        /// 获取当前所激活的异常。
+        /// </summary>
+        public ExceptionActionModule CurrentException { get; private set; } = new ExceptionActionModule();
+
+        public ObservableCollection<ExceptionActionModule> Exceptions
+        {
+            get
+            {
+                if (_service.ExcepManager != null)
+                {
+                    var es = new ObservableCollection<ExceptionActionModule>();
+                    foreach (var item in _service.ExcepManager.AppearedEExceptions)
+                    {
+                        es.Add(new ExceptionActionModule() { Action = item });
+                    }
+                    return es;
+                }
+                else
+                {
+                    return null;
+                }
+
             }
         }
 
@@ -180,6 +213,29 @@ namespace ExpRuntimeApp.ViewModules
                     }
                 }
             }
+        }
+
+        // 异常已处理事件。
+        private void ExcepManager_HandledEException(object sender, LabMCESystem.EException.HandledEExceptionEventArgs e)
+        {
+            ExpInformation = "异常已处理";
+        }
+
+        // 异常激活事件。
+        private void ExcepManager_ActivatedEException(object sender, LabMCESystem.EException.ActivatedEExceptionEventArgs e)
+        {
+            CurrentException.Action = _service.ExcepManager.GetActiveExcepAction(e.ActivatedEException) as LabMCESystem.EException.EExcepAction;
+            ExpInformation = $"异常{e.ActivatedEException}触发。";
+        }
+
+        private void ElementManager_ExperimentPointsChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ElementManager_ExperimentAreaesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()

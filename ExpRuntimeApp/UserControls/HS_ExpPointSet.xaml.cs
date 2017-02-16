@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabMCESystem.Servers.HS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,24 @@ namespace ExpRuntimeApp.UserControls
         public HS_ExpPointSet()
         {
             InitializeComponent();
+        }
+
+        private void RL_FlowControlBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null && RL_Flow_ControlValue.Value != null)
+            {
+                srvRes.HS_Device.SetFT0102To((double)RL_Flow_ControlValue.Value);
+            }
+        }
+
+        private void ELL_FlowControlBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null && ELL_Flow_ControlValue.Value != null)
+            {
+                srvRes.HS_Device.SetFT0101To((double)ELL_Flow_ControlValue.Value);
+            }
         }
     }
 }

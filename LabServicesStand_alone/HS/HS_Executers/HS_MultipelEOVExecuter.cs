@@ -26,7 +26,7 @@ namespace LabMCESystem.Servers.HS
             HS_EOVPIDExecuter mEOV,
             HS_EOVPIDExecuter fEOV,
             string designMark,
-            double targetVal = 30):base(designMark, targetVal)
+            double targetVal = 30) : base(designMark, targetVal)
         {
             _fEOV = fEOV;
             _mEOV = mEOV;
@@ -46,7 +46,7 @@ namespace LabMCESystem.Servers.HS
 
             UpdateFedback += HS_MultipelEOVExecuter_UpdateFedback;
 
-            AutoFinish = false;
+            //AutoFinish = false;
         }
 
         // 主调阀
@@ -73,16 +73,52 @@ namespace LabMCESystem.Servers.HS
             {
                 return;
             }
+            double tMEovOut = 0;
+            double tFEovOut = 0;
 
-            double tk = _mEOVDefualt / (_mEOV.SafeRange.Height - _mEOV.SafeRange.Low);
-            double tempdia = _mEOV.PipeDiameter * (1.0 - tk);
-            double tempAdia = _fEOV.PipeDiameter + tempdia;
+            // 比例计算 管径开度
+            double tempPipeDiameter = executedVal * PipeDiameter / SafeRange.Length;
 
-            double tempTarget = _mEOVDefualt + executedVal * tempdia / tempAdia;
+            // 主阀默认开度对应管径。
+            double tDefMEovPipeDia = _mEOVDefualt * _mEOV.PipeDiameter / _mEOV.SafeRange.Length;
 
-            _mEOV.TargetVal = tempTarget;
+            // 调节开度小于主阀默认开度是只动作主阀。
+            if (tempPipeDiameter <= tDefMEovPipeDia)
+            {
+                tMEovOut = tempPipeDiameter * _mEOV.SafeRange.Length / _mEOV.PipeDiameter;
+                tFEovOut = 0;
+            }
+            else
+            {
+                double lPieDia = tempPipeDiameter - tDefMEovPipeDia;
+                double pMParam = _mEOV.PipeDiameter / PipeDiameter;
+                double pFParam = _fEOV.PipeDiameter / PipeDiameter;
 
-            tempTarget = executedVal * _fEOV.PipeDiameter / tempAdia;
+                if (tDefMEovPipeDia + lPieDia * pMParam > _mEOV.PipeDiameter)
+                {
+                    tMEovOut = _mEOV.SafeRange.Height;
+                    tFEovOut = (tempPipeDiameter - _mEOV.PipeDiameter) * _fEOV.SafeRange.Length / _fEOV.PipeDiameter;
+                }
+                else
+                {
+                    tMEovOut = (tDefMEovPipeDia + lPieDia * pMParam) * _mEOV.SafeRange.Length / _mEOV.PipeDiameter;
+
+                    tFEovOut = lPieDia * pFParam * _fEOV.SafeRange.Length / _fEOV.PipeDiameter;
+                }
+
+            }
+
+            if (!_mEOV.SafeRange.IsSafeIn(tMEovOut))
+            {
+                tMEovOut = _mEOV.SafeRange.Height;
+            }
+            if (!_fEOV.SafeRange.IsSafeIn(tFEovOut))
+            {
+                tFEovOut = _mEOV.SafeRange.Height;
+            }
+
+            _mEOV.TargetVal = tMEovOut;
+            _fEOV.TargetVal = tFEovOut;
 
             _mEOV.ExecuteBegin();
             _fEOV.ExecuteBegin();
@@ -96,16 +132,34 @@ namespace LabMCESystem.Servers.HS
                 return;
             }
 
-            double tk = _mEOVDefualt / (_mEOV.SafeRange.Height - _mEOV.SafeRange.Low);
-            double tempdia = _mEOV.PipeDiameter * (1.0 - tk);
-            double tempAdia = _fEOV.PipeDiameter + tempdia;
+            // 主阀默认开度对应管径。
+            double tDefMEovPipeDia = _mEOVDefualt * _mEOV.PipeDiameter / _mEOV.SafeRange.Length;
 
-            double km = (_mEOV.FedbackData - _mEOVDefualt) * tempAdia / tempdia;
+            double tMEovOpenedPipeDia = _mEOV.FedbackData * _mEOV.PipeDiameter / _mEOV.SafeRange.Length;
+            double tFEovOpenedPipeDia = _fEOV.FedbackData * _fEOV.PipeDiameter / _fEOV.SafeRange.Length;
 
-            double kf = _fEOV.FedbackData * tempAdia / tempAdia;
+            sender.FedbackData = (tMEovOpenedPipeDia + tFEovOpenedPipeDia) * SafeRange.Length / PipeDiameter;
 
-            sender.FedbackData = km + kf / 2.0;
         }
 
+        /// <summary>
+        /// 计算获取当前组合阀门换算开度。
+        /// </summary>
+        /// <returns></returns>
+        public double GetCurrentMultiEovData()
+        {
+            if (PipeDiameter == 0)
+            {
+                return 0;
+            }
+
+            // 主阀默认开度对应管径。
+            double tDefMEovPipeDia = _mEOVDefualt * _mEOV.PipeDiameter / _mEOV.SafeRange.Length;
+
+            double tMEovOpenedPipeDia = _mEOV.FedbackData * _mEOV.PipeDiameter / _mEOV.SafeRange.Length;
+            double tFEovOpenedPipeDia = _fEOV.FedbackData * _fEOV.PipeDiameter / _fEOV.SafeRange.Length;
+
+            return (tMEovOpenedPipeDia + tFEovOpenedPipeDia) * SafeRange.Length / PipeDiameter;
+        }
     }
 }

@@ -72,7 +72,10 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                 {
                                     case "%":
                                         rt = EOVChannelTemplate;
-                                        break;                                    
+                                        break;
+                                    case "℃":
+                                        rt = TemperatureTemplate;
+                                        break;
                                     default:
                                         rt = DefualtMeasureDataTemplate;
                                         break;

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ExpRuntimeApp.Modules;
+using LabMCESystem.Servers.HS;
 
 namespace ExpRuntimeApp.UserControls
 {
@@ -23,6 +25,38 @@ namespace ExpRuntimeApp.UserControls
         public ExpDeviceControlCtrl()
         {
             InitializeComponent();
+        }
+
+        private void UniformGrid_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = e.OriginalSource as Button;
+
+            if (btn?.Tag != null)
+            {
+                var mdChannel = btn.Tag as MdChannel;
+                if (mdChannel != null)
+                {
+                    mdChannel.ControllerExecute();
+                } 
+            }
+        }
+
+        private void FT0101Watcher_BtnClick(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null)
+            {
+                srvRes.HS_Device.ShowFT0101_PIDWatcher();
+            }
+        }
+
+        private void FT0102Watcher_BtnClick(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null)
+            {
+                srvRes.HS_Device.ShowFT0102_PIDWatcher();
+            }
         }
     }
 }

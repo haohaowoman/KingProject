@@ -44,6 +44,7 @@ namespace mcLogic.Execute
 
         protected override bool OnExecute(ref double eVal)
         {
+            eVal = TargetVal;
             return true;
         }
 

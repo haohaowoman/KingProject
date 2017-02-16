@@ -318,7 +318,7 @@ namespace LabMCESystem.BaseService
 
         public bool ExitLogDevice(LabDevice dev)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool RegistNewExpArea(ExperimentalArea nArea)

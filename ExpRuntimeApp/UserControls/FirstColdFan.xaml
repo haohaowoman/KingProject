@@ -199,7 +199,7 @@
                                   Click="FanPowerOnBtn_Click"/>
         <Rectangle Grid.Column="1" Margin="5,10,14.333,82.667" RadiusY="5" Grid.Row="2" RadiusX="5" Stroke="#FF342F2F" Fill="#FF8D9191" StrokeThickness="2"/>
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="36.333" Margin="10,15,0,0" Grid.Row="2" IsReadOnly="True"
-                 Text="{Binding MdChannels[风机变频器电机转速反馈].Value,StringFormat={}{0:F2} r/min,Mode=OneWay}" VerticalAlignment="Top" Width="87" FontSize="18.667" FontWeight="Bold" FontStyle="Italic"
+                 Text="{Binding MdChannels[风机变频器电机转速反馈].Value,StringFormat={}{0:F0} r/min,Mode=OneWay}" VerticalAlignment="Top" Width="87" FontSize="18.667" FontWeight="Bold" FontStyle="Italic"
                  />
 
         <metro:NumericUpDown Margin="10,56.333,51,91.667" Grid.Column="1" Grid.Row="2" UpDownButtonsWidth="15"
@@ -228,7 +228,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机变频器电机电流反馈].MeasureValue"/>
                             <Binding Path="MdChannels[风机变频器电机电流反馈].Unit"/>
                         </MultiBinding>
@@ -240,7 +240,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机前轴承温度TT1].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机前轴承温度TT1].Unit"/>
                         </MultiBinding>
@@ -252,7 +252,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机后轴承温度TT2].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机后轴承温度TT2].Unit"/>
                         </MultiBinding>
@@ -264,7 +264,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机绕组U温度TT3].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机绕组U温度TT3].Unit"/>
                         </MultiBinding>
@@ -276,7 +276,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机绕组V温度TT4].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机绕组V温度TT4].Unit"/>
                         </MultiBinding>
@@ -287,7 +287,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机绕组W温度TT5].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机绕组W温度TT5].Unit"/>
                         </MultiBinding>
@@ -298,7 +298,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机前轴振动].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机前轴振动].Unit"/>
                         </MultiBinding>
@@ -309,7 +309,7 @@
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
-                        <MultiBinding StringFormat="{}{0:F2} {1}">
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
                             <Binding Path="MdChannels[风机电机后轴振动].MeasureValue"/>
                             <Binding Path="MdChannels[风机电机后轴振动].Unit"/>
                         </MultiBinding>

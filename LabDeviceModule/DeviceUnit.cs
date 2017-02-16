@@ -168,7 +168,7 @@ namespace LabMCESystem.LabDeviceModule
         {
             return _device.ToString();
         }
-
+        
         /// <summary>
         /// 重写此函数以响应异常报告事件。
         /// </summary>

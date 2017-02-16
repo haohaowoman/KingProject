@@ -17,6 +17,7 @@ namespace mcLogic.Execute.Watcher
             InitializeComponent();
 
             _watcher = watcher;
+            _watcher.WatchDataChanged += _watcher_WatchDataChanged;
         }
 
         private ExecuteWatcher _watcher;
@@ -55,15 +56,64 @@ namespace mcLogic.Execute.Watcher
             var sEv = EChart.Series.FindByName("ExeValue");
             var sFv = EChart.Series.FindByName("FedbackValue");
             var fe = _watcher.TargetExecuter as IDataFeedback;
-            foreach (var item in _watcher.WatchData)
+            int wcount = _watcher.WatchData.Count;
+            if (sEv.Points.Count < wcount)
             {
-                sEv.Points.AddXY(item.Time, item.ExecuteValue);
-                
-                if (fe != null)
+                for (int i = sEv.Points.Count; i < wcount; i++)
                 {
-                    sFv.Points.AddXY(item.Time, item.FedbackValue);
+                    sEv.Points.AddXY(_watcher.WatchData[i].Time, _watcher.WatchData[i].ExecuteValue);
+                    
+                    if (fe != null)
+                    {
+                        sFv.Points.AddXY(_watcher.WatchData[i].Time, _watcher.WatchData[i].FedbackValue);
+                        
+                    }
                 }
+            }            
+        }
+
+        private void _watcher_WatchDataChanged(object sender, List<EWatcherData> e)
+        {
+            this.Invoke(new Action(delegate () { RefreshBtn_Click(this, null); }));
+        }
+
+        private void ExecuteWatcherDlg_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _watcher.WatchDataChanged -= _watcher_WatchDataChanged;
+        }
+
+        private void EOverBtn_Click(object sender, EventArgs e)
+        {
+            _watcher?.TargetExecuter?.ExecuteOver();
+        }
+
+        private void EBegainBtn_Click(object sender, EventArgs e)
+        {
+            _watcher?.TargetExecuter?.ExecuteBegin();
+        }
+
+        private void ResetBtn_Click(object sender, EventArgs e)
+        {
+            PIDExecuterBase pidExe = _watcher?.TargetExecuter as PIDExecuterBase;
+            if (pidExe != null)
+            {
+                PIDParam pidParam = new PIDParam();
+                pidParam.Kp = Convert.ToDouble(PIDKpTextBox.Text);
+                pidParam.Ti = Convert.ToDouble(PIDKiTextBox.Text);
+                pidParam.Td = Convert.ToDouble(PIDTdTextBox.Text);
+
+                if (pidExe.Enabled)
+                {
+                    pidExe.ExecuteOver();
+                    pidExe.Param = pidParam;
+                    pidExe.ExecuteBegin();
+                }
+                else
+                {
+                    pidExe.Param = pidParam;
+                }                
             }
+
         }
     }
 }

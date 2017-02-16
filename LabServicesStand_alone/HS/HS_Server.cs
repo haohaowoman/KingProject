@@ -49,12 +49,12 @@ namespace LabMCESystem.Servers.HS
 
         private HS_MeasCtrlDevice _hs_Device;
         /// <summary>
-        /// 获取/设置环散系统测控设备对象
+        /// 获取环散系统测控设备对象
         /// </summary>
         public HS_MeasCtrlDevice HS_Device
         {
             get { return _hs_Device; }
-            set { _hs_Device = value; }
+            private set { _hs_Device = value; }
         }
 
         public EExceptionManager ExcepManager { get; private set; }
@@ -99,6 +99,16 @@ namespace LabMCESystem.Servers.HS
         #endregion
 
         #region Operators
+
+        /// <summary>
+        /// 关闭服务。
+        /// </summary>
+        public void Close()
+        {
+            _hs_Device.Stop();
+            System.Threading.Thread.Sleep(100);
+            _hs_Device.Close();
+        }
 
         /// <summary>
         /// 初始化实验段与测试点

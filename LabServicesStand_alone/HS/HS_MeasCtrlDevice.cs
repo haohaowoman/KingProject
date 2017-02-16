@@ -11,6 +11,8 @@ using LabMCESystem.ETask;
 using LabMCESystem.BaseService.ExperimentDataExchange;
 
 using static LabMCESystem.Servers.HS.HS_PLCReadWriter;
+using mcLogic.Demarcate;
+using HS_DeviceInteract;
 
 namespace LabMCESystem.Servers.HS
 {
@@ -25,10 +27,10 @@ namespace LabMCESystem.Servers.HS
     public partial class HS_MeasCtrlDevice : ControlExecuterBase
     {
         public HS_MeasCtrlDevice()
-        {   
+        {
             _updateTimer.Elapsed += _updateTimer_Elapsed;
 
-            InitialDevice();            
+            InitialDevice();
         }
 
         // 默认设置的热边最小流量
@@ -36,8 +38,8 @@ namespace LabMCESystem.Servers.HS
         // 默认设置的二冷最小流量
         public const double Defualt_MinQ_SecendCold = 100;
 
-
         #region Fields
+
         // 通过通道名创建执行器的映射关系
         private Dictionary<string, Executer> _executerMap = new Dictionary<string, Executer>();
         /// <summary>
@@ -50,7 +52,7 @@ namespace LabMCESystem.Servers.HS
 
         // 表示 数采箱采集 通道提示-采集值 的集合
         private Dictionary<string, double> _measureValues = new Dictionary<string, double>();
-        
+
         public Dictionary<string, double> MeasureValues
         {
             get { return _measureValues; }
@@ -67,9 +69,15 @@ namespace LabMCESystem.Servers.HS
             set { _chsValueLook = value; }
         }
 
-        // 数据更新定时器
+        /// <summary>
+        /// 保存数采箱通道标号与其对应的下标集合。
+        /// </summary>
+        private Dictionary<string, int> _devPromptIndexDic;
+        // 采集通道数据更新定时器
         private Timer _updateTimer = new Timer(250);
 
+        // 记录已更新数据的次数。
+        private ulong _updatedCount = 0;
         #endregion
 
         #region Properties
@@ -89,6 +97,11 @@ namespace LabMCESystem.Servers.HS
         /// 获取/设置实验室的报警温度上限。
         /// </summary>
         public double LabFaultTemprature { get; set; } = 45;
+
+        /// <summary>
+        /// 获取数采箱的交互。
+        /// </summary>
+        public HS_DeviceInteract.IADDeviceInteract ADDeviceInteract { get; private set; }
 
         #endregion
 
@@ -120,7 +133,7 @@ namespace LabMCESystem.Servers.HS
 
             System.Diagnostics.Debug.Assert(ch != null);
 
-            HS_FIRQExecuter FIRQE = new HS_FIRQExecuter(ch.Label, this, Defualt_MinQ_SecendCold);
+            HS_FIRQExecuter FIRQE = new HS_FIRQExecuter(ch.Label, ch as IAnalogueMeasure, Defualt_MinQ_SecendCold);
             FIRQE.MulEOVExecuter = new HS_MultipelEOVExecuter
                 (
                 (HS_EOVPIDExecuter)_executerMap["FT0101A"],
@@ -130,12 +143,15 @@ namespace LabMCESystem.Servers.HS
 
             _executerMap.Add(ch.Label, FIRQE);
 
+            // 为二冷入口温度TT0105添加控制器，执行温度调节任务。
+
+
             // 热边
             ch = dev["FT0102"];
 
             System.Diagnostics.Debug.Assert(ch != null);
 
-            FIRQE = new HS_FIRQExecuter(ch.Label, this, Defualt_MinQ_HotRoad);
+            FIRQE = new HS_FIRQExecuter(ch.Label, ch as IAnalogueMeasure, Defualt_MinQ_HotRoad);
             FIRQE.MulEOVExecuter = new HS_MultipelEOVExecuter
                 (
                 (HS_EOVPIDExecuter)_executerMap["FT0102A"],
@@ -177,61 +193,108 @@ namespace LabMCESystem.Servers.HS
                 var ext = so.Controller as DigitalExecuter;
                 if (ext != null)
                 {
-                    ext.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
+                    ext.ExecuteChanged += HS_SwitchEOV_ExecuteChanged;
                 }
             }
-
-            // 为执行器添加反馈更新事件与执行事件。
-            //foreach (var exe in _executerMap)
-            //{
-            //    // 电磁调节阀 执行器
-            //    if (exe.Value is HS_EOVPIDExecuter)
-            //    {
-            //        HS_EOVPIDExecuter tempe = exe.Value as HS_EOVPIDExecuter;
-
-            //        tempe.UpdateFedback += HS_EOVsUpdateFedback;
-
-            //        tempe.ExecuteChanged += HS_EOVsExecuteChanged;
-            //    }
-
-            //    // 电磁开关阀执行器
-            //    if (exe.Value is DigitalExecuter)
-            //    {
-            //        exe.Value.ExecuteChanged += HS_DigitalEOV_ExecuteChanged;
-            //    }
-            //}
-
+            
             // 为采集通道映射数据
+            int index = 0;
+            _devPromptIndexDic = new Dictionary<string, int>(48);
             for (int i = 1; i <= 8; i++)
             {
                 for (int j = 1; j <= 6; j++)
                 {
                     _measureValues.Add($"{i:D2}_Ch{j:D}", 0);
+                    _devPromptIndexDic.Add($"{i:D2}_Ch{j:D}", index++);
                 }
             }
 
             _mvDicKeys = _measureValues.Keys.ToArray();
-
-            // 为通道映射数据集合
-            _chsValueLook = new Dictionary<string, ChannelRTData>();
-            foreach (var item in Device.Children)
+            
+            // 打开数采箱设备。
+            ADDeviceInteract = new EM9118.BoardManage();
+            if (ADDeviceInteract != null)
             {
-                _chsValueLook.Add(item.Label, new ChannelRTData(item));
+                var adc = Device["ADDevRemoteConnection"] as IStatusExpress;
+                if (adc != null)
+                {
+                    adc.Status = ADDeviceInteract.OpenDevice();
+                }
+
+                foreach (var item in ADDeviceInteract.CardsConnection)
+                {
+                    adc.Status &= item;
+                }
+
+                ADDeviceInteract.CardConnectionChanged += (sender, e) =>
+                {
+                    foreach (var item in ADDeviceInteract.CardsConnection)
+                    {
+                        adc.Status &= item;
+                    }
+                };
             }
+
+            // opc group
+            bool bsuc = InitialOpcInteractGroup();
+            (Device["PLCRemoteConnection"] as IStatusExpress).Status = bsuc;
+#if DEBUG
+            if (!bsuc)
+            {
+                Console.WriteLine($"Initial opc interact feild.");
+            }
+#endif
+
+            InitialHeaters();
         }
 
         #region 电磁开关阀执行器事件
         // 电磁开关阀控制。
-        private void HS_DigitalEOV_ExecuteChanged(object sender, double executedVal)
+        private void HS_SwitchEOV_ExecuteChanged(object sender, double executedVal)
         {
             var de = sender as DigitalExecuter;
             if (de != null)
             {
-                HS_PLCReadWriter.WriteStatus(de.DesignMark, de.Enable);
+                string realChannelLabel = null;
+                // 得到对应的相关的真正执行离散通道。
+                switch (de.DesignMark)
+                {
+                    case "EV0101":
+                        {
+                            realChannelLabel = de.Enable ? "EV0101_HMI_OPEN" : "EV0101_HMI_CLOSE";
+                        }
+                        break;
+                    case "EV0102":
+                        {
+                            realChannelLabel = de.Enable ? "EV0102_HMI_OPEN" : "EV0102_HMI_CLOSE";
+                        }
+                        break;
+                    case "EV0103":
+                        {
+                            realChannelLabel = de.Enable ? "EV0103_HMI_OPEN" : "EV0103_HMI_CLOSE";
+                        }
+                        break;
+                    case "EV0104":
+                        {
+                            realChannelLabel = de.Enable ? "EV0104_HMI_OPEN" : "EV0104_HMI_CLOSE";
+                        }
+                        break;
+                }
+                if (realChannelLabel != null)
+                {
+                    Channel realChannel;
+
+                    if (_disChannels.TryGetValue(realChannelLabel, out realChannel))
+                    {
+                        var pulseExe = (realChannel as StatusOutputChannel).Controller as SimplePulseExecuter;
+
+                        pulseExe?.ExecuteBegin();
+                    }
+                }
             }
         }
 
-        // 电磁开关阀控制事件。
+        // 电磁开关阀控制通道事件。
         private void StatusOutput_Execute(object sender, ControllerEventArgs e)
         {
             var ev = sender as StatusOutputChannel;
@@ -252,6 +315,28 @@ namespace LabMCESystem.Servers.HS
             }
         }
 
+        // 电磁开关阀脉冲执行器控制事件。
+        private void EovExe_ExecuteChanged(object sender, double executedVal)
+        {
+            var pulseExe = sender as SimplePulseExecuter;
+            if (pulseExe != null)
+            {
+                SwitchEOVHMISetGroup.Write(pulseExe.DesignMark,
+                    pulseExe.NextPulseBit == PulseBit.HighBit ? true : false);
+#if DEBUG
+                Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.NextPulseBit}. ");
+#endif
+            }
+        }
+
+        private void EovExe_ExecuteOvered(object obj)
+        {
+
+#if DEBUG
+            Console.WriteLine($"Pulse executer {obj} execute overed. ");
+#endif
+        }
+
         #endregion
 
         #region 电磁调节阀执行器 事件
@@ -267,7 +352,7 @@ namespace LabMCESystem.Servers.HS
             {
                 try
                 {
-                    eove.FedbackData = ReadAnaloge(eove.DesignMark);
+                    eove.FedbackData = eove.TargetVal;
                 }
                 catch (Exception ex)
                 {
@@ -289,7 +374,7 @@ namespace LabMCESystem.Servers.HS
             {
                 try
                 {
-                    WriteAnaloge(eove.DesignMark, executedVal);
+                    EOVHMISetGroup.Write(eove.DesignMark, executedVal);
                 }
                 catch (Exception ex)
                 {
@@ -350,73 +435,160 @@ namespace LabMCESystem.Servers.HS
 
             return true;
         }
-        static double iio = 0;
+        static double iio = 4;
         // 定时器进行数据的读取和更新。
         private void _updateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            // 4倍时间从OPC读取数据。
+            if (_updatedCount % 4 == 0)
+            {
+                DIGroup.Read();
+                SwitchEOVHMIGroup.Read();
+                FanHMIGroup.Read();
+                //HeaterHMIGroup.Read();
+                
+            }
+
+            HeaterHMIGroup.Read();
+            EOVHMIGroup.Read();
             // 从采集设备读取所有通道数据
 
-            Random r = new Random();
-            double[] mvalues = new double[48];
-            
-            for (int i = 0; i < 48; i++)
+            double[] mvalues = ADDeviceInteract?.AllChannelsValue ?? new double[48];
+
+            if (ADDeviceInteract == null)
             {
-                mvalues[i] = iio;
+                for (int i = 0; i < 48; i++)
+                {
+                    mvalues[i] = i + iio;
+                }
+                iio += 0.01;
+                if (iio >= 20.0)
+                {
+                    iio = 4;
+                }
             }
-            iio += 0.01;
-            int count = _mvDicKeys.Length;
+
+            //
+            var chs = Device.Channels;
+            int count = chs.Count;
+
             for (int i = 0; i < count; i++)
             {
-                _measureValues[_mvDicKeys[i]] = mvalues[i];
-            }
-            
-            // 获取 PLC 数据 如果有执行器则更新为执行器的反馈值。
-            var chs = Device.Channels;
-            count = chs.Count;
-            
-            for(int i = 0; i < count; i++)
-            {
                 var ch = chs[i];
-                double val;
-                if (ch.Prompt != null && _measureValues.TryGetValue(ch.Prompt, out val))
+
+                int index = 0;
+                if (ch.Prompt != null && _devPromptIndexDic.TryGetValue(ch.Prompt, out index))
                 {
-                    (ch as IAnalogueMeasure).MeasureValue = val;
+                    // 数采箱通道更新数据。
+                    var amc = ch as IAnalogueMeasure;
+                    if (amc != null)
+                    {
+                        var sensor = amc.Collector as LinerSensor;
+                        if (sender != null)
+                        {
+                            RangeDemarcater rd = new RangeDemarcater(
+                                new mcLogic.SafeRange(sensor.ElectricSignalRange.Low, sensor.ElectricSignalRange.Height),
+                                new mcLogic.SafeRange(sensor.Range.Low, sensor.Range.Height)
+                                );
+                            amc.MeasureValue = rd.Demarcate(mvalues[index]);
+                            //amc.MeasureValue = mvalues[index];
+                        }
+                        else
+                        {
+                            amc.MeasureValue = mvalues[index];
+                        }
+                    }
+
                 }
                 else
                 {
+                    #region 读取 除数采箱与OPC AI之外的数据 .
+
+
+
                     // 如果没有找到集合_measureValues的键值 则从PLC OPC服务器中读取数据。
-                    switch (ch.Style)
-                    {
-                        case ExperimentStyle.Measure:
-                            (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
-                            break;
-                        case ExperimentStyle.Control:
-                            ch.Value = ReadAnaloge(ch.Prompt);
-                            break;
-                        case ExperimentStyle.Feedback:
-                            (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
-                            break;
-                        case ExperimentStyle.Status:
-                            (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
-                            break;
-                        case ExperimentStyle.StatusControl:
-                            (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
-                            break;
-                        default:
-                            ch.Value = ReadAnaloge(ch.Prompt);
-                            break;
-                    }
+                    //switch (ch.Style)
+                    //{
+                    //    case ExperimentStyle.Measure:
+                    //        (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
+                    //        break;
+                    //    case ExperimentStyle.Control:
+                    //        ch.Value = ReadAnaloge(ch.Prompt);
+                    //        break;
+                    //    case ExperimentStyle.Feedback:
+                    //        (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
+                    //        break;
+                    //    case ExperimentStyle.Status:
+                    //        (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
+                    //        break;
+                    //    case ExperimentStyle.StatusControl:
+                    //        (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
+                    //        break;
+                    //    default:
+                    //        ch.Value = ReadAnaloge(ch.Prompt);
+                    //        break;
+                    //} 
+                    #endregion
+
                 }
             }
+
+            _updatedCount++;
         }
 
+
+        /// <summary>
+        /// 将二冷路流量设置到目标流量值，执行PID控制逻辑。
+        /// </summary>
+        /// <param name="targetFlow">目标流量值。</param>
+        public void SetFT0101To(double targetFlow)
+        {
+            var executer = _executerMap["FT0101"];
+            executer.TargetVal = targetFlow;
+            executer.ExecuteBegin();
+        }
+
+        /// <summary>
+        /// 将热路流量设置到目标流量值，执行PID控制逻辑。
+        /// </summary>
+        /// <param name="targetFlow">目标流量值。</param>
+        public void SetFT0102To(double targetFlow)
+        {
+            var executer = _executerMap["FT0102"];
+            executer.TargetVal = targetFlow;
+            executer.ExecuteBegin();
+        }
+
+        /// <summary>
+        /// 调用以显示FT0101的PID调节监控器。
+        /// </summary>
+        public void ShowFT0101_PIDWatcher()
+        {
+            mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["FT0101"]);
+            watcher.ShowWatcherDialog();
+        }
+
+        /// <summary>
+        /// 调用以显示FT0102的PID调节监控器。
+        /// </summary>
+        public void ShowFT0102_PIDWatcher()
+        {
+            mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["FT0102"]);
+            watcher.ShowWatcherDialog();
+        }
         #endregion
 
         #region Base class Override
 
         protected override void OnClosed()
         {
+            ADDeviceInteract?.Close();
+
+            CloseOpcInteractGroup();
+
             _updateTimer.Dispose();
+
+            ReleaseHeaters();
         }
 
         protected override bool OnClosing()
@@ -437,6 +609,7 @@ namespace LabMCESystem.Servers.HS
 
         protected override bool OnRun()
         {
+            ADDeviceInteract?.StartAD();
             _updateTimer.Start();
             return true;
         }
@@ -448,7 +621,7 @@ namespace LabMCESystem.Servers.HS
 
         protected override void OnStopped()
         {
-
+            ADDeviceInteract?.StopAD();
         }
 
         protected override bool OnStopping()

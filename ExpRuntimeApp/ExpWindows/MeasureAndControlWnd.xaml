@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        Title="试验工况" Height="1050" Width="1680" Background="{x:Null}"
+        Title="试验工况" Height="1050" Width="1900" Background="{x:Null}"
     >
     <Grid>
         <Grid.RowDefinitions>
@@ -23,27 +23,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid Background="{DynamicResource HS_BackgroundBrush}" Height="2100" Width="3360">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Grid.Row="0" Stretch="Fill">
-                    <UserControls:HS_GKUI_SecendCold Height="1050" Width="1680"/>
-                </Viewbox>
+            <UserControls:HS_GKUI_Experiment Height="980" Width="1860"/>
 
-                <Viewbox Grid.Column="0" Grid.Row="1" Stretch="Fill">
-                    <UserControls:HS_GKUI_HotRoad Height="1050" Width="1680"/>
-                </Viewbox>
-
-                <Viewbox Grid.Column="1" Stretch="Fill" Grid.RowSpan="2" Margin="0,523,0,523">
-                    <UserControls:FirstColdControl Height="1050" Width="1680"/>
-                </Viewbox>
-            </Grid>
         </ScrollViewer>
 
 
