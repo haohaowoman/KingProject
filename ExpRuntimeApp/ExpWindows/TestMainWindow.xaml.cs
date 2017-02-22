@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls.Dialogs;
+using ExpRuntimeApp.Modules;
+
 namespace ExpRuntimeApp.ExpWindows
 {
     /// <summary>
@@ -112,5 +114,20 @@ namespace ExpRuntimeApp.ExpWindows
             System.Threading.Thread.Sleep(3000);
             // await edlg
         }
+
+        private void ResetFaultBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null)
+            {
+                MdChannel ch = btn.Tag as MdChannel;
+                if (ch != null)
+                {
+                    ch.NextStatus = true;
+                    ch.ControllerExecute();
+                }
+            }
+        }
+
     }
 }

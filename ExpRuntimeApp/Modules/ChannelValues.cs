@@ -39,6 +39,7 @@ namespace ExpRuntimeApp.Modules
         public event Action<IController> SettedControlValue;
         public event ControllerExecuteEventHandler Execute;
         public event Action<IStatusController> SettedNextStatus;
+        public event ControllerExecuteEventHandler StopExecute;
 
         private Channel _channel;
 
@@ -196,7 +197,7 @@ namespace ExpRuntimeApp.Modules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Collector"));
             }
         }
-        
+
         public string Unit
         {
             get
@@ -237,7 +238,7 @@ namespace ExpRuntimeApp.Modules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
             }
         }
-        
+
         public double RangeHigh
         {
             get
@@ -250,7 +251,7 @@ namespace ExpRuntimeApp.Modules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
             }
         }
-        
+
         public double AOValue
         {
             get
@@ -260,8 +261,12 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.AOValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.AOValue = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
+                }
+
             }
         }
 
@@ -274,8 +279,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.Controller = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Controller"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.Controller = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Controller"));
+                }
             }
         }
 
@@ -288,8 +296,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.ControlValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ControlValue"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.ControlValue = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ControlValue"));
+                }                    
             }
         }
 
@@ -333,6 +344,11 @@ namespace ExpRuntimeApp.Modules
         public void ControllerExecute()
         {
             AsController?.ControllerExecute();
+        }
+
+        public void StopControllerExecute()
+        {
+            AsController?.StopControllerExecute();
         }
 
         private void NotifyValueUpdated(object obj, object e)
@@ -381,6 +397,7 @@ namespace ExpRuntimeApp.Modules
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
         }
+
         #endregion
     }
 
@@ -552,10 +569,10 @@ namespace ExpRuntimeApp.Modules
     /// <summary>
     /// 提供了通道Label属性索引元素的功能。
     /// </summary>
-    public class MdChannelsCollection : 
+    public class MdChannelsCollection :
         IList,
-        IList<MdChannel>, 
-        ICollection, 
+        IList<MdChannel>,
+        ICollection,
         ICollection<MdChannel>,
         INotifyCollectionChanged
     {

@@ -57,7 +57,7 @@
         <ContentControl>
             <UniformGrid Columns="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0101Watcher_BtnClick"></Button>
-                <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0102Watcher_BtnClick"></Button>
+                <Button Content="FT0102 PID 监控" Padding="10,20" Margin="10" Click="FT0102Watcher_BtnClick"></Button>
             </UniformGrid>
         </ContentControl>
 
@@ -89,7 +89,9 @@
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[PV0104].AOValue}"
                                      />
-                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0104]}"/>
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0104]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[PV0104]}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102A：" Margin="2,3"/>
@@ -100,7 +102,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[FT0102A].AOValue}"/>
-                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102A]}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102A]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[FT0102A]}"
+                        />
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102B：" Margin="2,3"/>
@@ -111,7 +116,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[FT0102B].AOValue}"/>
-                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102B]}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0102B]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[FT0102B]}"
+                        />
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0108：" Margin="2,3"/>
@@ -122,7 +130,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[PV0108].AOValue}"/>
-                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0108]}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0108]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[PV0108]}"
+                        />
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0109：" Margin="2,3"/>
@@ -133,7 +144,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[PV0109].AOValue}"/>
-                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0109]}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0109]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[PV0109]}"
+                        />
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0103：" Margin="2,3"/>
@@ -145,7 +159,10 @@
                                                 OffLabel="关"
                                                 OnLabel="开"
                                     IsChecked="{Binding MdChannels[EV0103].NextStatus}"/>
-                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0103]}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0103]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[EV0103]}"
+                        />
 
                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0104：" Margin="2,3"/>
@@ -156,7 +173,10 @@
                                                 OffLabel="关"
                                                 OnLabel="开"
                                     IsChecked="{Binding MdChannels[EV0104].NextStatus}"/>
-                <Button Grid.Row="6" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0104]}"/>
+                <Button Grid.Row="6" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0104]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[EV0104]}"
+                        />
             </Grid>
         </GroupBox>
 
@@ -186,7 +206,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[PV0103].AOValue}"/>
-                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0103]}"/>
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0103]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[PV0103]}"
+                        />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101A：" Margin="2,3"/>
@@ -197,7 +220,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[FT0101A].AOValue}"/>
-                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101A]}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101A]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[FT0101A]}"
+                        />
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101B：" Margin="2,3"/>
@@ -208,7 +234,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[FT0101B].AOValue}"/>
-                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101B]}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[FT0101B]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[FT0101B]}"
+                        />
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0107：" Margin="2,3"/>
@@ -219,7 +248,10 @@
                                 VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
                                      Minimum="0" Maximum="100"
                                      Value="{Binding Path=MdChannels[PV0107].AOValue}"/>
-                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0107]}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[PV0107]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[PV0107]}"
+                        />
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0101：" Margin="2,3"/>
@@ -231,7 +263,10 @@
                                 OffLabel="关"
                                 OnLabel="开"
                                     IsChecked="{Binding MdChannels[EV0101].NextStatus}"/>
-                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0101]}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0101]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[EV0101]}"
+                        />
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0102：" Margin="2,3"/>
@@ -243,7 +278,10 @@
                                 OffLabel="关"
                                 OnLabel="开"
                                     IsChecked="{Binding MdChannels[EV0102].NextStatus}"/>
-                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0102]}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding Path=MdChannels[EV0102]}"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdChannels[EV0102]}"
+                        />
             </Grid>
         </GroupBox>
 

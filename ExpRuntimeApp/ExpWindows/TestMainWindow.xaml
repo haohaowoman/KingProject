@@ -14,8 +14,10 @@
         WindowStartupLocation="CenterScreen"
         Closing="MetroWindow_Closing"
                    Closed="MetroWindow_Closed"
+                   Icon="/ExpRuntimeApp;component/Images/FactoryIcon.ico"
         DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}" ShowCloseButton="False" ShowDialogsOverTitleBar="False" ShowMaxRestoreButton="False"
         >
+    
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
             <Button Margin="1"
@@ -67,9 +69,9 @@
                             <ToggleButton Margin="10" Content="风机报警" Style="{DynamicResource ErrorStatusLight}"
                                 FontSize="24"
                                 IsChecked="{Binding MdChannels[风机报警].Status}"/>
-                            <ToggleButton Margin="10" Content="试验室温度报警" Style="{DynamicResource ErrorStatusLight}"
+                            <ToggleButton Margin="10" Content="实验室报警" Style="{DynamicResource ErrorStatusLight}"
                                 FontSize="24"
-                                IsChecked="{Binding MdChannels[试验室温度报警].Status}"/>
+                                IsChecked="{Binding MdChannels[实验室报警].Status}"/>
 
                             <ToggleButton Margin="10" Content="加热器报警" Style="{DynamicResource ErrorStatusLight}"
                                 FontSize="24"
@@ -88,7 +90,10 @@
                                     Style="{DynamicResource AccentedSquareButtonStyle}"
                                     Margin="3" Padding="8,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
                                     FontSize="18"
-                                    Content="故障清除"/>
+                                    Content="故障清除"
+                                    Tag="{Binding Path=MdChannels[报警复位]}"
+                                    ToolTip="复位操作套报警。"
+                                    Click="ResetFaultBtn_Click"/>
                             </UniformGrid>
                             <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                                 Content="当前故障信息："/>
@@ -98,7 +103,7 @@
                                 <TextBlock Text="{Binding Path=CurrentException.Label,StringFormat=名称：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                                 <TextBlock Text="{Binding Path=CurrentException.Summary,StringFormat=说明：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                                 <TextBlock Text="{Binding Path=CurrentException.DealOpinion,StringFormat=意见：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                               
+
                             </ListBox>
                         </DockPanel>
                     </DockPanel>
@@ -210,17 +215,17 @@
 
                 <UniformGrid Grid.Row="0" Grid.Column="1" Columns="2">
                     <GroupBox Header="试验快速设置" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <uc:HS_ExpPointSet/>
                         </ScrollViewer>
                     </GroupBox>
                     <GroupBox Header="热路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <uc:HotRoadExpPointsCtrl/>
                         </ScrollViewer>
                     </GroupBox>
                     <GroupBox Header="二冷路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <uc:SecendColdRoadExpPointsCtrl/>
                         </ScrollViewer>
                     </GroupBox>
@@ -239,7 +244,7 @@
 
         <Border Grid.Column="2" Grid.Row="1" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
             <UniformGrid Columns="1">
-                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10,5">
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10,5" Command="{Binding Path=Test}">
                     <DockPanel>
                         <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_settings}"/>
                         <TextBlock DockPanel.Dock="Bottom" Text="试验设置"></TextBlock>

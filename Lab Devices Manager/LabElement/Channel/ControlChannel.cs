@@ -63,6 +63,10 @@ namespace LabMCESystem.LabElement
         /// 调用ControllerExecute后发生。
         /// </summary>
         public event ControllerExecuteEventHandler Execute;
+        /// <summary>
+        /// 调用StopControllerExecute后发生。
+        /// </summary>
+        public event ControllerExecuteEventHandler StopExecute;
 
         #endregion
 
@@ -74,6 +78,13 @@ namespace LabMCESystem.LabElement
         public virtual void ControllerExecute()
         {
             Execute?.Invoke(this, new ControllerEventArgs(ControlValue));
+        }
+        /// <summary>
+        /// 通知控制器停止控制操作。
+        /// </summary>
+        public void StopControllerExecute()
+        {
+            StopExecute?.Invoke(this, new ControllerEventArgs(ControlValue));
         }
 
         #endregion

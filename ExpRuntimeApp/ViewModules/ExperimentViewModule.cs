@@ -13,9 +13,50 @@ using LabMCESystem.Servers.HS;
 using System.Windows.Data;
 using LabMCESystem.LabElement;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace ExpRuntimeApp.ViewModules
 {
+    class MCommand : ICommand
+    {
+        public MCommand()
+        {
+
+        }
+
+        public MCommand(EventHandler<object> executed, Predicate<object> canExecute)
+        {
+            Executed = executed;
+            CanExecuteHandler = canExecute;
+        }
+
+        public event EventHandler<object> Executed;
+
+        public Predicate<object> CanExecuteHandler { set; get; }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {            
+            return CanExecuteHandler?.Invoke(parameter) ?? true;            
+        }
+
+        public void Execute(object parameter)
+        {
+            Executed?.Invoke(this, parameter);
+        }
+    }
+
     class ExperimentViewModule : IDisposable, INotifyPropertyChanged
     {
 
@@ -24,8 +65,26 @@ namespace ExpRuntimeApp.ViewModules
             // 每100ms从服务读取一次数据
             _readValueTimer = new Timer(150);
             _readValueTimer.Elapsed += _readValueTimer_Elapsed;
+
+            // 命令
+                        
+            ExpPointOutputCommand = new MCommand();
+            ExpPointOutputCommand.Executed += ExpPointOutputCommand_Executed;
+            ExpPointOutputCommand.CanExecuteHandler = (o) => { return true; };
+
+            ExpPointOutputStopCommand = new MCommand();
+            ExpPointOutputStopCommand.Executed += ExpPointOutputStopCommand_Executed;
         }
 
+        public ExperimentViewModule(HS_Server service) : this()
+        {
+            Service = service;
+        }
+
+        #region Properties
+
+        public RoutedCommand TestCommand { get; set; }
+        
         private Timer _readValueTimer;
 
         public MdChannelsCollection Test { get; set; } = new MdChannelsCollection();
@@ -92,11 +151,6 @@ namespace ExpRuntimeApp.ViewModules
             }
         }
 
-        public ExperimentViewModule(HS_Server service) : this()
-        {
-            Service = service;
-        }
-
         // 当前所有通道的数据值集合
         private MdChannelsCollection _mdChannels;
         /// <summary>
@@ -134,7 +188,6 @@ namespace ExpRuntimeApp.ViewModules
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExpInformation)));
             }
         }
-
 
         /// <summary>
         /// 获取包含传感器的测量通道集合。
@@ -186,33 +239,23 @@ namespace ExpRuntimeApp.ViewModules
             }
         }
 
+        #region Commands
+        /// <summary>
+        /// 实验电控制输出命令。
+        /// </summary>
+        public MCommand ExpPointOutputCommand { get; private set; }
+        /// <summary>
+        /// 实验电控制输出停止命令。
+        /// </summary>
+        public MCommand ExpPointOutputStopCommand { get; private set; }
+
+        #endregion
+
+        #endregion
+
         private void _readValueTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_service != null)
-            {
-                // 读取数据
-                var eReader = _service.ExpDataExchange.SingleDataReader;
 
-                Random r = new Random();
-                // 更新通道数据
-                foreach (var item in _mdChannels)
-                {
-                    IAnalogueMeasure iam = item.Channel as IAnalogueMeasure;
-
-                    if (iam != null)
-                    {
-                        iam.MeasureValue = r.Next(0, 100) / 1.0;
-                    }
-                    else
-                    {
-                        IStatusExpress ise = item.Channel as IStatusExpress;
-                        if (ise != null)
-                        {
-                            ise.Status = !ise.Status;
-                        }
-                    }
-                }
-            }
         }
 
         // 异常已处理事件。
@@ -237,6 +280,31 @@ namespace ExpRuntimeApp.ViewModules
         {
             throw new NotImplementedException();
         }
+
+        private void ExpPointOutputCommand_Executed(object sender, object e)
+        {
+            // Paramter is MdChannel?
+            MdChannel mCh = e as MdChannel;
+            if (mCh != null)
+            {
+                // 如果控制的是热边与二冷的入口温度的测试点需要对所进流量进行判断选择
+                // 并提示用户进行加热器与电炉的选择
+
+                mCh.ControllerExecute();
+
+            }
+        }
+        
+        private void ExpPointOutputStopCommand_Executed(object sender, object e)
+        {
+            // Paramter is MdChannel?
+            MdChannel mCh = e as MdChannel;
+            if (mCh != null)
+            {
+                mCh.StopControllerExecute();
+            }
+        }
+
 
         public void Dispose()
         {

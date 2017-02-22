@@ -19,6 +19,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         {
             Caption = caption;
             _heaterCtrl = new FP23Ctrl(ComName);
+            Addr = addr;
         }
 
         #region Properties
@@ -27,6 +28,15 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// 电炉通讯控制。
         /// </summary>
         private FP23Ctrl _heaterCtrl;
+
+        /// <summary>
+        /// 每个电炉的真实最小要求流量，如果低于此值应该关闭加热器。
+        /// </summary>
+        static public double HeaterTrueRequirMinFlow = 300;
+        /// <summary>
+        /// 在电炉控制时的基础流量，在控制流量下对使用电炉数量计量的基本参数。
+        /// </summary>
+        static public double HeaterControlBaseFlow = 500;
 
         /// <summary>
         /// 获取/设置电炉是否准备好的状态通道。
@@ -53,6 +63,11 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// </summary>
         public StatusChannel HeaterConnectionChannel { get; set; }
         /// <summary>
+        /// 获取/设置加热器的远程、本地控制状态通道。
+        /// </summary>
+        public StatusChannel HeaterRemoteControlChannle { get; set; }
+
+        /// <summary>
         /// 获取/设置电炉的反馈通道。
         /// </summary>
         public FeedbackChannel HeaterChannel { get; set; }
@@ -65,6 +80,26 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// 获取电炉的运程控制状态。
         /// </summary>
         public bool HeaterIsRemote { get; private set; }
+        /// <summary>
+        /// 电炉是否处于远程控制状态。
+        /// </summary>
+        public bool HeaterIsAuto
+        {
+            get
+            {
+                return HeaterRemoteControlChannle?.Status ?? false;
+            }
+        }
+        /// <summary>
+        /// 电炉是否处于运行状态。
+        /// </summary>
+        public bool HeaterIsRun
+        {
+            get
+            {
+                return HeaterRunStatusChannel?.Status ?? false;
+            }
+        }
         /// <summary>
         /// 获取电炉控制器名称。
         /// </summary>
@@ -84,14 +119,21 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public bool InitialHeater()
         {
             bool bt;
-            bt = _heaterCtrl.InitCtrl();
-            HeaterIsRemote = _heaterCtrl.SetComStyle(true);
+            bt = _heaterCtrl.InitCtrl(Addr);
+            bt &= HeaterIsRemote = _heaterCtrl.SetComStyle(true);
+            System.Threading.Thread.Sleep(10);
+            bt &= _heaterCtrl.SetFixStyle(true);
+            bt &= _heaterCtrl.SetRun(true);
+
             HeaterConnection = bt;
 
             if (HeaterConnectionChannel != null)
             {
                 HeaterConnectionChannel.Status = bt;
-            }            
+            }
+
+            HeaterStartChannel.Execute += HeaterStartStopChannel_Execute;
+            HeaterStopChannel.Execute += HeaterStartStopChannel_Execute;
 
             return true;
         }
@@ -103,19 +145,54 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// <returns></returns>
         public bool SetTemperature(double tTemp)
         {
-            bool bt = _heaterCtrl.SetTemp((float)tTemp);
-
+            bool bt = true;
+            // 电炉准备好输出。
             if (HeaterReadyChannel?.Status == true)
             {
-                // 首先停止电炉的输出。
-                HeaterStopChannel.NextStatus = true;
-                HeaterStopChannel.ControllerExecute();
-                System.Threading.Thread.Sleep(5);
+                double rTemp = 0;
+                bt = GetCtrlTemperature(out rTemp);
+
+                if (bt && rTemp == tTemp)
+                {
+                    //温度为需要设置的温度则不重新设置，进行启动。
+                    if (HeaterRemoteControlChannle?.Status == true && 
+                        HeaterRunStatusChannel?.Status != true && 
+                        HeaterStartChannel != null)
+                    {
+                        HeaterStartChannel.NextStatus = true;
+                        HeaterStartChannel.ControllerExecute();
+                        bt &= true;
+                    }
+                }
+                else if (bt)
+                {
+                    // 重新设置温度。
+                    bt &= _heaterCtrl.SetTemp((float)tTemp);
+                    if (!bt)
+                    {
+                        bt = _heaterCtrl.SetComStyle(true);
+                        bt &= _heaterCtrl.SetRun(true);
+                        HeaterIsRemote = bt;
+                        HeaterConnection = bt;
+                        if (HeaterConnectionChannel != null)
+                        {
+                            HeaterConnectionChannel.Status = bt;
+                        }
+                    }
+                    if (HeaterRemoteControlChannle?.Status == true && 
+                        HeaterRunStatusChannel?.Status != true && 
+                        HeaterStartChannel != null)
+                    {
+                        HeaterStartChannel.NextStatus = true;
+                        HeaterStartChannel.ControllerExecute();
+                        bt &= true;
+                    }
+                }
+
             }
-            if (HeaterStartChannel != null)
+            else
             {
-                HeaterStartChannel.NextStatus = true;
-                HeaterStartChannel.ControllerExecute();
+                bt = false;
             }
 
             return bt;
@@ -133,6 +210,11 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             if (bt)
             {
                 cTemp = sv;
+
+                if (HeaterChannel != null)
+                {
+                    HeaterChannel.MeasureValue = sv;
+                }
             }
             return bt;
         }
@@ -151,12 +233,32 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             {
                 cTemp = pv;
 
-                if (HeaterChannel != null)
-                {
-                    HeaterChannel.MeasureValue = pv;
-                }
             }
             return bt;
+        }
+
+        /// <summary>
+        /// 停止加热器加热工作。
+        /// </summary>
+        /// <returns></returns>
+        public bool Stop()
+        {
+            bool bs = false;
+            if (HeaterReadyChannel?.Status == true)
+            {
+                // 电炉准备好输出。
+                if (HeaterRemoteControlChannle?.Status == true && 
+                    HeaterRunStatusChannel?.Status == true && 
+                    HeaterStopChannel != null)
+                {
+                    // 首先停止电炉的输出。
+                    HeaterStopChannel.NextStatus = true;
+                    HeaterStopChannel.ControllerExecute();
+
+                    bs = true;
+                }
+            }
+            return bs;
         }
 
         /// <summary>
@@ -167,11 +269,29 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             if (HeaterReadyChannel.Status)
             {
                 // 首先停止电炉的输出。
-                HeaterStopChannel.NextStatus = true;
-                HeaterStopChannel.ControllerExecute();
+                if (HeaterRemoteControlChannle?.Status == true && 
+                    HeaterRunStatusChannel?.Status == true && 
+                    HeaterStopChannel != null)
+                {
+                    HeaterStopChannel.NextStatus = true;
+                    HeaterStopChannel.ControllerExecute();
+                }
                 System.Threading.Thread.Sleep(5);
             }
             _heaterCtrl.ReleaseCtrl();
+        }
+
+        private void HeaterStartStopChannel_Execute(object sender, ControllerEventArgs e)
+        {
+            var ssCh = sender as LabElement.StatusOutputChannel;
+            if (ssCh != null)
+            {
+                var exe = ssCh.Controller as SimplePulseExecuter;
+                if (exe != null)
+                {
+                    exe.ExecuteBegin();
+                }
+            }
         }
 
         #endregion

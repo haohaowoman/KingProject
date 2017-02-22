@@ -10,7 +10,7 @@
             <Setter Property="AnimationEnabled" Value="False"/>
         </Style.Setters>
     </Style>
-    
+
     <Style x:Key="VGroupBorderStyle" TargetType="{x:Type Border}">
         <Style.Setters>
             <Setter Property="BorderThickness" Value="2"/>
@@ -65,13 +65,9 @@
                             OuterBackground="#FF4B236C" 
                             OuterBorderBrush="#FF2821A6">
                             <vfgauge:Gauge.CircularScales>
-                                <!--<vfgauge:CircularScale 
-                                Minimum="{Binding Path=Channel.Range.Low}" 
-                                Maximum="{Binding Path=Channel.Range.Height}"
-                                >
                                 
-                            </vfgauge:CircularScale>-->
-                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                                <vfgauge:CircularScale Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}"/>
                             </vfgauge:Gauge.CircularScales>
                             <vfgauge:Gauge.Indicators>
                                 <vfgauge:NeedleIndicator 
@@ -157,7 +153,7 @@
                                 >
                                 
                             </vfgauge:CircularScale>-->
-                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                                <vfgauge:CircularScale Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"/>
                             </vfgauge:Gauge.CircularScales>
                             <vfgauge:Gauge.Indicators>
                                 <vfgauge:BarIndicator
@@ -175,7 +171,47 @@
                         </vfgauge:Gauge>
                     </GroupBox>
                     <!--#endregion-->
+                    <!--#region 控制部分-->
+                    <GroupBox Grid.Row="1"  Grid.Column="1" Margin="1" Header="控制">
+                        <DockPanel LastChildFill="False" VerticalAlignment="Center">
+                            <metro:NumericUpDown DockPanel.Dock="Top"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     MinWidth="100"
+                                                     x:Name="ValueNum"                                        
+                                                     HasDecimals="True" 
+                                                     Minimum="{Binding Path=RangeLow}"
+                                         Maximum="{Binding Path=RangeHigh}"
+                                                     TextAlignment="Left"                                        
+                                                     Value="{Binding Path=AOValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Speedup="True" StringFormat="{}{0:F1}" />
 
+                            <Slider DockPanel.Dock="Top" 
+                                        Margin="3"                                        
+                                        Orientation="Horizontal"                            
+                                        LargeChange="10"
+                                        Minimum="{Binding Path=RangeLow}" 
+                                        Maximum="{Binding Path=RangeHigh}"
+                                        SmallChange="1"
+                                        Value="{Binding Path=Value,ElementName=ValueNum}"/>
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="确定"                                     
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="停止"
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputStopCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
+                        </DockPanel>
+                    </GroupBox>
+
+                    <!--#endregion-->
                 </Grid>
             </Border>
         </GroupBox>
@@ -229,7 +265,7 @@
                                 >
                                 
                             </vfgauge:CircularScale>-->
-                                <vfgauge:CircularScale Minimum="0" Maximum="100"/>
+                                <vfgauge:CircularScale Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"/>
                             </vfgauge:Gauge.CircularScales>
                             <vfgauge:Gauge.Indicators>
                                 <vfgauge:NeedleIndicator 
@@ -272,8 +308,8 @@
                                                      MinWidth="100"
                                                      x:Name="ValueNum"                                        
                                                      HasDecimals="True" 
-                                                     Minimum="0"
-                                         Maximum="100"
+                                                     Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}"
                                                      TextAlignment="Left"                                        
                                                      Value="{Binding Path=AOValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Speedup="True" StringFormat="{}{0:F2}" />
@@ -282,11 +318,24 @@
                                         Margin="3"                                        
                                         Orientation="Horizontal"                            
                                         LargeChange="10"
-                                        Maximum="100"
-                                        Minimum="0"
+                                        Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}"
                                         SmallChange="1"
                                         Value="{Binding Path=Value,ElementName=ValueNum}"/>
-                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="确定"                                     
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="停止"
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputStopCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
                         </DockPanel>
                     </GroupBox>
 
@@ -337,7 +386,20 @@
                                                 Margin="3" Padding="10" 
                                                 Style="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}" 
                                                 IsChecked="{Binding Path=NextStatus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></metro:ToggleSwitch>
-                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="确定"                                     
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="停止"
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputStopCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
                         </DockPanel>
                     </GroupBox>
                 </Grid>
@@ -412,13 +474,10 @@
                                 </LinearGradientBrush>
                             </vfgauge:Gauge.OuterBackground>
                             <vfgauge:Gauge.LinearScales>
-                                <!--<vfgauge:CircularScale 
-                                Minimum="{Binding Path=Channel.Range.Low}" 
-                                Maximum="{Binding Path=Channel.Range.Height}"
-                                />-->
+
                                 <vfgauge:LinearScale 
-                                Minimum="0" 
-                                Maximum="100" BorderThickness="1" Padding="3,0"
+                                Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}" BorderThickness="1" Padding="3,0"
                                 />
                             </vfgauge:Gauge.LinearScales>
                             <vfgauge:Gauge.Indicators>
@@ -443,7 +502,7 @@
                         </vfgauge:Gauge>
                     </GroupBox>
                     <!--#endregion-->
-                    <!--#region 控制部分-->                    
+                    <!--#region 控制部分-->
                     <GroupBox Grid.Row="1"  Grid.Column="1" Margin="1" Header="控制">
                         <DockPanel LastChildFill="False" VerticalAlignment="Center">
                             <metro:NumericUpDown DockPanel.Dock="Top"
@@ -452,8 +511,8 @@
                                                      MinWidth="100"
                                                      x:Name="ValueNum"                                        
                                                      HasDecimals="True" 
-                                                     Minimum="0"
-                                         Maximum="100"
+                                                     Minimum="{Binding Path=RangeLow}"
+                                         Maximum="{Binding Path=RangeHigh}"
                                                      TextAlignment="Left"                                        
                                                      Value="{Binding Path=AOValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Speedup="True" StringFormat="{}{0:F1}" />
@@ -462,11 +521,24 @@
                                         Margin="3"                                        
                                         Orientation="Horizontal"                            
                                         LargeChange="10"
-                                        Maximum="100"
-                                        Minimum="0"
+                                        Minimum="{Binding Path=RangeLow}" 
+                                        Maximum="{Binding Path=RangeHigh}"
                                         SmallChange="1"
                                         Value="{Binding Path=Value,ElementName=ValueNum}"/>
-                            <Button DockPanel.Dock="Bottom" Margin="3" Padding="10,5" Content="OUT" Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" HorizontalAlignment="Right" Cursor="Hand" ></Button>
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="确定"                                     
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="10,5" 
+                                    HorizontalAlignment="Right" Cursor="Hand"
+                                    Content="停止"
+                                    Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    Command="{Binding Source={StaticResource ExpViewModule},Path=ExpPointOutputStopCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                                    />
                         </DockPanel>
                     </GroupBox>
 
@@ -508,8 +580,8 @@
                                 Maximum="{Binding Path=ExpPoint.Range.Height}"
                                 />-->
                         <vfgauge:CircularScale 
-                                Minimum="0" 
-                                Maximum="100"
+                                Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}"
                                 />
                     </vfgauge:Gauge.CircularScales>
                     <vfgauge:Gauge.Indicators>
@@ -567,13 +639,10 @@
                             OuterBackground="#FF4B236C" 
                             OuterBorderBrush="#FF2821A6" AnimationEnabled="False">
                     <vfgauge:Gauge.CircularScales>
-                        <!--<vfgauge:CircularScale 
-                                Minimum="{Binding Path=ExpPoint.Range.Low}" 
-                                Maximum="{Binding Path=ExpPoint.Range.Height}"
-                                />-->
+                        
                         <vfgauge:CircularScale 
-                                Minimum="0" 
-                                Maximum="100"
+                                Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}"
                                 />
                     </vfgauge:Gauge.CircularScales>
                     <vfgauge:Gauge.Indicators>
@@ -647,8 +716,8 @@
                                 Maximum="{Binding Path=ExpPoint.Range.Height}"
                                 />-->
                         <vfgauge:LinearScale 
-                                Minimum="0" 
-                                Maximum="100" BorderThickness="1" Padding="3,0"
+                                Minimum="{Binding Path=RangeLow}" 
+                                Maximum="{Binding Path=RangeHigh}" BorderThickness="1" Padding="3,0"
                                 />
                     </vfgauge:Gauge.LinearScales>
                     <vfgauge:Gauge.Indicators>

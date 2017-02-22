@@ -17,8 +17,8 @@ namespace LabMCESystem.Servers.HS
         /// <summary>
         /// 指定主调阀与微调阀创建多阀组合控制。
         /// </summary>
-        /// <param name="mEOV">主阀</param>
-        /// <param name="fEOV">微调阀</param>
+        /// <param name="mEOV">主阀。</param>
+        /// <param name="fEOV">次阀。</param>
         /// <param name="designMark"></param>
         /// <param name="targetVal"></param>
         /// <exception cref="ArgumentNullException">需要为主控阀和微调阀设置PipeDiameter参数，0为不合法参数。</exception>
@@ -145,7 +145,7 @@ namespace LabMCESystem.Servers.HS
         /// <summary>
         /// 计算获取当前组合阀门换算开度。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>计算表示的开度。</returns>
         public double GetCurrentMultiEovData()
         {
             if (PipeDiameter == 0)

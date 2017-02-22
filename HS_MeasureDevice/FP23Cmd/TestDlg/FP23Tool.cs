@@ -13,22 +13,35 @@ using FP23;
 
 namespace TestDlg
 {
-    public partial class Form1 : Form
+    public partial class FP23Tool : Form
     {
         FP23.FP23Ctrl m_ctrl;
         bool bCom = false;
         bool bFix = false;
         bool bRun = false;
-        public Form1()
+
+        bool bInput = false;
+
+        public FP23Tool(FP23Ctrl ctrl):this()
+        {
+            m_ctrl = ctrl;
+            button3.Enabled = false;
+            button12.Enabled = false;
+            heaterCombox.Enabled = false;
+            bInput = true;
+        }
+
+        public FP23Tool()
         {
             InitializeComponent();
-            textBox1.Text = "COM1";
+            heaterCombox.SelectedIndex = 0;
         }
+
         private void button3_Click(object sender, EventArgs e)
         {
             string m_Com = textBox1.Text;
             m_ctrl = new FP23.FP23Ctrl(m_Com);
-            if (!m_ctrl.InitCtrl())
+            if (!m_ctrl.InitCtrl(Convert.ToInt32(textBox10.Text)))
             {
                 MessageBox.Show("初始化失败！");
             }
@@ -201,6 +214,55 @@ namespace TestDlg
                 else
                     MessageBox.Show("设置RST失败");
 
+            }
+        }
+
+        private void FP23Tool_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (bInput)
+            {
+                m_ctrl?.ReleaseCtrl();
+            }            
+        }
+
+        private void heaterCombox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            switch (heaterCombox.SelectedIndex)
+            {
+                case 0:
+                    textBox1.Text = "COM3";
+                    textBox10.Text = "1";
+                    break;
+                case 1:
+                    textBox1.Text = "COM4";
+                    textBox10.Text = "2";
+                    break;
+                case 2:
+                    textBox1.Text = "COM5";
+                    textBox10.Text = "3";
+                    break;
+                case 3:
+                    textBox1.Text = "COM6";
+                    textBox10.Text = "4";
+                    break;
+                case 4:
+                    textBox1.Text = "COM7";
+                    textBox10.Text = "5";
+                    break;
+                case 5:
+                    textBox1.Text = "COM8";
+                    textBox10.Text = "6";
+                    break;
+                case 6:
+                    textBox1.Text = "COM9";
+                    textBox10.Text = "7";
+                    break;
+                
+                default:
+                    textBox1.Text = "";
+                    textBox10.Text = "";
+                    break;
             }
         }
     }

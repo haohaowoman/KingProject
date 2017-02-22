@@ -13,6 +13,8 @@ using LabMCESystem.BaseService.ExperimentDataExchange;
 using static LabMCESystem.Servers.HS.HS_PLCReadWriter;
 using mcLogic.Demarcate;
 using HS_DeviceInteract;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LabMCESystem.Servers.HS.HS_Executers;
 
 namespace LabMCESystem.Servers.HS
 {
@@ -34,10 +36,10 @@ namespace LabMCESystem.Servers.HS
         }
 
         // 默认设置的热边最小流量
-        public const double Defualt_MinQ_HotRoad = 100;
+        public const double Defualt_MinQ_HotRoad = 500;
         // 默认设置的二冷最小流量
-        public const double Defualt_MinQ_SecendCold = 100;
-
+        public const double Defualt_MinQ_SecendCold = 500;
+                
         #region Fields
 
         // 通过通道名创建执行器的映射关系
@@ -115,6 +117,9 @@ namespace LabMCESystem.Servers.HS
         {
             LabDevice dev = new LabDevice("PLC&加热器控制", 01);
 
+            // 赋值给设备。
+            Device = dev;
+
             InitialExceptionWatcher();
 
             InitialMeasureChannels(dev);
@@ -126,6 +131,8 @@ namespace LabMCESystem.Servers.HS
             InitialFanDevice(dev);
 
             InitialStatusChannel(dev);
+
+            
             // 单独为FT0101 与 FT0102创建绑定执行器。
 
             // 二冷
@@ -141,9 +148,16 @@ namespace LabMCESystem.Servers.HS
                 "FT0101#A&B"
                 );
 
-            _executerMap.Add(ch.Label, FIRQE);
+            var elFlowCh = ch as FeedbackChannel;
 
-            // 为二冷入口温度TT0105添加控制器，执行温度调节任务。
+            System.Diagnostics.Debug.Assert(elFlowCh != null);
+
+            elFlowCh.Execute += Flow_Execute;
+            elFlowCh.StopExecute += Flow_StopExecute;
+
+            elFlowCh.Controller = FIRQE;
+
+            _executerMap.Add(ch.Label, FIRQE);
 
 
             // 热边
@@ -159,11 +173,17 @@ namespace LabMCESystem.Servers.HS
                 "FT0102#A&B"
                 );
 
+            var rlFlowCh = ch as FeedbackChannel;
+
+            System.Diagnostics.Debug.Assert(elFlowCh != null);
+
+            rlFlowCh.Execute += Flow_Execute;
+            rlFlowCh.StopExecute += Flow_StopExecute;
+
+            rlFlowCh.Controller = FIRQE;
+            
             _executerMap.Add(ch.Label, FIRQE);
-
-            // 赋值给设备。
-            Device = dev;
-
+            
             InitialEExceptions();
 
             // 为可控制通道关联控制处理事件。
@@ -244,8 +264,69 @@ namespace LabMCESystem.Servers.HS
                 Console.WriteLine($"Initial opc interact feild.");
             }
 #endif
-
             InitialHeaters();
+
+            // 为二冷入口温度TT0105添加控制器，执行温度调节任务。
+            var elTemp = dev["TT0105"] as FeedbackChannel;
+
+            System.Diagnostics.Debug.Assert(elTemp != null);
+
+            var elTempExecuter = new HS_TempreatureExecute();
+            elTempExecuter.AllowTolerance = new Tolerance(1.5);
+            elTempExecuter.DesignMark = "ELRoadTempController";
+            elTempExecuter.FlowChannel = elFlowCh;
+            elTempExecuter.TargetTempChannel = elTemp;
+            elTempExecuter.SecTempChannel = dev["TT0103"] as AnalogueMeasureChannel;
+            elTempExecuter.HeaterChannels.Add(dev["SecendCold1#Heater"] as FeedbackChannel);
+            elTempExecuter.HeaterChannels.Add(dev["SecendCold2#Heater"] as FeedbackChannel);
+
+            elTempExecuter.HeatersFromChannels();
+
+            elTemp.Execute += (sender, e) =>
+            {
+                elTempExecuter.TargetVal = elTemp.AOValue;
+                elTempExecuter.ExecuteBegin();
+            };
+
+            elTemp.StopExecute += (sender, e) =>
+            {
+                elTempExecuter.ExecuteOver();
+                elTempExecuter.StopHeatersOutput();
+                elTempExecuter.Reset();
+            };
+            //-------------------------------
+            // 热路温度控制器 TT0106控制。
+            var rlTemp = dev["TT0106"] as FeedbackChannel;
+
+            System.Diagnostics.Debug.Assert(rlTemp != null);
+
+            var rlTempExecuter = new HS_TempreatureExecute();
+            rlTempExecuter.AllowTolerance = new Tolerance(1.5);
+            rlTempExecuter.DesignMark = "HotRoadTempController";
+            rlTempExecuter.FlowChannel = rlFlowCh;
+            rlTempExecuter.TargetTempChannel = rlTemp;
+            rlTempExecuter.SecTempChannel = dev["TT0104"] as AnalogueMeasureChannel;
+            rlTempExecuter.HeaterChannels.Add(dev["HotRoad1#Heater"] as FeedbackChannel);
+            rlTempExecuter.HeaterChannels.Add(dev["HotRoad2#Heater"] as FeedbackChannel);
+            rlTempExecuter.HeaterChannels.Add(dev["HotRoad3#Heater"] as FeedbackChannel);
+            rlTempExecuter.HeaterChannels.Add(dev["HotRoad4#Heater"] as FeedbackChannel);
+            rlTempExecuter.HeaterChannels.Add(dev["HotRoad5#Heater"] as FeedbackChannel);
+            rlTempExecuter.HeatersFromChannels();
+
+            rlTemp.Execute += (sender, e) =>
+            {
+                rlTempExecuter.TargetVal = rlTemp.AOValue;
+                rlTempExecuter.ExecuteBegin();
+            };
+
+            rlTemp.StopExecute += (sender, e) =>
+            {
+                rlTempExecuter.ExecuteOver();
+                rlTempExecuter.StopHeatersOutput();
+                rlTempExecuter.Reset();
+            };
+            //-------------------------------
+
         }
 
         #region 电磁开关阀执行器事件
@@ -401,6 +482,34 @@ namespace LabMCESystem.Servers.HS
 
         #endregion
 
+        #region 流量控制事件
+
+        private void Flow_StopExecute(object sender, ControllerEventArgs e)
+        {
+            var flowCh = sender as FeedbackChannel;
+            System.Diagnostics.Debug.Assert(flowCh != null && flowCh.Controller != null);
+
+            var exe = flowCh.Controller as Executer;
+            
+            exe.ExecuteOver();
+            // 重置 以免数据过冲。
+            exe.Reset();
+        }
+
+        private void Flow_Execute(object sender, ControllerEventArgs e)
+        {
+            var flowCh = sender as FeedbackChannel;
+            System.Diagnostics.Debug.Assert(flowCh != null && flowCh.Controller != null);
+
+            var exe = flowCh.Controller as Executer;
+
+            exe.TargetVal = flowCh.AOValue;
+
+            exe.ExecuteBegin();
+        }
+
+        #endregion
+
         /// <summary>
         /// 热边电加热器执行条件
         /// </summary>
@@ -445,12 +554,14 @@ namespace LabMCESystem.Servers.HS
                 DIGroup.Read();
                 SwitchEOVHMIGroup.Read();
                 FanHMIGroup.Read();
-                //HeaterHMIGroup.Read();
-                
+                HeaterHMIGroup.Read();
             }
 
             HeaterHMIGroup.Read();
             EOVHMIGroup.Read();
+
+            HeaterHMISetGroup.Read();
+            DOHMISetGroup.Read();
             // 从采集设备读取所有通道数据
 
             double[] mvalues = ADDeviceInteract?.AllChannelsValue ?? new double[48];
@@ -583,12 +694,25 @@ namespace LabMCESystem.Servers.HS
         protected override void OnClosed()
         {
             ADDeviceInteract?.Close();
-
-            CloseOpcInteractGroup();
-
+            
             _updateTimer.Dispose();
 
             ReleaseHeaters();
+
+            System.Threading.Thread.Sleep(500);
+
+            foreach (var exe in _executerMap)
+            {
+                System.Diagnostics.Debug.Assert(exe.Value != null);
+
+                exe.Value.ExecuteOver();
+
+                exe.Value.Reset();
+
+                (exe.Value as IDisposable)?.Dispose();
+            }
+
+            CloseOpcInteractGroup();
         }
 
         protected override bool OnClosing()
@@ -622,6 +746,10 @@ namespace LabMCESystem.Servers.HS
         protected override void OnStopped()
         {
             ADDeviceInteract?.StopAD();
+            foreach (var heaters in Heaters)
+            {
+                heaters.Value.Stop();
+            }
         }
 
         protected override bool OnStopping()

@@ -29,16 +29,16 @@ namespace ExpRuntimeApp.UserControls
 
         private void UniformGrid_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = e.OriginalSource as Button;
+            //Button btn = e.OriginalSource as Button;
 
-            if (btn?.Tag != null)
-            {
-                var mdChannel = btn.Tag as MdChannel;
-                if (mdChannel != null)
-                {
-                    mdChannel.ControllerExecute();
-                } 
-            }
+            //if (btn?.Tag != null)
+            //{
+            //    var mdChannel = btn.Tag as MdChannel;
+            //    if (mdChannel != null)
+            //    {
+            //        mdChannel.ControllerExecute();
+            //    } 
+            //}
         }
 
         private void FT0101Watcher_BtnClick(object sender, RoutedEventArgs e)

@@ -272,9 +272,23 @@ namespace EM9118
                     for (int i = 0; i < 6; i++)
                     {
                         tmp[i, c] = (short)((recv[p * 240 + c * 12 + i * 2 + 1] << 8 | recv[p * 240 + c * 12 + i * 2]) & 0xffff);
+                        if ((tmp[i, c] & 0xF000) == 0xF000)
+                        {
+                            // 出现错误代码。                            
+                            if (c == 0)
+                            {
+                                tmp[i, c] = 0;
+                            }
+                            else
+                            {
+                                tmp[i, c] = tmp[i, c - 1];
+                            }
+                            //Console.WriteLine($"Card {commondIP} channel {i} data is error 0x{tmp[i, c]:x4}-{tmp[i, c]:d}.");
+                        }
                         tempSum[i] += tmp[i, c];
                         tempMax[i] = Math.Max(tempMax[i], tmp[i, c]);
                         tempMin[i] = Math.Max(tempMin[i], tmp[i, c]);
+
                     }
                 }
 
@@ -287,6 +301,20 @@ namespace EM9118
                         if (index >= _moveWndWidth)
                         {
                             _moveWndVsSum[i] -= saveData[i, index % _moveWndWidth];
+                        }
+                        
+                        if (index > 0)
+                        {
+                            // 排除掉较大跳变值。
+                            int ct = lbs - saveData[i, (index - 1) % _moveWndWidth];
+                            if (ct >= 4096/*saveData[i, (index - 1) % _moveWndWidth] / 2*/ || ct <= -4096/*-saveData[i, (index - 1) % _moveWndWidth] / 2*/)
+                            {
+#if DEBUG
+                                Console.WriteLine($"Card {commondIP} channel {i} data {lbs} is error re={saveData[i, (index - 1) % _moveWndWidth]} at {DateTime.Now.ToShortTimeString()}.");
+#endif
+                                lbs = saveData[i, (index - 1) % _moveWndWidth];
+                                
+                            }
                         }
 
                         saveData[i, index % _moveWndWidth] = lbs;

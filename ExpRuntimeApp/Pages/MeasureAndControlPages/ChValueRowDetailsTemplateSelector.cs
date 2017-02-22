@@ -48,7 +48,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                         rt = EOVChannelTemplate;
                                         break;
                                     case "℃":
-                                        rt = TemperatureTemplate;
+                                        rt = DefualtMeasureDataTemplate;
                                         break;
                                     case "Kg/h":
                                         rt = FlowTemplate;
@@ -75,6 +75,9 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                         break;
                                     case "℃":
                                         rt = TemperatureTemplate;
+                                        break;
+                                    case "Kg/h":
+                                        rt = FlowTemplate;
                                         break;
                                     default:
                                         rt = DefualtMeasureDataTemplate;

@@ -330,6 +330,7 @@ namespace mcLogic.Execute
 
         public void Dispose()
         {
+            Close();
             _periodTimer?.Dispose();
         }
 

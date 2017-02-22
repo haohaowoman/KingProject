@@ -698,7 +698,7 @@ namespace LabMCESystem.Servers.HS
             // 报警复位
             sch = dev.CreateStatusOutputChannelIn("报警复位");
             sch.Prompt = "RESETWARN";
-            sch.Prompt = "将操作台报警复位";
+            sch.Summary = "将操作台报警复位";
 
             exr = new SimplePulseExecuter() { DesignMark = "RESETWARN" };
             sch.Controller = exr;
@@ -720,7 +720,7 @@ namespace LabMCESystem.Servers.HS
                 var pulseExe = sender as SimplePulseExecuter;
                 if (pulseExe != null)
                 {
-                    SwitchEOVHMISetGroup.Write(pulseExe.DesignMark,
+                    DOHMISetGroup.Write(pulseExe.DesignMark,
                         pulseExe.NextPulseBit == PulseBit.HighBit ? true : false);
 #if DEBUG
                     Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.NextPulseBit}. ");
@@ -733,7 +733,7 @@ namespace LabMCESystem.Servers.HS
             // 风机报警
             sch = dev.CreateStatusOutputChannelIn("风机报警");
             sch.Prompt = "FJ_ALARM";
-            sch.Prompt = "风机报警";
+            sch.Summary = "风机报警";
 
             exr = new DigitalExecuter() { DesignMark = "FJ_ALARM" };
             sch.Controller = exr;
@@ -745,7 +745,7 @@ namespace LabMCESystem.Servers.HS
             // 加热器报警
             sch = dev.CreateStatusOutputChannelIn("加热器报警");
             sch.Prompt = "HEATER_ALARM";
-            sch.Prompt = "加热器报警";
+            sch.Summary = "加热器报警";
 
             exr = new DigitalExecuter() { DesignMark = "HEATER_ALARM" };
             sch.Controller = exr;
@@ -755,9 +755,9 @@ namespace LabMCESystem.Servers.HS
             DIGroup.AddSubChannel(sch);
             /*---------------------------*/
             // 实验室温度报警
-            sch = dev.CreateStatusOutputChannelIn("实验室温度报警");
+            sch = dev.CreateStatusOutputChannelIn("实验室报警");
             sch.Prompt = "LAB_TT_ALARM";
-            sch.Prompt = "实验室温度报警";
+            sch.Summary = "实验室报警";
 
             exr = new DigitalExecuter() { DesignMark = "LAB_TT_ALARM" };
             sch.Controller = exr;
@@ -824,19 +824,20 @@ namespace LabMCESystem.Servers.HS
 
             #region 热边采集卡通道
 
-            // 热边入口流量
-            mCh = dev.CreateAIChannelIn("FT0102");
-            mCh.Unit = "Kg/h";
-            mCh.Prompt = "06_Ch4";
-            mCh.Summary = "热边入口流量";
-            mCh.Range = new QRange(0, 3200);
+            // 热边入口流量 创建为可控制的反馈通道。
+
+            var rlFlow = dev.CreateFeedbackChannelIn("FT0102");
+            rlFlow.Unit = "Kg/h";
+            rlFlow.Prompt = "06_Ch4";
+            rlFlow.Summary = "热边入口流量";
+            rlFlow.Range = new QRange(0, 3200);
 
             var sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 3200));
             sensor.Unit = "Kg/h";
             sensor.Label = "FT0102";
             sensor.SensorNumber = "FT0102 000001";
 
-            mCh.Collector = sensor;
+            rlFlow.Collector = sensor;
             // 热边电炉入口空气压力            
             mCh = dev.CreateAIChannelIn("PT0104");
             mCh.Unit = "KPa";
@@ -902,19 +903,19 @@ namespace LabMCESystem.Servers.HS
             sensor.SensorNumber = "PT0108 000001";
 
             mCh.Collector = sensor;
-            // 热边实验段入口空气温度
-            mCh = dev.CreateAIChannelIn("TT0106");
-            mCh.Unit = "℃";
-            mCh.Prompt = "02_Ch5";
-            mCh.Summary = "热边实验段入口空气温度";
-            mCh.Range = new QRange(0, 700);
+            // 热边实验段入口空气温度 创建为可控制反馈通道。
+            var rlTemp = dev.CreateFeedbackChannelIn("TT0106");
+            rlTemp.Unit = "℃";
+            rlTemp.Prompt = "02_Ch5";
+            rlTemp.Summary = "热边实验段入口空气温度";
+            rlTemp.Range = new QRange(0, 700);
 
             sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 700));
             sensor.Unit = "℃";
             sensor.Label = "TT0106";
             sensor.SensorNumber = "TT0106 000001";
 
-            mCh.Collector = sensor;
+            rlTemp.Collector = sensor;
             // 热边实验段出口空气压力
             mCh = dev.CreateAIChannelIn("PT0109");
             mCh.Unit = "KPa";
@@ -946,18 +947,18 @@ namespace LabMCESystem.Servers.HS
             #region 二冷采集通道
 
             // 二冷入口空气流量
-            mCh = dev.CreateAIChannelIn("FT0101");
-            mCh.Unit = "Kg/h";
-            mCh.Prompt = "06_Ch3";
-            mCh.Summary = "二冷入口空气流量";
-            mCh.Range = new QRange(0, 6200);
+            var elFlow = dev.CreateFeedbackChannelIn("FT0101");
+            elFlow.Unit = "Kg/h";
+            elFlow.Prompt = "06_Ch3";
+            elFlow.Summary = "二冷入口空气流量";
+            elFlow.Range = new QRange(0, 6200);
 
             sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 6200));
             sensor.Unit = "Kg/h";
             sensor.Label = "FT0101";
             sensor.SensorNumber = "FT0102 000001";
 
-            mCh.Collector = sensor;
+            elFlow.Collector = sensor;
             // 二冷电炉入口空气压力
             mCh = dev.CreateAIChannelIn("PT0103");
             mCh.Unit = "KPa";
@@ -1024,18 +1025,18 @@ namespace LabMCESystem.Servers.HS
 
             mCh.Collector = sensor;
             // 二冷实验段入口空气温度
-            mCh = dev.CreateAIChannelIn("TT0105");
-            mCh.Unit = "℃";
-            mCh.Prompt = "01_Ch4";
-            mCh.Summary = "二冷实验段入口空气温度";
-            mCh.Range = new QRange(0, 100);
+            var elTemp = dev.CreateFeedbackChannelIn("TT0105");
+            elTemp.Unit = "℃";
+            elTemp.Prompt = "01_Ch4";
+            elTemp.Summary = "二冷实验段入口空气温度";
+            elTemp.Range = new QRange(0, 100);
 
             sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
             sensor.Unit = "℃";
             sensor.Label = "TT0105";
             sensor.SensorNumber = "TT0105 000001";
 
-            mCh.Collector = sensor;
+            elTemp.Collector = sensor;
             // 二冷实验段出口空气压力
             mCh = dev.CreateAIChannelIn("PT0110");
             mCh.Unit = "KPa";
@@ -1067,18 +1068,21 @@ namespace LabMCESystem.Servers.HS
             #region 一冷实验段采集通道
 
             // 一冷入口空气流量
-            mCh = dev.CreateAIChannelIn("FT0103");
-            mCh.Unit = "Kg/h";
-            mCh.Prompt = "06_Ch5";
-            mCh.Summary = "一冷入口空气流量";
-            mCh.Range = new QRange(0, 30000);
+
+            // 将流量创建为可控制的反馈通道。
+            var firtFlow = dev.CreateFeedbackChannelIn("FT0103");
+            firtFlow.Unit = "Kg/h";
+            firtFlow.Prompt = "06_Ch5";
+            firtFlow.Summary = "一冷入口空气流量";
+            firtFlow.Range = new QRange(0, 30000);
 
             sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 30000));
             sensor.Unit = "Kg/h";
             sensor.Label = "FT0103";
             sensor.SensorNumber = "FT0103 000001";
 
-            mCh.Collector = sensor;
+            firtFlow.Collector = sensor;
+
             // 一冷入口空气压力
             mCh = dev.CreateAIChannelIn("PT01");
             mCh.Unit = "KPa";
@@ -1636,7 +1640,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("RL_1#HEATER_READY");
-            heaterSt.Prompt = "HMI.RL_1#HEATER_READY";
+            heaterSt.Prompt = "RL_1#HEATER_READY";
             heaterSt.Summary = "热路1#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             
@@ -1659,7 +1663,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("RL_2#HEATER_READY");
-            heaterSt.Prompt = "HMI.RL_2#HEATER_READY";
+            heaterSt.Prompt = "RL_2#HEATER_READY";
             heaterSt.Summary = "热路2#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1681,7 +1685,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("RL_3#HEATER_READY");
-            heaterSt.Prompt = "HMI.RL_3#HEATER_READY";
+            heaterSt.Prompt = "RL_3#HEATER_READY";
             heaterSt.Summary = "热路3#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1703,7 +1707,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("RL_4#HEATER_READY");
-            heaterSt.Prompt = "HMI.RL_4#HEATER_READY";
+            heaterSt.Prompt = "RL_4#HEATER_READY";
             heaterSt.Summary = "热路4#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1725,7 +1729,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("RL_5#HEATER_READY");
-            heaterSt.Prompt = "HMI.RL_5#HEATER_READY";
+            heaterSt.Prompt = "RL_5#HEATER_READY";
             heaterSt.Summary = "热路5#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1747,7 +1751,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("EL_1#HEATER_READY");
-            heaterSt.Prompt = "HMI.EL_1#HEATER_READY";
+            heaterSt.Prompt = "EL_1#HEATER_READY";
             heaterSt.Summary = "二冷1#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1769,7 +1773,7 @@ namespace LabMCESystem.Servers.HS
             HeaterHMIGroup.AddSubChannel(heaterSt);
 
             heaterSt = dev.CreateStatusChannelIn("EL_2#HEATER_READY");
-            heaterSt.Prompt = "HMI.EL_1#HEATER_READY";
+            heaterSt.Prompt = "EL_2#HEATER_READY";
             heaterSt.Summary = "二冷2#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
             /*---------------------------------------*/
@@ -1777,11 +1781,25 @@ namespace LabMCESystem.Servers.HS
             // 加热器画面启动停止的离散控制通道。
 
             // 热路1号加热器。
-            StatusOutputChannel hSop = LabDevice.CreateChannel(dev, "RL_1#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.RL_1#HEATER_HMI_START";
+            StatusOutputChannel hSop = dev.CreateStatusOutputChannelIn("RL_1#HEATER_HMI_START");// LabDevice.CreateChannel(dev, "RL_1#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
+            hSop.Prompt = "RL_1#HEATER_HMI_START";
             hSop.Summary = "热路1#加热器画面启动";
 
-            var hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            var hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("RL_1#HEATER_HMI_STOP");
+            hSop.Prompt = "RL_1#HEATER_HMI_STOP";
+            hSop.Summary = "热路1#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1792,11 +1810,11 @@ namespace LabMCESystem.Servers.HS
             /*------------------------------------*/
 
             // 热路2号加热器。
-            hSop = LabDevice.CreateChannel(dev, "RL_2#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.RL_2#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("RL_2#HEATER_HMI_START");
+            hSop.Prompt = "RL_2#HEATER_HMI_START";
             hSop.Summary = "热路2#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1804,14 +1822,43 @@ namespace LabMCESystem.Servers.HS
             _disChannels.Add(hSop.Label, hSop);
 
             HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("RL_2#HEATER_HMI_STOP");
+            hSop.Prompt = "RL_2#HEATER_HMI_STOP";
+            hSop.Summary = "热路2#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
             /*------------------------------------*/
 
             // 热路3号加热器。
-            hSop = LabDevice.CreateChannel(dev, "RL_3#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.RL_3#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("RL_3#HEATER_HMI_START");
+            hSop.Prompt = "RL_3#HEATER_HMI_START";
             hSop.Summary = "热路3#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("RL_3#HEATER_HMI_STOP");
+            hSop.Prompt = "RL_3#HEATER_HMI_STOP";
+            hSop.Summary = "热路3#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1822,11 +1869,25 @@ namespace LabMCESystem.Servers.HS
             /*------------------------------------*/
 
             // 热路4号加热器。
-            hSop = LabDevice.CreateChannel(dev, "RL_4#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.RL_4#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("RL_4#HEATER_HMI_START");
+            hSop.Prompt = "RL_4#HEATER_HMI_START";
             hSop.Summary = "热路4#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("RL_4#HEATER_HMI_STOP");
+            hSop.Prompt = "RL_4#HEATER_HMI_STOP";
+            hSop.Summary = "热路4#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1835,13 +1896,27 @@ namespace LabMCESystem.Servers.HS
 
             HeaterHMISetGroup.AddSubChannel(hSop);
             /*------------------------------------*/
-            
+
             // 热路5号加热器。
-            hSop = LabDevice.CreateChannel(dev, "RL_5#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.RL_5#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("RL_5#HEATER_HMI_START");
+            hSop.Prompt = "RL_5#HEATER_HMI_START";
             hSop.Summary = "热路5#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("RL_5#HEATER_HMI_STOP");
+            hSop.Prompt = "RL_5#HEATER_HMI_STOP";
+            hSop.Summary = "热路5#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1850,13 +1925,27 @@ namespace LabMCESystem.Servers.HS
 
             HeaterHMISetGroup.AddSubChannel(hSop);
             /*------------------------------------*/
-            
+
             // 二冷路1号加热器。
-            hSop = LabDevice.CreateChannel(dev, "EL_1#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.EL_1#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("EL_1#HEATER_HMI_START");
+            hSop.Prompt = "EL_1#HEATER_HMI_START";
             hSop.Summary = "二冷1#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("EL_1#HEATER_HMI_STOP");
+            hSop.Prompt = "EL_1#HEATER_HMI_STOP";
+            hSop.Summary = "二冷1#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);
@@ -1867,11 +1956,25 @@ namespace LabMCESystem.Servers.HS
             /*------------------------------------*/
 
             // 二冷路2号加热器。
-            hSop = LabDevice.CreateChannel(dev, "EL_2#HEATER_HMI_START", ExperimentStyle.StatusControl) as StatusOutputChannel;
-            hSop.Prompt = "HMI.EL_2#HEATER_HMI_START";
+            hSop = dev.CreateStatusOutputChannelIn("EL_2#HEATER_HMI_START");
+            hSop.Prompt = "EL_2#HEATER_HMI_START";
             hSop.Summary = "二冷2#加热器画面启动";
 
-            hexe = new SimplePulseExecuter() { DesignMark = hSop.Label };
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
+            hSop.Controller = hexe;
+            hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
+            _executerMap.Add(hSop.Label, hexe);
+
+            _disChannels.Add(hSop.Label, hSop);
+
+            HeaterHMISetGroup.AddSubChannel(hSop);
+
+            // stop
+            hSop = dev.CreateStatusOutputChannelIn("EL_2#HEATER_HMI_STOP");
+            hSop.Prompt = "EL_2#HEATER_HMI_STOP";
+            hSop.Summary = "二冷1#加热器画面停止";
+
+            hexe = new SimplePulseExecuter() { DesignMark = hSop.Prompt };
             hSop.Controller = hexe;
             hexe.ExecuteChanged += HS_HeaterHMI_ExecuteChanged;
             _executerMap.Add(hSop.Label, hexe);

@@ -19,21 +19,24 @@ namespace LabMCESystem.Servers.HS
         private void InitialHeaters()
         {
             // 热路1号加热器。
-            HS_HeaterContrller heater = new HS_HeaterContrller("RL_1#Heater", "COM3", 1);
+            HS_HeaterContrller heater = new HS_HeaterContrller("RL_1#Heater", "COM5", 3);
 
             heater.HeaterChannel = Device["HotRoad1#Heater"] as FeedbackChannel;
             var exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["RL_1#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["RL_1#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["RL_1#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["RL_1#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["RL_1#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["RL_1#HEATER_READY"] as StatusChannel;
 
@@ -45,21 +48,24 @@ namespace LabMCESystem.Servers.HS
             /* -------------------------------------- */
 
             // 热路2号加热器。
-            heater = new HS_HeaterContrller("RL_2#Heater", "COM4", 1);
+            heater = new HS_HeaterContrller("RL_2#Heater", "COM6", 4);
 
             heater.HeaterChannel = Device["HotRoad2#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["RL_2#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["RL_2#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["RL_2#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["RL_2#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["RL_2#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["RL_2#HEATER_READY"] as StatusChannel;
 
@@ -71,21 +77,24 @@ namespace LabMCESystem.Servers.HS
             /* -------------------------------------- */
             
             // 热路3号加热器。
-            heater = new HS_HeaterContrller("RL_3#Heater", "COM5", 1);
+            heater = new HS_HeaterContrller("RL_3#Heater", "COM7", 5);
 
             heater.HeaterChannel = Device["HotRoad3#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["RL_3#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["RL_3#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["RL_3#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["RL_3#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["RL_3#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["RL_3#HEATER_READY"] as StatusChannel;
 
@@ -98,21 +107,24 @@ namespace LabMCESystem.Servers.HS
 
 
             // 热路4号加热器。
-            heater = new HS_HeaterContrller("RL_4#Heater", "COM6", 1);
+            heater = new HS_HeaterContrller("RL_4#Heater", "COM8", 6);
 
             heater.HeaterChannel = Device["HotRoad4#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["RL_4#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["RL_4#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["RL_4#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["RL_4#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["RL_4#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["RL_4#HEATER_READY"] as StatusChannel;
 
@@ -124,21 +136,24 @@ namespace LabMCESystem.Servers.HS
             /* -------------------------------------- */
 
             // 热路5号加热器。
-            heater = new HS_HeaterContrller("RL_5#Heater", "COM7", 1);
+            heater = new HS_HeaterContrller("RL_5#Heater", "COM9", 7);
 
             heater.HeaterChannel = Device["HotRoad5#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["RL_5#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["RL_5#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["RL_5#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["RL_5#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["RL_5#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["RL_5#HEATER_READY"] as StatusChannel;
 
@@ -150,21 +165,24 @@ namespace LabMCESystem.Servers.HS
             /* -------------------------------------- */
             
             // 二冷1号加热器。
-            heater = new HS_HeaterContrller("EL_1#Heater", "COM8", 1);
+            heater = new HS_HeaterContrller("EL_1#Heater", "COM3", 1);
 
             heater.HeaterChannel = Device["SecendCold1#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["ELL_1#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["ELL_1#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["ELL_1#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["ELL_1#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["ELL_1#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["EL_1#HEATER_READY"] as StatusChannel;
 
@@ -176,21 +194,24 @@ namespace LabMCESystem.Servers.HS
             /* -------------------------------------- */
             
             // 二冷2号加热器。
-            heater = new HS_HeaterContrller("EL_2#Heater", "COM9", 1);
+            heater = new HS_HeaterContrller("EL_2#Heater", "COM4", 2);
 
             heater.HeaterChannel = Device["SecendCold2#Heater"] as FeedbackChannel;
             exe = new HS_ElectricHeaterExecuter(heater.HeaterChannel.Label, heater);
             exe.ExecutePredicate = HotRoadHeaterExecuterPredicate;
             heater.HeaterChannel.Execute += HeaterChannel_Execute;
+            heater.HeaterChannel.StopExecute += HeaterChannel_StopExecute;
 
-            heater.HeaterChannel.Collector = exe;
+            heater.HeaterChannel.Controller = exe;
             _executerMap.Add(heater.HeaterChannel.Label, exe);
             
             heater.HeaterConnectionChannel = Device["ELL_2#RemoteConnection"] as StatusChannel;
 
             heater.HeaterFualtChannel = Device["ELL_2#_FAULT"] as StatusChannel;
 
-            heater.HeaterRunStatusChannel = Device["ELL_2#_AUTO"] as StatusChannel;
+            heater.HeaterRemoteControlChannle = Device["ELL_2#_AUTO"] as StatusChannel;
+
+            heater.HeaterRunStatusChannel = Device["ELL_2#_RUN"] as StatusChannel;
 
             heater.HeaterReadyChannel = Device["EL_2#HEATER_READY"] as StatusChannel;
 
@@ -220,7 +241,7 @@ namespace LabMCESystem.Servers.HS
             var ch = sender as FeedbackChannel;
             if (ch != null)
             {
-                HS_ElectricHeaterExecuter exe = ch.Collector as HS_ElectricHeaterExecuter;
+                HS_ElectricHeaterExecuter exe = ch.Controller as HS_ElectricHeaterExecuter;
                 if (exe != null)
                 {
                     exe.TargetVal = ch.AOValue;
@@ -229,7 +250,17 @@ namespace LabMCESystem.Servers.HS
             }
              
         }
+        
+        private void HeaterChannel_StopExecute(object sender, ControllerEventArgs e)
+        {
+            var ch = sender as FeedbackChannel;
+            System.Diagnostics.Debug.Assert(ch != null && ch.Controller != null);
 
+            var exe = ch.Controller as HS_ElectricHeaterExecuter;
+            exe.ExecuteOver();
+            exe.Heater?.Stop();
+        }
+        
         /// <summary>
         /// 加热器的启动停止 脉冲控制执行器控制事件。
         /// </summary>

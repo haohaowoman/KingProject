@@ -225,8 +225,8 @@ namespace newopcdll
             }
             catch (System.Exception err) // catch for add items
             {
-                MessageBox.Show(err.Message, "Result - Adding Items",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(err.Message, "Result - Adding Items",
+                //MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
             finally
@@ -344,8 +344,8 @@ namespace newopcdll
             }
             catch (System.Exception error)
             {
-                MessageBox.Show(error.Message, "Result - Read Items", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                //MessageBox.Show(error.Message, "Result - Read Items", MessageBoxButtons.OK,
+                //MessageBoxIcon.Error);
             }
             finally
             {
@@ -402,8 +402,8 @@ namespace newopcdll
             }
             catch (System.Exception error)
             {
-                MessageBox.Show(error.Message, "Result - WriteItem", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                //MessageBox.Show(error.Message, "Result - WriteItem", MessageBoxButtons.OK,
+                //MessageBoxIcon.Error);
             }
             finally
             {
@@ -433,8 +433,8 @@ namespace newopcdll
             }
             catch (System.Exception error)
             {
-                MessageBox.Show(error.Message, "Result - Stop Server", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                //MessageBox.Show(error.Message, "Result - Stop Server", MessageBoxButtons.OK,
+                //MessageBoxIcon.Error);
             }
         }
 

@@ -18,7 +18,7 @@ namespace LabMCESystem.Servers.HS
     /// </summary>
     class HS_ElectricHeaterExecuter : PredicatePositionPID
     {
-        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 20000, Kp = 0.6, Ti = 10000, Td = 1000})
+        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 60000, Kp = 0.6, Ti = 10000, Td = 1000})
         {
             if (heater == null)
             {
@@ -30,7 +30,14 @@ namespace LabMCESystem.Servers.HS
             UpdateFedback += HS_ElectricHeaterExecuter_UpdateFedback;
 
             ExecuteChanged += HS_ElectricHeaterExecuter_ExecuteChanged;
+
+            AutoFinish = true;
         }
+
+        /// <summary>
+        /// 为防止电炉功率过大设置电炉的升温步进为100。
+        /// </summary>
+        public static double HeaterTempUpStepInterval = 100;
 
         public HS_HeaterContrller Heater { get; set; }
 
@@ -49,12 +56,35 @@ namespace LabMCESystem.Servers.HS
             if (Heater != null)
             {
                 double temp = 0;
-                if (Heater.GetCurrentTemperature(out temp))
+                if (Heater.GetCtrlTemperature(out temp))
                 {
                     sender.FedbackData = temp;
                 }
             }
         }
 
+        protected override bool OnExecute(ref double eVal)
+        {
+            HS_ElectricHeaterExecuter_UpdateFedback(this);
+
+            if (Heater?.HeaterIsRun == true)
+            {
+                double tc = TargetVal - FedbackData;
+                if (tc <= 0)
+                {
+                    eVal = TargetVal;
+                }
+                else
+                {
+                    eVal = FedbackData + Math.Min(HeaterTempUpStepInterval, tc);
+                }
+            }
+            else
+            {
+                eVal = Math.Min(TargetVal,HeaterTempUpStepInterval);
+            }
+            //eVal = TargetVal;
+            return true;
+        }
     }
 }
