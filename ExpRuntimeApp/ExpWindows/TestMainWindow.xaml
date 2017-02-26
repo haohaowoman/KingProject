@@ -45,7 +45,7 @@
             <StackPanel DockPanel.Dock="Top">
                 <Label Margin="8,3" VerticalAlignment="Center"
                        Content="试验类型:"/>
-                <ComboBox Margin="8,5" VerticalAlignment="Center" IsEditable="True">
+                <ComboBox Margin="8,5" VerticalAlignment="Center" IsEditable="True" Text="{Binding Path=ExpType}">
                     <ComboBox.Items>
                         <ComboBoxItem Margin="5,1" Content="流体阻力试验"/>
                         <ComboBoxItem Margin="5,1" Content="产品散热性能试验"/>
@@ -270,7 +270,7 @@
                     </DockPanel>
                 </Button>
 
-                <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
+                <Button Click="OpenDataReportWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
                     <DockPanel>
                         <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_office_excel}"/>
                         <TextBlock DockPanel.Dock="Bottom" Text="试验报表"></TextBlock>
@@ -381,15 +381,15 @@
 
                 <DockPanel Margin="8,3" HorizontalAlignment="Stretch">
 
-                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="信息:"/>
+                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="{Binding Path=ExpInformation,StringFormat=信息:{0}}"/>
                     <TextBlock DockPanel.Dock="Left" Margin="3" Text="" TextDecorations="Underline"/>
 
                 </DockPanel>
             </StackPanel>
         </Border>
         <!--#endregion-->
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right"
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="22,3" VerticalAlignment="Center" HorizontalAlignment="Right"
                    FontWeight="UltraBold"
-                   Text="试验时间："/>
+                   Text="{Binding Path=ExpTime,StringFormat=实验时间:{0:HH:mm:ss}}"/>
     </Grid>
 </metro:MetroWindow>

@@ -129,5 +129,10 @@ namespace ExpRuntimeApp.ExpWindows
             }
         }
 
+        private void OpenDataReportWndBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var reprotWnd = new DataReportWnd();
+            reprotWnd.Show();
+        }
     }
 }

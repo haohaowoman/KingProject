@@ -14,6 +14,13 @@ using System.Windows.Data;
 using LabMCESystem.LabElement;
 using System.ComponentModel;
 using System.Windows.Input;
+using ExpRuntimeApp.DataReport;
+using Microsoft.Win32;
+using System.IO;
+using Microsoft.Office.Interop.Excel;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ExpRuntimeApp.ViewModules
 {
@@ -47,8 +54,8 @@ namespace ExpRuntimeApp.ViewModules
         }
 
         public bool CanExecute(object parameter)
-        {            
-            return CanExecuteHandler?.Invoke(parameter) ?? true;            
+        {
+            return CanExecuteHandler?.Invoke(parameter) ?? true;
         }
 
         public void Execute(object parameter)
@@ -67,13 +74,29 @@ namespace ExpRuntimeApp.ViewModules
             _readValueTimer.Elapsed += _readValueTimer_Elapsed;
 
             // 命令
-                        
+
             ExpPointOutputCommand = new MCommand();
             ExpPointOutputCommand.Executed += ExpPointOutputCommand_Executed;
             ExpPointOutputCommand.CanExecuteHandler = (o) => { return true; };
 
             ExpPointOutputStopCommand = new MCommand();
             ExpPointOutputStopCommand.Executed += ExpPointOutputStopCommand_Executed;
+
+            AddDataReportNow = new MCommand();
+            AddDataReportNow.Executed += AddDataReportNow_Executed;
+
+            SaveReport = new MCommand();
+            SaveReport.Executed += SaveReport_Executed;
+
+            LoadReport = new MCommand();
+            LoadReport.Executed += LoadReport_Executed;
+
+            ReportToExcel = new MCommand();
+            ReportToExcel.Executed += ReportToExcel_Executed;
+
+            CurRutimeReport.ExperimentInfo.AddExperimentInfoRow(
+                DateTime.Now,
+                string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
         public ExperimentViewModule(HS_Server service) : this()
@@ -84,7 +107,7 @@ namespace ExpRuntimeApp.ViewModules
         #region Properties
 
         public RoutedCommand TestCommand { get; set; }
-        
+
         private Timer _readValueTimer;
 
         public MdChannelsCollection Test { get; set; } = new MdChannelsCollection();
@@ -147,6 +170,8 @@ namespace ExpRuntimeApp.ViewModules
                     // 异常管理事件。
                     _service.ExcepManager.ActivatedEException += ExcepManager_ActivatedEException;
                     _service.ExcepManager.HandledEException += ExcepManager_HandledEException;
+
+                    InitialDataTabelChannels();
                 }
             }
         }
@@ -239,6 +264,110 @@ namespace ExpRuntimeApp.ViewModules
             }
         }
 
+        public HS_ExpDataReport CurRutimeReport { get; set; } = new HS_ExpDataReport();
+
+        #region ExpInfor
+
+        public DateTime ExpTime
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_expTime"];
+                DateTime rt;
+                if (t == null)
+                {
+                    rt = DateTime.Now;
+                }
+                else
+                {
+                    rt = (DateTime)t;
+                }
+                return rt;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_expTime"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExpTime"));
+            }
+        }
+
+        public string ExpType
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_expType"];
+
+                return t as string;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_expType"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExpType"));
+            }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_userName"];
+
+                return t as string;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_userName"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UserName"));
+            }
+        }
+
+        public string UserID
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_userID"];
+
+                return t as string;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_userID"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UserID"));
+            }
+        }
+
+        public string ProductType
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_productType"];
+
+                return t as string;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_productType"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductType"));
+            }
+        }
+
+        public string ProductID
+        {
+            get
+            {
+                var t = CurRutimeReport.ExperimentInfo.Rows[0]["_productID"];
+
+                return t as string;
+            }
+            set
+            {
+                CurRutimeReport.ExperimentInfo.Rows[0]["_productID"] = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProductID"));
+            }
+        }
+
+        #endregion
+
         #region Commands
         /// <summary>
         /// 实验电控制输出命令。
@@ -248,7 +377,22 @@ namespace ExpRuntimeApp.ViewModules
         /// 实验电控制输出停止命令。
         /// </summary>
         public MCommand ExpPointOutputStopCommand { get; private set; }
-
+        /// <summary>
+        /// 立即进行数据记录命令。
+        /// </summary>
+        public MCommand AddDataReportNow { get; set; }
+        /// <summary>
+        /// 保存报表至XML文件。
+        /// </summary>
+        public MCommand SaveReport { get; set; }
+        /// <summary>
+        /// 从XML文件导入报表。
+        /// </summary>
+        public MCommand LoadReport { get; set; }
+        /// <summary>
+        /// 将报表导入至Excel表。
+        /// </summary>
+        public MCommand ReportToExcel { get; set; }
         #endregion
 
         #endregion
@@ -289,12 +433,26 @@ namespace ExpRuntimeApp.ViewModules
             {
                 // 如果控制的是热边与二冷的入口温度的测试点需要对所进流量进行判断选择
                 // 并提示用户进行加热器与电炉的选择
+                switch (mCh.Label)
+                {
+                    case "热边空气进口温度":
 
-                mCh.ControllerExecute();
-
+                        var prpWnd = new ExpWindows.RLTempSetPropWnd();
+                        if (prpWnd.ShowDialog() == true)
+                        {
+                            mCh.ControllerExecute();
+                        }
+                        break;
+                    case "二冷空气进口温度":
+                        mCh.ControllerExecute();
+                        break;
+                    default:
+                        mCh.ControllerExecute();
+                        break;
+                }
             }
         }
-        
+
         private void ExpPointOutputStopCommand_Executed(object sender, object e)
         {
             // Paramter is MdChannel?
@@ -305,11 +463,164 @@ namespace ExpRuntimeApp.ViewModules
             }
         }
 
+        private void InitialDataTabelChannels()
+        {
+            //向DataReprot绑定通道。
+            var tabel = CurRutimeReport.HS_DataReport;
+            tabel.RlFlowChannel = MdExperPoints["热边空气流量"];
+            tabel.YlFlowChannel = MdExperPoints["一冷空气流量"];
+            tabel.YlInTempChannel = MdExperPoints["一冷空气进口温度"];
+            tabel.ElFlowChannel = MdExperPoints["二冷空气流量"];
+            tabel.ElInTempChannel = MdExperPoints["二冷空气进口温度"];
+            tabel.ElOutTempChannel = MdExperPoints["二冷空气出口温度"];
+            tabel.RlOutpressChannel = MdExperPoints["热边空气出口压力"];
+            tabel.RlInPressChannel = MdExperPoints["热边空气进口压力"];
+            tabel.RlInTempChannel = MdExperPoints["热边空气进口温度"];
+            tabel.RlOutTempChannel = MdExperPoints["热边空气出口温度"];
+            tabel.ElInPressChannel = MdExperPoints["二冷空气进口压力"];
+            tabel.ElOutPressChannel = MdExperPoints["二冷空气出口压力"];
+            tabel.RlPressDiffChannel = MdExperPoints["热边压差"];
+            tabel.ElPressDiffChannel = MdExperPoints["二冷压差"];
+            tabel.HeatEmissEffecChannel = MdExperPoints["散热效率"];
+        }
+
+        private void AddDataReportNow_Executed(object sender, object e)
+        {
+            CurRutimeReport.HS_DataReport.AddRowNow();
+        }
+
+        private void LoadReport_Executed(object sender, object e)
+        {
+            HS_ExpDataReport dataSet = e as HS_ExpDataReport;
+
+            OpenFileDialog sfd = new OpenFileDialog();
+            sfd.DefaultExt = "XML 数据文件 (*.xml)|*.xlsx";
+            sfd.Filter = "XML 数据文件 (*.xml)|*.xlsx";
+            
+            sfd.Title = "打开实验数据文件";
+            if (sfd.ShowDialog() == true)
+            {
+                if (dataSet == null)
+                {
+                    dataSet = new HS_ExpDataReport();
+                }
+                try
+                {
+                    dataSet.ReadXml(sfd.FileName);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"{ex.Message}\n打开数据文件{sfd.FileName}失败。", "错误", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);                  
+                }
+            }
+            
+        }
+
+        private void SaveReport_Executed(object sender, object e)
+        {
+            HS_ExpDataReport dataSet = e as HS_ExpDataReport;
+            if (dataSet != null)
+            {
+                string dicPath = Properties.Settings.Default.DefualtSaveFileDic;
+                
+                var dicInfo = new DirectoryInfo(dicPath);
+                if (!dicInfo.Exists)
+                {
+                    try
+                    {
+                        dicInfo = Directory.CreateDirectory(dicPath);                        
+                    }
+                    catch (Exception)
+                    {
+
+                        System.Windows.MessageBox.Show($"创建文件夹{dicPath}失败。", "错误", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                        return;
+                    }
+                    
+                }
+                dicPath = dicInfo.FullName;
+                string filePath = dicPath + $"{ExpTime.ToLongDateString()}{ExpTime:HH mm ss}_{ExpType}.xml";
+                dataSet.WriteXml(filePath);
+            }
+            
+        }
+
+        private void ReportToExcel_Executed(object sender, object e)
+        {
+            HS_ExpDataReport dataSet = e as HS_ExpDataReport;
+            if (dataSet != null)
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.DefaultExt = "Microsoft Excel 工作表 (*.xlsx)|*.xlsx";
+                sfd.Filter = "Microsoft Excel 工作表 (*.xlsx)|*.xlsx|所有(*.*)|*.*";
+                sfd.FileName = $"{ExpTime.ToLongDateString()} {ExpTime.ToLongTimeString():HH mm ss} {ExpType}";
+                sfd.OverwritePrompt = true;
+                sfd.Title = "选择导出Excel文件路径";
+                if (sfd.ShowDialog() == true)
+                {
+                    //dataSet.WriteXml(sfd.FileName);
+                    
+                    System.Action facMeth = () =>
+                    {
+                        try
+                        {
+                            Excel.Application ap = new Application();
+                            ap.WindowState = XlWindowState.xlMaximized;
+                            ap.DisplayAlerts = false;
+                            ap.Visible = false;
+                            string tempPath = Environment.CurrentDirectory + @"\ReportTemplate\ExperimentReport.xltx";
+
+                            var workBook = ap.Workbooks.Open(tempPath, System.Type.Missing);
+
+                            Excel.Worksheet wSheet = workBook.Sheets["环散系统实验报表"];
+
+                            int colunmsCount = dataSet.HS_DataReport.Columns.Count;
+                            int rowCount = dataSet.HS_DataReport.Rows.Count;
+                            wSheet.Cells[1, 1] = dataSet.ExperimentInfo.Rows[0]["_expType"];
+                            for (int i = 0; i < rowCount; i++)
+                            {
+                                for (int j = 1; j < colunmsCount; j++)
+                                {
+                                    wSheet.Cells[3 + i, j].Value = dataSet.HS_DataReport.Rows[i][j];
+                                }
+                            }
+
+                            workBook.SaveAs(sfd.FileName);
+                            workBook.Close();
+
+                            try
+                            {
+                                int apPreId = 0;
+
+                                GetWindowThreadProcessId((IntPtr)ap.Hwnd, out apPreId);
+                                var p = Process.GetProcessById(apPreId);
+                                p.CloseMainWindow();
+                                p.Close();
+                            }
+                            catch (Exception excep)
+                            {
+                                System.Windows.MessageBox.Show($"{excep.Message}\n关闭{ap.Name}失败", "错误", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                            }
+
+                        }
+                        catch (Exception excep)
+                        {
+                            System.Windows.MessageBox.Show($"{excep.Message}\n 保存Excel失败。", "错误", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                        }
+                    };
+
+                    Task.Factory.StartNew(facMeth);
+                }                
+            }
+
+        }
 
         public void Dispose()
         {
             _readValueTimer?.Stop();
             _readValueTimer?.Dispose();
         }
+        [DllImport("User32.dll",CharSet = CharSet.Auto)]
+        public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int id);
     }
 }

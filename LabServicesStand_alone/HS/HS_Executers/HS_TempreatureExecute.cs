@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using mcLogic;
 using mcLogic.Execute;
 using LabMCESystem.LabElement;
+using System.Diagnostics;
+
 namespace LabMCESystem.Servers.HS.HS_Executers
 {
     /// <summary>
@@ -16,10 +18,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public HS_TempreatureExecute() : base(0, new SafeRange(0, 800),
             new PIDParam()
             {
-                Ts = 60 * 1000 * 10,
-                Kp = 0.66,
+                Ts = 60 * 1000 * 20,
+                Kp = 0.88,
                 Td = 0,
-                Ti = 0
+                Ti = 1000 * 60 * 40
             }
             )
         {
@@ -68,7 +70,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 {
                     if (heater.HeaterIsAuto)
                     {
-                        minFlow += HS_HeaterContrller.HeaterTrueRequirMinFlow;
+                        minFlow += heater.HeaterTrueRequirMinFlow;
                     }
                 }
                 return minFlow;
@@ -96,14 +98,22 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         {
             foreach (var hCh in HeaterChannels)
             {
-                hCh.AOValue = executedVal;
-                hCh.ControllerExecute();
+                var exe = hCh.Controller as HS_ElectricHeaterExecuter;
+
+                Debug.Assert(exe != null && exe.Heater != null);
+
+                if (exe.Heater.HeaterIsAuto)
+                {
+                    hCh.AOValue = executedVal;
+                    hCh.ControllerExecute();
+                }
+
             }
         }
 
         private void HS_TempreatureExecute_UpdateFedback(IDataFeedback sender)
         {
-            sender.FedbackData = (TargetTempChannel as IAnalogueMeasure)?.MeasureValue ?? 0;
+            sender.FedbackData = (/*TargetTempChannel*/SecTempChannel as IAnalogueMeasure)?.MeasureValue ?? 0;
         }
         /// <summary>
         /// 从已添加的加热器通道添加电炉集合。
@@ -136,11 +146,12 @@ namespace LabMCESystem.Servers.HS.HS_Executers
 
         protected override bool OnExecute(ref double eVal)
         {
-            if (ExecutePredicate?.Invoke(this, ref eVal) != false && base.OnExecute(ref eVal))
-            {
-                return true;
-            }
-            return false;
+            //if (ExecutePredicate?.Invoke(this, ref eVal) != false && base.OnExecute(ref eVal))
+            //{
+            //    return true;
+            //}
+            //return false;
+            return base.OnExecute(ref eVal);
         }
 
         #endregion

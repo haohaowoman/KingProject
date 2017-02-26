@@ -34,6 +34,11 @@ namespace mcLogic.Execute
             if (ExecutePredicate != null)
             {
                 br = ExecutePredicate(this, ref eVal);
+                // 如果条件未通过，则对周期的计数-1，让条件先行但不影响在一个PID周期内的周期运行次数。
+                if (!br)
+                {
+                    PeriodCount--;
+                }                
             }
 
             return br && base.OnExecute(ref eVal);

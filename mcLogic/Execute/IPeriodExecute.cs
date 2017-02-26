@@ -40,5 +40,10 @@ namespace mcLogic.Execute
         /// 获取当前执行器是否为有效
         /// </summary>
         bool Enabled { get; }
+
+        /// <summary>
+        /// 获取已有的周期次数。
+        /// </summary>
+        int PeriodCount { get; }
     }
 }

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        Title="试验工况" Height="1050" Width="1900" Background="{x:Null}"
+        Title="试验工况" Height="1050" Width="1900"
     >
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="Black">
             <UserControls:HS_GKUI_Experiment Height="980" Width="1860"/>
 
         </ScrollViewer>

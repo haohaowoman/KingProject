@@ -91,8 +91,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataReport\HS_ExpDataReport.cs">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataReport\HS_ExpDataReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ExpWindows\AllChannelsPointsWnd.xaml.cs">
       <DependentUpon>AllChannelsPointsWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\DataReportWnd.xaml.cs">
+      <DependentUpon>DataReportWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExpWindows\ExperimentSetWnd.xaml.cs">
       <DependentUpon>ExperimentSetWnd.xaml</DependentUpon>
@@ -102,6 +113,12 @@
     </Compile>
     <Compile Include="ExpWindows\HistoryAnalyseWnd.xaml.cs">
       <DependentUpon>HistoryAnalyseWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\RLTempSetPropWnd.xaml.cs">
+      <DependentUpon>RLTempSetPropWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\RLTempSetWarnningWnd.xaml.cs">
+      <DependentUpon>RLTempSetWarnningWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExpWindows\TestMainWindow.xaml.cs">
       <DependentUpon>TestMainWindow.xaml</DependentUpon>
@@ -219,6 +236,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ExpWindows\DataReportWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExpWindows\ExperimentSetWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -236,6 +257,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExpWindows\PrepareOrLookWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\RLTempSetPropWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\RLTempSetWarnningWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -446,12 +475,26 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DataReport\HS_ExpDataReport.xsc">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </None>
+    <None Include="DataReport\HS_ExpDataReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HS_ExpDataReport.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataReport\HS_ExpDataReport.xss">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="ReportTemplate\ExperimentReport.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -459,6 +502,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExpViews\" />
+    <Folder Include="Pages\TempCtrlPages\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\DefualtUserImage.png">
@@ -512,6 +556,35 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\FactoryIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warning-Message.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CheckRight.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Incident.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

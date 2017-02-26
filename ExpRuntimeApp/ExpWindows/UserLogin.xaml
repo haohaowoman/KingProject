@@ -10,7 +10,7 @@
         Title="进入环散系统" Height="697" Width="800"
         FontSize="24"
                    WindowStartupLocation="CenterScreen"
-                   WindowState="Normal" ShowMaxRestoreButton="False">
+                   WindowState="Normal" ShowMaxRestoreButton="False" EnableDWMDropShadow="True">
     <Grid HorizontalAlignment="Center" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>

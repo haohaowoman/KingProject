@@ -33,7 +33,7 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                Content="确定" FontSize="18" Cursor="Hand"                
+                Content="启动" FontSize="18" Cursor="Hand"                
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气流量]}"/>
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
                 Content="停止" FontSize="18" Cursor="Hand"
@@ -54,7 +54,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                Content="确定" FontSize="18" Cursor="Hand"
+                Content="启动" FontSize="18" Cursor="Hand"
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
                 Content="停止" FontSize="18" Cursor="Hand"
@@ -73,7 +73,7 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                Content="确定" FontSize="18" Cursor="Hand"
+                Content="启动" FontSize="18" Cursor="Hand"
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气流量]}"/>
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
                 Content="停止" FontSize="18" Cursor="Hand"
@@ -92,7 +92,7 @@
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                Content="确定" FontSize="18" Cursor="Hand"
+                Content="启动" FontSize="18" Cursor="Hand"
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气进口温度]}"/>
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
                 Content="停止" FontSize="18" Cursor="Hand"
@@ -112,7 +112,7 @@
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                Content="确定" FontSize="18" Cursor="Hand"
+                Content="启动" FontSize="18" Cursor="Hand"
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[一冷空气流量]}"/>
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
                 Content="停止" FontSize="18" Cursor="Hand"

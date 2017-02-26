@@ -23,7 +23,10 @@ namespace mcLogic.Execute
 
         // 周期的定时器
         private Timer _periodTimer;
-
+        /// <summary>
+        /// 获取已有的周期次数。
+        /// </summary>
+        public int PeriodCount { get; protected set; }
         #endregion
 
         #region Override
@@ -107,6 +110,7 @@ namespace mcLogic.Execute
         
         private void _periodTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            PeriodCount++;
             Execute();
         }
 

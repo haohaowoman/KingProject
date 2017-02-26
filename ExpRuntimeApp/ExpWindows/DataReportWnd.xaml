@@ -1,0 +1,90 @@
+﻿<Window x:Class="ExpRuntimeApp.ExpWindows.DataReportWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        DataContext="{StaticResource ExpViewModule}"
+        Title="数据报表" Height="800" Width="960" Icon="/ExpRuntimeApp;component/Images/Incident.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <UniformGrid Grid.Column="0" Margin="3" Columns="2" HorizontalAlignment="Left">
+                <Label VerticalAlignment="Center" Content="试验类型："/>
+                <TextBox VerticalAlignment="Center" MinWidth="120" Text="{Binding Path=ExpType}"/>
+                <Label VerticalAlignment="Center" Content="产品型号："/>
+                <TextBox VerticalAlignment="Center" Text="{Binding Path=ProductType}"/>
+                <Label VerticalAlignment="Center" Content="产品编号："/>
+                <TextBox VerticalAlignment="Center" Text="{Binding Path=ProductID}"/>
+            </UniformGrid>
+            
+            <DockPanel Grid.Row="0" Margin="3" Grid.Column="2">
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5"
+                        Command="{Binding Path=ReportToExcel}"
+                        CommandParameter="{Binding Path=CurRutimeReport}">
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_office_excel}"/>
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="导出Excel"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5" VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding Path=AddDataReportNow}"
+                    >
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_cursor_hand}"/>
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="手动记录"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5" VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding Path=SaveReport}"
+                        CommandParameter="{Binding Path=CurRutimeReport}"
+                    >
+                    <DockPanel>
+                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_save}"/>
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="保存"></TextBlock>
+                    </DockPanel>
+                </Button>
+            </DockPanel>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <DataGrid x:Name="ReportGrid" Margin="10"  ItemsSource="{Binding Path=CurRutimeReport.HS_DataReport.DefaultView}" IsReadOnly="True" AutoGenerateColumns="False" Loaded="ReportGrid_Loaded" BorderThickness="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="热边流量 Kg/h" Binding="{Binding Path=_rlFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="一冷流量 Kg/h" Binding="{Binding Path=_ylFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="一冷进口温度 ℃" Binding="{Binding Path=_ylInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷流量 Kg/h" Binding="{Binding Path=_elFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷进口温度 ℃" Binding="{Binding Path=_elInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷出口温度 ℃" Binding="{Binding Path=_elOutTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边出口压力 KPa" Binding="{Binding Path=_rlOutPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边进口压力 KPa" Binding="{Binding Path=_rlInPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边进口温度 ℃" Binding="{Binding Path=_rlInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边出口温度 ℃" Binding="{Binding Path=_rlOutTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷进口压力 KPa" Binding="{Binding Path=_elInPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷出口压力 KPa" Binding="{Binding Path=_elOutPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边压差 KPa" Binding="{Binding Path=_rlPressDiff,StringFormat={}{0:F1}}"/>
+
+                    <DataGridTextColumn Header="二冷压差 KPa" Binding="{Binding Path=_elPressDiff,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="散热效率" Binding="{Binding Path=_heatEmissEffec,StringFormat={}{0:F1}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

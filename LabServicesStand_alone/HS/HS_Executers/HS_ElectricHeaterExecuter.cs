@@ -18,7 +18,7 @@ namespace LabMCESystem.Servers.HS
     /// </summary>
     class HS_ElectricHeaterExecuter : PredicatePositionPID
     {
-        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 60000, Kp = 0.6, Ti = 10000, Td = 1000})
+        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 180000, Kp = 0.6, Ti = 10000, Td = 1000})
         {
             if (heater == null)
             {
@@ -30,6 +30,9 @@ namespace LabMCESystem.Servers.HS
             UpdateFedback += HS_ElectricHeaterExecuter_UpdateFedback;
 
             ExecuteChanged += HS_ElectricHeaterExecuter_ExecuteChanged;
+
+            // 公差为数据类型的精度。
+            AllowTolerance = new Tolerance(0.11);
 
             AutoFinish = true;
         }

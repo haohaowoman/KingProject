@@ -23,6 +23,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         }
 
         #region Properties
+        /// <summary>
+        /// 当前加热器的设置温度值。
+        /// </summary>
+        private double _currentSetTemp = 0;
 
         /// <summary>
         /// 电炉通讯控制。
@@ -30,13 +34,30 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         private FP23Ctrl _heaterCtrl;
 
         /// <summary>
-        /// 每个电炉的真实最小要求流量，如果低于此值应该关闭加热器。
+        /// 低温加热时最低要求流量为。
         /// </summary>
-        static public double HeaterTrueRequirMinFlow = 300;
+        static public double HeaterLowTempReMinFlow = 200;
         /// <summary>
-        /// 在电炉控制时的基础流量，在控制流量下对使用电炉数量计量的基本参数。
+        /// 高温加热时最低要求流量。
         /// </summary>
-        static public double HeaterControlBaseFlow = 500;
+        static public double HeaterHighTempReMinFlow = 300;
+        /// <summary>
+        /// 标识加热器超过此温度时为高温加热。
+        /// </summary>
+        static public double WhereIsHeaterHighTemp = 250;
+
+        /// <summary>
+        /// 每个电炉的真实最小要求流量，如果低于此值应该关闭加热器。
+        /// 在低温加热时最低要求流量默认为200，高温加热时最低要求流量默认为300。
+        /// </summary>
+        public double HeaterTrueRequirMinFlow
+        {
+            get
+            {
+                return _currentSetTemp > WhereIsHeaterHighTemp ? HeaterHighTempReMinFlow : HeaterLowTempReMinFlow;
+            }
+        }
+        
 
         /// <summary>
         /// 获取/设置电炉是否准备好的状态通道。
@@ -135,6 +156,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             HeaterStartChannel.Execute += HeaterStartStopChannel_Execute;
             HeaterStopChannel.Execute += HeaterStartStopChannel_Execute;
 
+            Stop();
+
             return true;
         }
 
@@ -151,44 +174,55 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             {
                 double rTemp = 0;
                 bt = GetCtrlTemperature(out rTemp);
-
-                if (bt && rTemp == tTemp)
+                if (bt)
                 {
-                    //温度为需要设置的温度则不重新设置，进行启动。
-                    if (HeaterRemoteControlChannle?.Status == true && 
-                        HeaterRunStatusChannel?.Status != true && 
-                        HeaterStartChannel != null)
+                    // 由于数据类型的精度误差 将误差在0.1内的视为相等。
+                    double ct = rTemp - tTemp;
+                    if (ct <= 0.1 && ct >= -0.1)
                     {
-                        HeaterStartChannel.NextStatus = true;
-                        HeaterStartChannel.ControllerExecute();
-                        bt &= true;
-                    }
-                }
-                else if (bt)
-                {
-                    // 重新设置温度。
-                    bt &= _heaterCtrl.SetTemp((float)tTemp);
-                    if (!bt)
-                    {
-                        bt = _heaterCtrl.SetComStyle(true);
-                        bt &= _heaterCtrl.SetRun(true);
-                        HeaterIsRemote = bt;
-                        HeaterConnection = bt;
-                        if (HeaterConnectionChannel != null)
+                        //温度为需要设置的温度则不重新设置，进行启动。
+                        if (HeaterRemoteControlChannle?.Status == true &&
+                            HeaterRunStatusChannel?.Status != true &&
+                            HeaterStartChannel != null)
                         {
-                            HeaterConnectionChannel.Status = bt;
+                            HeaterStartChannel.NextStatus = true;
+                            HeaterStartChannel.ControllerExecute();
+                            bt &= true;
                         }
                     }
-                    if (HeaterRemoteControlChannle?.Status == true && 
-                        HeaterRunStatusChannel?.Status != true && 
-                        HeaterStartChannel != null)
+                    else
                     {
-                        HeaterStartChannel.NextStatus = true;
-                        HeaterStartChannel.ControllerExecute();
-                        bt &= true;
+                        // 重新设置温度。
+                        bt &= _heaterCtrl.SetTemp((float)tTemp);
+
+                        if (bt)
+                        {
+                            _currentSetTemp = tTemp;
+
+                            if (HeaterRemoteControlChannle?.Status == true &&
+                            HeaterRunStatusChannel?.Status != true &&
+                            HeaterStartChannel != null)
+                            {
+                                HeaterStartChannel.NextStatus = true;
+                                HeaterStartChannel.ControllerExecute();
+                                bt &= true;
+                            }
+                        }                        
                     }
                 }
 
+                if (!bt)
+                {
+                    // set or get fault,then reset .
+                    bt = _heaterCtrl.SetComStyle(true);
+                    bt &= _heaterCtrl.SetRun(true);
+                    HeaterIsRemote = bt;
+                    HeaterConnection = bt;
+                    if (HeaterConnectionChannel != null)
+                    {
+                        HeaterConnectionChannel.Status = bt;
+                    }
+                }
             }
             else
             {
@@ -247,8 +281,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             if (HeaterReadyChannel?.Status == true)
             {
                 // 电炉准备好输出。
-                if (HeaterRemoteControlChannle?.Status == true && 
-                    HeaterRunStatusChannel?.Status == true && 
+                if (HeaterRemoteControlChannle?.Status == true &&
+                    HeaterRunStatusChannel?.Status == true &&
                     HeaterStopChannel != null)
                 {
                     // 首先停止电炉的输出。
@@ -269,8 +303,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             if (HeaterReadyChannel.Status)
             {
                 // 首先停止电炉的输出。
-                if (HeaterRemoteControlChannle?.Status == true && 
-                    HeaterRunStatusChannel?.Status == true && 
+                if (HeaterRemoteControlChannle?.Status == true &&
+                    HeaterRunStatusChannel?.Status == true &&
                     HeaterStopChannel != null)
                 {
                     HeaterStopChannel.NextStatus = true;

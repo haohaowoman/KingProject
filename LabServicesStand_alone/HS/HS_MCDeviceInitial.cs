@@ -9,6 +9,24 @@ using LabMCESystem.EException;
 namespace LabMCESystem.Servers.HS
 {
     /// <summary>
+    /// 组合通道转换器，用以将已有通道的值转换为其它通道的测量值。
+    /// </summary>
+    class MultipelChannelConverter
+    {
+        public List<Channel> Channels { get; private set; } = new List<Channel>();
+
+        public Func<MultipelChannelConverter, double> Algorithm { get; set; }
+        /// <summary>
+        /// 执行转换算法得到转换值。
+        /// </summary>
+        /// <returns>转换值。</returns>
+        public double Converte()
+        {
+            return Algorithm?.Invoke(this) ?? 0;
+        }
+    }
+
+    /// <summary>
     /// 在此文件进行初始化方法的编写。
     /// </summary>
     public partial class HS_MeasCtrlDevice
@@ -38,6 +56,8 @@ namespace LabMCESystem.Servers.HS
 
         public const string HeaterHMIGroupName = "HeaterHMIGroup";
 
+        public const string PLCGetHMIGroupName = "HMIGetGroup";
+
         public OPCGroup DIGroup { get; private set; } = new OPCGroup(DIGroupName);
 
         public OPCGroup DOHMISetGroup { get; private set; } = new OPCGroup(DOHMISetGroupName);
@@ -58,9 +78,14 @@ namespace LabMCESystem.Servers.HS
 
         public OPCGroup HeaterHMIGroup { get; private set; } = new OPCGroup(HeaterHMIGroupName);
 
+        public OPCGroup PLCHMIGetGroup { get; set; } = new OPCGroup(PLCGetHMIGroupName);
+
         //零散设备通道 这此通道只进行了创建 并未添加进行设备组。
         Dictionary<string, Channel> _disChannels = new Dictionary<string, Channel>();
-
+        /// <summary>
+        /// PLC 写入HMI get通道。
+        /// </summary>
+        List<FeedbackChannel> _plcGetChls = new List<FeedbackChannel>();
         /// <summary>
         /// 初始化PLC中的DI O的状态通道。
         /// </summary>
@@ -678,6 +703,24 @@ namespace LabMCESystem.Servers.HS
             sch.Controller = exr;
             _executerMap.Add(sch.Label, exr);
 
+            sch.Execute += (sender, e) =>
+            {
+                exr.ExecuteBegin();
+            };
+
+            exr.ExecuteChanged += (sender, e) =>
+            {
+                var pulseExe = sender as SimplePulseExecuter;
+                if (pulseExe != null)
+                {
+                    FanHMISetGroup.Write(pulseExe.DesignMark,
+                        pulseExe.NextPulseBit == PulseBit.HighBit ? true : false);
+#if DEBUG
+                    Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.NextPulseBit}. ");
+#endif
+                }
+            };
+
             FanHMISetGroup.AddSubChannel(sch);
             /*---------------------------*/
 
@@ -686,9 +729,27 @@ namespace LabMCESystem.Servers.HS
             sch.Prompt = "FJ_HMI_STOP";
             sch.Summary = "风机停止";
 
-            exr = new DigitalExecuter() { DesignMark = "FJ_HMI_STOP" };
+            exr = new SimplePulseExecuter() { DesignMark = "FJ_HMI_STOP" };
             sch.Controller = exr;
             _executerMap.Add(sch.Label, exr);
+
+            sch.Execute += (sender, e) =>
+            {
+                exr.ExecuteBegin();
+            };
+
+            exr.ExecuteChanged += (sender, e) =>
+            {
+                var pulseExe = sender as SimplePulseExecuter;
+                if (pulseExe != null)
+                {
+                    FanHMISetGroup.Write(pulseExe.DesignMark,
+                        pulseExe.NextPulseBit == PulseBit.HighBit ? true : false);
+#if DEBUG
+                    Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.NextPulseBit}. ");
+#endif
+                }
+            };
 
             FanHMISetGroup.AddSubChannel(sch);
             /*---------------------------*/
@@ -1161,7 +1222,187 @@ namespace LabMCESystem.Servers.HS
             sensor.SensorNumber = "TT03 000001";
 
             mCh.Collector = sensor;
+
+            // 一冷出口空气压力
+            mCh = dev.CreateAIChannelIn("PT04");
+            mCh.Unit = "KPa";
+            mCh.Prompt = "05_Ch3";
+            mCh.Summary = "一冷出口空气压力";
+            mCh.Range = new QRange(0, 1000);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor.Unit = "KPa";
+            sensor.Label = "PT04";
+            sensor.SensorNumber = "PT04 000001";
+
+            mCh.Collector = sensor;
+            // 一冷出口空气温度
+            mCh = dev.CreateAIChannelIn("TT04");
+            mCh.Unit = "℃";
+            mCh.Prompt = "04_Ch1";
+            mCh.Summary = "一冷出口空气温度";
+            mCh.Range = new QRange(0, 100);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor.Unit = "℃";
+            sensor.Label = "TT04";
+            sensor.SensorNumber = "TT04 000001";
+
+            mCh.Collector = sensor;
+
+            // 一冷出口空气压力
+            mCh = dev.CreateAIChannelIn("PT05");
+            mCh.Unit = "KPa";
+            mCh.Prompt = "05_Ch3";
+            mCh.Summary = "一冷出口空气压力";
+            mCh.Range = new QRange(0, 1000);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor.Unit = "KPa";
+            sensor.Label = "PT05";
+            sensor.SensorNumber = "PT05 000001";
+
+            mCh.Collector = sensor;
+            // 一冷出口空气温度
+            mCh = dev.CreateAIChannelIn("TT05");
+            mCh.Unit = "℃";
+            mCh.Prompt = "04_Ch1";
+            mCh.Summary = "一冷出口空气温度";
+            mCh.Range = new QRange(0, 100);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor.Unit = "℃";
+            sensor.Label = "TT05";
+            sensor.SensorNumber = "TT05 000001";
+
+            mCh.Collector = sensor;
+
+            // 一冷出口空气压力
+            mCh = dev.CreateAIChannelIn("PT06");
+            mCh.Unit = "KPa";
+            mCh.Prompt = "05_Ch3";
+            mCh.Summary = "一冷出口空气压力";
+            mCh.Range = new QRange(0, 1000);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor.Unit = "KPa";
+            sensor.Label = "PT06";
+            sensor.SensorNumber = "PT06 000001";
+
+            mCh.Collector = sensor;
+            // 一冷出口空气温度
+            mCh = dev.CreateAIChannelIn("TT06");
+            mCh.Unit = "℃";
+            mCh.Prompt = "04_Ch1";
+            mCh.Summary = "一冷出口空气温度";
+            mCh.Range = new QRange(0, 100);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor.Unit = "℃";
+            sensor.Label = "TT06";
+            sensor.SensorNumber = "TT06 000001";
+
+            mCh.Collector = sensor;
+
+            // 一冷出口空气压力
+            mCh = dev.CreateAIChannelIn("PT07");
+            mCh.Unit = "KPa";
+            mCh.Prompt = "05_Ch3";
+            mCh.Summary = "一冷出口空气压力";
+            mCh.Range = new QRange(0, 1000);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor.Unit = "KPa";
+            sensor.Label = "PT07";
+            sensor.SensorNumber = "PT07 000001";
+
+            mCh.Collector = sensor;
+            // 一冷出口空气温度
+            mCh = dev.CreateAIChannelIn("TT07");
+            mCh.Unit = "℃";
+            mCh.Prompt = "04_Ch1";
+            mCh.Summary = "一冷出口空气温度";
+            mCh.Range = new QRange(0, 100);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor.Unit = "℃";
+            sensor.Label = "TT07";
+            sensor.SensorNumber = "TT03 000001";
+
+            mCh.Collector = sensor;
+
+            // 一冷出口空气压力
+            mCh = dev.CreateAIChannelIn("PT08");
+            mCh.Unit = "KPa";
+            mCh.Prompt = "05_Ch3";
+            mCh.Summary = "一冷出口空气压力";
+            mCh.Range = new QRange(0, 1000);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor.Unit = "KPa";
+            sensor.Label = "PT08";
+            sensor.SensorNumber = "PT03 000001";
+
+            mCh.Collector = sensor;
+            // 一冷出口空气温度
+            mCh = dev.CreateAIChannelIn("TT08");
+            mCh.Unit = "℃";
+            mCh.Prompt = "04_Ch1";
+            mCh.Summary = "一冷出口空气温度";
+            mCh.Range = new QRange(0, 100);
+
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor.Unit = "℃";
+            sensor.Label = "TT08";
+            sensor.SensorNumber = "TT08 000001";
+
+            mCh.Collector = sensor;
             #endregion
+
+            // 使用已有的通道创建虚拟的 压差 与 散热率通道。
+            mCh = dev.CreateAIChannelIn("RL_PRESSUREDIFF");
+            mCh.Prompt = "RL_PRE_DIFF";
+            mCh.Summary = "热边压差";
+            mCh.Unit = "KPa";
+
+            var cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["PT0108"]);
+            cov.Channels.Add(dev["PT0109"]);
+            cov.Algorithm = (converter) =>
+            {
+                var pt0108 = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt0108 != null);
+                var pt0109 = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt0109 != null);
+                return pt0108.MeasureValue - pt0109.MeasureValue;
+            };
+
+            mCh.Collector = cov; 
+
+            mCh = dev.CreateAIChannelIn("EL_PRESSUREDIFF");
+            mCh.Prompt = "EL_PRE_DIFF";
+            mCh.Summary = "二冷压差";
+            mCh.Unit = "KPa";
+
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["PT0107"]);
+            cov.Channels.Add(dev["PT0110"]);
+            cov.Algorithm = (converter) =>
+            {
+                var pt0107 = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt0107 != null);
+                var pt0110 = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt0110 != null);
+                return pt0107.MeasureValue - pt0110.MeasureValue;
+            };
+
+            mCh.Collector = cov;
+
+            mCh = dev.CreateAIChannelIn("HEAT_EMISS_EFFIC");
+            mCh.Prompt = "HEAT_EMISS_EFFIC";
+            mCh.Summary = "散热效率";
+
+
         }
 
         /// <summary>
@@ -1386,7 +1627,7 @@ namespace LabMCESystem.Servers.HS
 
             AnalogueMeasureChannel amc;
             // 风机变频器转速反馈 控制
-            amc = dev.CreateAIChannelIn("风机变频器电机转速反馈");
+            amc = dev.CreateAIChannelIn("MOTOSPEED_HMI");
             amc.Unit = "r/s";
             amc.Prompt = "HMI.MOTOSPEED_HMI";
             amc.Range = new QRange(0, 5000);
@@ -1396,7 +1637,7 @@ namespace LabMCESystem.Servers.HS
             /*---------------------------*/
 
             // 风机变频器电流反馈
-            amc = dev.CreateAIChannelIn("风机变频器电机电流反馈");
+            amc = dev.CreateAIChannelIn("MOTOCURRENT_HMI");
             amc.Unit = "A";
             amc.Range = new QRange(0, 10);
             amc.Summary = "风机变频器电机电流反馈";
@@ -1408,7 +1649,7 @@ namespace LabMCESystem.Servers.HS
             #region 风机仪表箱
 
             // 风机前轴承温度TT1
-            amc = dev.CreateAIChannelIn("风机电机前轴承温度TT1");
+            amc = dev.CreateAIChannelIn("FJ_QZC_TT_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.FJ_QZC_TT_HMI";
             amc.Range = new QRange(0, 300);
@@ -1417,7 +1658,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机后轴承温度TT2");
+            amc = dev.CreateAIChannelIn("FJ_HZC_TT_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.FJ_HZC_TT_HMI";
             amc.Range = new QRange(0, 300);
@@ -1426,7 +1667,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机绕组U温度TT3");
+            amc = dev.CreateAIChannelIn("FJ_WINDING_U_TT_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.FJ_WINDING_U_TT_HMI";
             amc.Range = new QRange(0, 300);
@@ -1435,7 +1676,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机绕组V温度TT4");
+            amc = dev.CreateAIChannelIn("FJ_WINDING_V_TT_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.FJ_WINDING_V_TT_HMI";
             amc.Range = new QRange(0, 300);
@@ -1444,7 +1685,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机绕组W温度TT5");
+            amc = dev.CreateAIChannelIn("FJ_WINDING_W_TT_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.FJ_WINDING_W_TT_HMI";
             amc.Range = new QRange(0, 300);
@@ -1453,25 +1694,49 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机前轴振动");
+            amc = dev.CreateAIChannelIn("FJ_Q_ZD_HMI");
             amc.Prompt = "HMI.FJ_Q_ZD_HMI";
             amc.Summary = "风机电机前轴振动";
 
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("风机电机后轴振动");
+            amc = dev.CreateAIChannelIn("FJ_H_ZD_HMI");
             amc.Prompt = "HMI.FJ_H_ZD_HMI";
             amc.Summary = "风机电机后轴振动";
 
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            var fpsetch = dev.CreateAOChannelIn("风机变频器频率设定");
+            var fpsetch = dev.CreateFeedbackChannelIn("FJ_PL_SET_HMI");
+            fpsetch.Unit = "Hz";
+            fpsetch.Range = new QRange(0, 70);
             fpsetch.Prompt = "HMI.FJ_PL_SET_HMI";
             fpsetch.Summary = "风机变频器频率画面设定";
 
+            var fanFSetExe = new NoLogicExecuter(new mcLogic.SafeRange(0, 70));
+            fpsetch.Controller = fanFSetExe;
+            _executerMap.Add(fpsetch.Label, fanFSetExe);
+
+            fpsetch.Execute += (sender, e) =>
+            {
+                fanFSetExe.TargetVal = fpsetch.AOValue;
+                fanFSetExe.ExecuteBegin();
+            };
+            fpsetch.StopExecute += (sender, e) =>
+            {
+                fanFSetExe.TargetVal = 0;
+                fanFSetExe.ExecuteBegin();
+                fanFSetExe.ExecuteOver();
+            };
+
+            fanFSetExe.ExecuteChanged += (sender, e) =>
+            {
+                FanHMISetGroup.Write(fpsetch.Prompt, e);
+            };
+
             FanHMISetGroup.AddSubChannel(fpsetch);
+            FanHMIGroup.AddSubChannel(fpsetch);
             /*---------------------------*/
 
             #endregion
@@ -1480,7 +1745,7 @@ namespace LabMCESystem.Servers.HS
 
             #region 工作室温度
 
-            amc = dev.CreateAIChannelIn("工作室温度TT6-1");
+            amc = dev.CreateAIChannelIn("LAB_TT6-1_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.LAB_TT6-1_HMI";
             amc.Range = new QRange(0, 100);
@@ -1489,7 +1754,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("工作室温度TT6-2");
+            amc = dev.CreateAIChannelIn("LAB_TT6-2_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.LAB_TT6-2_HMI";
             amc.Range = new QRange(0, 100);
@@ -1498,7 +1763,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("工作室温度TT6-3");
+            amc = dev.CreateAIChannelIn("LAB_TT6-3_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.LAB_TT6-3_HMI";
             amc.Range = new QRange(0, 100);
@@ -1507,7 +1772,7 @@ namespace LabMCESystem.Servers.HS
             FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
-            amc = dev.CreateAIChannelIn("工作室温度TT6-4");
+            amc = dev.CreateAIChannelIn("LAB_TT6-4_HMI");
             amc.Unit = "℃";
             amc.Prompt = "HMI.LAB_TT6-4_HMI";
             amc.Range = new QRange(0, 100);
@@ -1540,8 +1805,7 @@ namespace LabMCESystem.Servers.HS
                 suc &= FanHMISetGroup.InitialGroup();
                 suc &= HeaterHMISetGroup.InitialGroup();
                 suc &= HeaterHMIGroup.InitialGroup();
-
-                EOVHMIGroup.Read();
+                suc &= PLCHMIGetGroup.InitialGroup();
             }
             return suc;
         }
@@ -1563,6 +1827,7 @@ namespace LabMCESystem.Servers.HS
                 FanHMISetGroup.CloseGroup();
                 HeaterHMISetGroup.CloseGroup();
                 HeaterHMIGroup.CloseGroup();
+                PLCHMIGetGroup.CloseGroup();
 
                 HS_PLCReadWriter.CloseOpcInteract();
             }
@@ -1570,7 +1835,7 @@ namespace LabMCESystem.Servers.HS
         }
 
         /// <summary>
-        /// 初始化所有电炉所需要的通道
+        /// 初始化所有电炉所需要的通道。
         /// </summary>
         private void InitialDianluChannels(LabDevice dev)
         {
@@ -1583,44 +1848,44 @@ namespace LabMCESystem.Servers.HS
             ch.Range = new QRange(0, 800);
             ch.Summary = "热路1#加热器";
             ch.Prompt = "HR1#H";
-            
+
             ch = dev.CreateFeedbackChannelIn("HotRoad2#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "热路2#加热器";
             ch.Prompt = "HR2#H";
-            
+
             ch = dev.CreateFeedbackChannelIn("HotRoad3#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "热路3#加热器";
             ch.Prompt = "HR3#H";
-            
+
             ch = dev.CreateFeedbackChannelIn("HotRoad4#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "热路4#加热器";
             ch.Prompt = "HR4#H";
-            
+
             ch = dev.CreateFeedbackChannelIn("HotRoad5#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "热路5#加热器";
             ch.Prompt = "HR5#H";
-            
+
             // 二冷边加热器 通道
             ch = dev.CreateFeedbackChannelIn("SecendCold1#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "二冷路1#号加热器";
             ch.Prompt = "SC1#H";
-            
+
             ch = dev.CreateFeedbackChannelIn("SecendCold2#Heater");
             ch.Unit = "℃";
             ch.Range = new QRange(0, 800);
             ch.Summary = "二冷路2#号加热器";
             ch.Prompt = "SC2#H";
-            
+
             // 加热器故障 运行/停止 远程/就地状态通道。
 
             // 热路1号加热器。
@@ -1633,7 +1898,7 @@ namespace LabMCESystem.Servers.HS
             heaterSt.Prompt = "RL_1#_RUN";
             heaterSt.Summary = "热路1#加热器运行/停止";
             HeaterHMIGroup.AddSubChannel(heaterSt);
-            
+
             heaterSt = dev.CreateStatusChannelIn("RL_1#_AUTO");
             heaterSt.Prompt = "RL_1#_AUTO";
             heaterSt.Summary = "热路1#加热器远程/就地";
@@ -1643,7 +1908,7 @@ namespace LabMCESystem.Servers.HS
             heaterSt.Prompt = "RL_1#HEATER_READY";
             heaterSt.Summary = "热路1#加热器准备好";
             HeaterHMIGroup.AddSubChannel(heaterSt);
-            
+
             /*---------------------------------------*/
 
             // 热路2号加热器。
@@ -1986,17 +2251,377 @@ namespace LabMCESystem.Servers.HS
         }
 
         /// <summary>
-        /// 初始化实验段风机变频器设备
+        /// 初始化实验段风机变频器设备。
         /// </summary>
         private void InitialFanDevice(LabDevice dev)
         {
             FeedbackChannel ch = dev.CreateFeedbackChannelIn("FirstColdFan");
-            ch.Unit = "℃";
-            ch.Range = new QRange(0, 30000);
-            HS_FirstColdFanDevice he = new HS_FirstColdFanDevice("FirstColdFan");
+            ch.Unit = "Hz";
+            ch.Prompt = "FanCtrl";
+            ch.Summary = "风机控制";
+
+            ch.Range = new QRange(0, 70);
+
+            HS_FirstColdFanDevice he = new HS_FirstColdFanDevice(ch.Label);
+
+            he.SafeRange = new mcLogic.SafeRange(ch.Range.Low, ch.Range.Height);
+            he.FanFrequencePlcChannel = dev["FJ_PL_SET_HMI"] as FeedbackChannel;
+            he.FanStartChannel = dev["FJ_HMI_START"] as StatusOutputChannel;
+            he.FanStopChannel = dev["FJ_HMI_STOP"] as StatusOutputChannel;
+            he.FanReadyChannel = dev["FJ_READY"] as StatusChannel;
+            he.FanConnectionChannel = dev["FanRemoteConnection"] as StatusChannel;
+
             ch.Controller = he;
             _executerMap.Add(ch.Label, he);
+
+            ch.Execute += (sender, e) =>
+            {
+                he.TargetVal = ch.AOValue;
+                he.ExecuteBegin();
+            };
+
+            ch.StopExecute += (sender, e) =>
+            {
+                he.ExecuteOver();
+            };
         }
 
+        /// <summary>
+        /// 初始化需要向PLC写入的模拟量通道。
+        /// </summary>
+        private void InitialPLCGetChannels()
+        {
+            // 需要创建不加入设备的输出通道 并与采集通道匹配，将采集通道的采集值当作新建通道的输出值。
+
+            var getChl = LabDevice.CreateChannel(Device, "TT0101_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0101_GET";
+            getChl.Summary = "二冷温度 TT0101 上位机写入";
+            getChl.Collector = Device["TT0101"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0102_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0102_GET";
+            getChl.Summary = "二冷温度 TT0102 上位机写入";
+            getChl.Collector = Device["TT0102"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0103_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0103_GET";
+            getChl.Summary = "二冷温度 TT0103 上位机写入";
+            getChl.Collector = Device["TT0103"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0105_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0105_GET";
+            getChl.Summary = "二冷温度 TT0105 上位机写入";
+            getChl.Collector = Device["TT0105"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0108_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0108_GET";
+            getChl.Summary = "二冷温度 TT0108 上位机写入";
+            getChl.Collector = Device["TT0108"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0103_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0103_GET";
+            getChl.Summary = "二冷 压 力 PT0103 上位机写入";
+            getChl.Collector = Device["PT0103"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0105_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0105_GET";
+            getChl.Summary = "二冷 压 力 PT0105 上位机写入";
+            getChl.Collector = Device["PT0105"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0107_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0107_GET";
+            getChl.Summary = "二冷 压 力 PT0107 上位机写入";
+            getChl.Collector = Device["PT0107"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0110_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0110_GET";
+            getChl.Summary = "二冷 压 力 PT0110 上位机写入";
+            getChl.Collector = Device["PT0110"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0104_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0104_GET";
+            getChl.Summary = "热 路温度 TT0104 上位机写入";
+            getChl.Collector = Device["TT0104"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0106_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0106_GET";
+            getChl.Summary = "热 路温度 TT0106 上位机写入";
+            getChl.Collector = Device["TT0106"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT0107_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT0107_GET";
+            getChl.Summary = "热 路温度 TT0107 上位机写入";
+            getChl.Collector = Device["TT0107"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0104_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0104_GET";
+            getChl.Summary = "热 路 压 力 PT0104 上位机写入";
+            getChl.Collector = Device["PT0104"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0106_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0106_GET";
+            getChl.Summary = "热 路 压 力 PT0106 上位机写入";
+            getChl.Collector = Device["PT0106"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0108_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0108_GET";
+            getChl.Summary = "热 路 压 力 PT0108 上位机写入";
+            getChl.Collector = Device["PT0108"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT0109_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT0109_GET";
+            getChl.Summary = "热 路 压 力 PT0109 上位机写入";
+            getChl.Collector = Device["PT0109"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT01_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT01_GET";
+            getChl.Summary = "试验 段温度 TT01 上位机写入";
+            getChl.Collector = Device["TT01"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT02_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT02_GET";
+            getChl.Summary = "试验 段温度 TT02 上位机写入";
+            getChl.Collector = Device["TT02"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT03_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT03_GET";
+            getChl.Summary = "试验 段温度 TT03 上位机写入";
+            getChl.Collector = Device["TT03"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT04_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT04_GET";
+            getChl.Summary = "试验 段温度 TT04 上位机写入";
+            getChl.Collector = Device["TT04"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT05_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT05_GET";
+            getChl.Summary = "试验 段温度 TT05 上位机写入";
+            getChl.Collector = Device["TT05"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT06_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT06_GET";
+            getChl.Summary = "试验 段温度 TT06 上位机写入";
+            getChl.Collector = Device["TT06"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT07_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT07_GET";
+            getChl.Summary = "试验 段温度 TT07 上位机写入";
+            getChl.Collector = Device["TT07"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "TT08_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.TT08_GET";
+            getChl.Summary = "试验 段温度 TT08 上位机写入";
+            getChl.Collector = Device["TT08"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT01_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT01_GET";
+            getChl.Summary = "试验 段 压 力 PT01 上位机写入";
+            getChl.Collector = Device["PT01"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT02_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT02_GET";
+            getChl.Summary = "试验 段 压 力 PT02 上位机写入";
+            getChl.Collector = Device["PT02"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT03_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT03_GET";
+            getChl.Summary = "试验 段 压 力 PT03 上位机写入";
+            getChl.Collector = Device["PT03"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT04_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT04_GET";
+            getChl.Summary = "试验 段 压 力 PT04 上位机写入";
+            getChl.Collector = Device["PT04"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT05_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT05_GET";
+            getChl.Summary = "试验 段 压 力 PT05 上位机写入";
+            getChl.Collector = Device["PT05"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT06_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT06_GET";
+            getChl.Summary = "试验 段 压 力 PT06 上位机写入";
+            getChl.Collector = Device["PT06"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT07_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT07_GET";
+            getChl.Summary = "试验 段 压 力 PT07 上位机写入";
+            getChl.Collector = Device["PT07"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "PT08_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.PT08_GET";
+            getChl.Summary = "试验 段 压 力 PT08 上位机写入";
+            getChl.Collector = Device["PT08"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "FT0101_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.FT0101_GET";
+            getChl.Summary = "低 压试验 管路流量 FT0101 上位机写 入";
+            getChl.Collector = Device["FT0101"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "FT0102_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.FT0102_GET";
+            getChl.Summary = "低 压试验 管路流量 FT0102 上位机写 入";
+            getChl.Collector = Device["FT0102"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+
+            getChl = LabDevice.CreateChannel(Device, "FT0103_GET", ExperimentStyle.Feedback) as FeedbackChannel;
+            getChl.Prompt = "HMI.FT0103_GET";
+            getChl.Summary = "低 压试验 管路流量 FT0103 上位机写 入";
+            getChl.Collector = Device["FT0103"];
+
+            _plcGetChls.Add(getChl);
+            PLCHMIGetGroup.AddSubChannel(getChl);
+            //-----------------------------------
+        }
+        /// <summary>
+        /// 向PLC写入HMI get通道。
+        /// </summary>
+        private void WriteToPLCGetChannels()
+        {
+            foreach (var getCh in _plcGetChls)
+            {
+                var pCh = getCh.Collector as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pCh != null);
+
+                getCh.AOValue = pCh.MeasureValue;
+            }
+
+            PLCHMIGetGroup.Write();
+        }
     }
 }

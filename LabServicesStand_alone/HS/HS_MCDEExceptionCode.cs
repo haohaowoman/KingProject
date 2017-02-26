@@ -101,19 +101,19 @@ namespace LabMCESystem.Servers.HS
                 DealOpinion = "请立即关闭所有相关加热设备，并加大气体流量，以实现实验室快速降温。"
             };
 
-            var labTempTrigger = new OutRangeTrigger(Device["工作室温度TT6-1"] as IAnalogueMeasure);
+            var labTempTrigger = new OutRangeTrigger(Device["LAB_TT6-1_HMI"] as IAnalogueMeasure);
             labTempTrigger.InRange = new QRange(0, LabFaultTemprature);
             ces.Triggers.Add(labTempTrigger);
 
-            labTempTrigger = new OutRangeTrigger(Device["工作室温度TT6-2"] as IAnalogueMeasure);
+            labTempTrigger = new OutRangeTrigger(Device["LAB_TT6-2_HMI"] as IAnalogueMeasure);
             labTempTrigger.InRange = new QRange(0, LabFaultTemprature);
             ces.Triggers.Add(labTempTrigger);
 
-            labTempTrigger = new OutRangeTrigger(Device["工作室温度TT6-3"] as IAnalogueMeasure);
+            labTempTrigger = new OutRangeTrigger(Device["LAB_TT6-3_HMI"] as IAnalogueMeasure);
             labTempTrigger.InRange = new QRange(0, LabFaultTemprature);
             ces.Triggers.Add(labTempTrigger);
 
-            labTempTrigger = new OutRangeTrigger(Device["工作室温度TT6-4"] as IAnalogueMeasure);
+            labTempTrigger = new OutRangeTrigger(Device["LAB_TT6-4_HMI"] as IAnalogueMeasure);
             labTempTrigger.InRange = new QRange(0, LabFaultTemprature);
             ces.Triggers.Add(labTempTrigger);
 

@@ -58,6 +58,8 @@
             <UniformGrid Columns="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0101Watcher_BtnClick"></Button>
                 <Button Content="FT0102 PID 监控" Padding="10,20" Margin="10" Click="FT0102Watcher_BtnClick"></Button>
+                <Button Content="TT0105 PID 监控" Padding="10,20" Margin="10" Click="TT0105Watcher_BtnClick"></Button>
+                <Button Content="TT0106 PID 监控" Padding="10,20" Margin="10" Click="TT0106Watcher_BtnClick"></Button>
             </UniformGrid>
         </ContentControl>
 

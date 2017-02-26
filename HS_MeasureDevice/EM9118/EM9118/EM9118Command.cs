@@ -272,7 +272,7 @@ namespace EM9118
                     for (int i = 0; i < 6; i++)
                     {
                         tmp[i, c] = (short)((recv[p * 240 + c * 12 + i * 2 + 1] << 8 | recv[p * 240 + c * 12 + i * 2]) & 0xffff);
-                        if ((tmp[i, c] & 0xF000) == 0xF000)
+                        if ((tmp[i, c] & 0xFF00) == 0xFF00)
                         {
                             // 出现错误代码。                            
                             if (c == 0)
@@ -307,7 +307,7 @@ namespace EM9118
                         {
                             // 排除掉较大跳变值。
                             int ct = lbs - saveData[i, (index - 1) % _moveWndWidth];
-                            if (ct >= 4096/*saveData[i, (index - 1) % _moveWndWidth] / 2*/ || ct <= -4096/*-saveData[i, (index - 1) % _moveWndWidth] / 2*/)
+                            if (ct >= 9600/*saveData[i, (index - 1) % _moveWndWidth] / 2*/ || ct <= -9600/*-saveData[i, (index - 1) % _moveWndWidth] / 2*/)
                             {
 #if DEBUG
                                 Console.WriteLine($"Card {commondIP} channel {i} data {lbs} is error re={saveData[i, (index - 1) % _moveWndWidth]} at {DateTime.Now.ToShortTimeString()}.");

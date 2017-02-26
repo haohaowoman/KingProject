@@ -80,7 +80,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                         rt = FlowTemplate;
                                         break;
                                     default:
-                                        rt = DefualtMeasureDataTemplate;
+                                        rt = FlowTemplate;
                                         break;
                                 }
                             }

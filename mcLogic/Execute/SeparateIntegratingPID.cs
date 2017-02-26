@@ -33,7 +33,7 @@ namespace mcLogic.Execute
             bool br = base.OnPIDMath(ref eVal);
             if (br && IsSpearateIntegrating && ExecuteTCount >= 1)
             {
-                // 在些减去积分项的影响
+                // 在此减去积分项的影响
                 double ki, kd;
                 Param.GetPostionPIDParam(out ki, out kd);
                 eVal = eVal - ki * EIntegrating;

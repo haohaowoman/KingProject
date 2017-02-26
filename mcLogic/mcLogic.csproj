@@ -52,6 +52,7 @@
     <Compile Include="Execute\IncrementPIDExecuter.cs" />
     <Compile Include="Execute\IPeriodExecute.cs" />
     <Compile Include="Execute\IPredicateExecute.cs" />
+    <Compile Include="Execute\NoLogicExecuter.cs" />
     <Compile Include="Execute\PeriodExecuter.cs" />
     <Compile Include="Execute\PeriodStepExecuter.cs" />
     <Compile Include="Execute\PIDExecuterBase.cs" />

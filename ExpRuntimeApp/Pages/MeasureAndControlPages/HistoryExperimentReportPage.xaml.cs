@@ -24,5 +24,10 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         {
             InitializeComponent();
         }
+
+        private void LookAllButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

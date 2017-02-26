@@ -58,5 +58,23 @@ namespace ExpRuntimeApp.UserControls
                 srvRes.HS_Device.ShowFT0102_PIDWatcher();
             }
         }
+
+        private void TT0105Watcher_BtnClick(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null)
+            {
+                srvRes.HS_Device.ShowTT0105PIDWatcher();
+            }
+        }
+
+        private void TT0106Watcher_BtnClick(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null)
+            {
+                srvRes.HS_Device.ShowTT0106PIDWatcher();
+            }
+        }
     }
 }

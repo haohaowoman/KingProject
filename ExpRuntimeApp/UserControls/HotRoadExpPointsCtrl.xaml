@@ -63,15 +63,15 @@
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[].MeasureValue"/>
+                    <Binding Path="MdExperPoints[].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
-                    <Binding Path="MdExperPoints[热边空气流量].Unit"/>
+                    <Binding Path="MdExperPoints[热边压差].MeasureValue"/>
+                    <Binding Path="MdExperPoints[热边压差].Unit"/>
                 </MultiBinding>
             </TextBox>
         </UniformGrid>

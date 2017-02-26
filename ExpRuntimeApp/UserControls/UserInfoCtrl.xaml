@@ -13,9 +13,9 @@
 
         <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
             <TextBlock Text="姓名:" Margin="5,3"/>
-            <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True"/>
+            <TextBox Margin="5,3" MinWidth="140" MaxWidth="250" Text="{Binding Path=UserName}"/>
             <TextBlock Text="工号:" Margin="5,3"/>
-            <TextBox Margin="5,3" />
+            <TextBox Margin="5,3"  Text="{Binding Path=UserID}"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

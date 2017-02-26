@@ -104,7 +104,8 @@
                                                      />
                                 <Button DockPanel.Dock="Left" Margin="3" Padding="8,5" VerticalAlignment="Center"
                                         Content="确定"
-                                        Click="EovAOBtn_Click"/>
+                                        Click="EovAOBtn_Click"
+                                        />
                             </DockPanel>
                         </ItemsControl>
 

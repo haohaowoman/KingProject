@@ -133,27 +133,27 @@
 
             <ToggleButton Canvas.Left="10" Canvas.Top="21" 
                           Style="{DynamicResource StatusSwitchLight}"
-                          IsChecked="{Binding Path=MdChannels[风机控制电源合闸].Status}"
+                          IsChecked="{Binding Path=MdChannels[风机控制电源合闸].Status,Mode=OneWay}"
                           ToolTip="{Binding MdChannels[风机控制电源合闸].Summary}"/>
             <ToggleButton Canvas.Left="42" Canvas.Top="21" 
                           Style="{DynamicResource StatusSwitchLight}"
-                          IsChecked="{Binding Path=MdChannels[风机远程控制].Status}"
+                          IsChecked="{Binding Path=MdChannels[风机远程控制].Status,Mode=OneWay}"
                           ToolTip="{Binding MdChannels[风机远程控制].Summary}"/>
             <ToggleButton Canvas.Left="71" Canvas.Top="21" 
                           Name="BeRun"
             	Style="{DynamicResource StatusSwitchLight}"
-            	IsChecked="{Binding MdChannels[风机变频器运行].Status}"
+            	IsChecked="{Binding MdChannels[风机变频器运行].Status,Mode=OneWay}"
                           ToolTip="{Binding MdChannels[风机变频器运行].Summary}"
                           >
             </ToggleButton>
             <ToggleButton Canvas.Left="10" Canvas.Top="61" 
             	Style="{DynamicResource ErrorStatusLight}"
-            	IsChecked="{Binding MdChannels[风机变频器故障].Status}"
+            	IsChecked="{Binding MdChannels[风机变频器故障].Status,Mode=OneWay}"
                           ToolTip="{Binding MdChannels[风机变频器故障].Summary}"
                           Height="54" Width="24"/>
             <ToggleButton Canvas.Left="71" Canvas.Top="61" 
             	Style="{DynamicResource ErrorStatusLight}"
-            	IsChecked="{Binding MdChannels[风机报警].Status}" 
+            	IsChecked="{Binding MdChannels[风机报警].Status, Mode=OneWay}" 
                           ToolTip="{Binding MdChannels[风机报警].Summary}"
                           Height="54" Width="24"/>
 
@@ -195,18 +195,24 @@
         </Canvas>
         <Path Grid.Column="1" Data="M12.505747,3.2528736 C11.245027,3.2528736 8.0536129,5.5077151 6.5725991,7.1980337 4.676902,9.3616418 3.9350075,11.995393 4.7011494,12.666667 5.4672908,13.33794 6.1847627,9.9222283 8.0804598,7.7586207 9.9761574,5.5950121 10.879494,5.3033747 12.988506,4.4597701 15,3.6551724 13.149425,3.2528736 12.505747,3.2528736 z M15,1 C22.731987,1 29,7.2680135 29,15 29,22.731987 22.731987,29 15,29 7.2680135,29 1,22.731987 1,15 1,7.2680135 7.2680135,1 15,1 z" Fill="#FF1F1F23" Height="30" Margin="0,0,16,25" Stretch="Fill" Stroke="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="30"/>
         <Rectangle Grid.Column="1" Fill="#FF161717" HorizontalAlignment="Left" Margin="0,0,0,3" Grid.Row="2" Stroke="#FF171212" Width="5"/>
-        <metro:ToggleSwitchButton x:Name="FanPowerOnBtn" Grid.Column="1" Margin="47,0,51,25" VerticalAlignment="Bottom" Width="Auto" Height="30" ToolTip="控制风机启动/停止"
-                                  Click="FanPowerOnBtn_Click"/>
+        <metro:ToggleSwitchButton x:Name="FanPowerOnBtn" Grid.Column="1" Margin="47,0,51,25" VerticalAlignment="Bottom" Width="Auto" Height="30"
+                                  Click="FanPowerOnBtn_Click"
+                                  Command="{Binding Path=ExpPointOutputStopCommand}"
+                                  CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"
+                ToolTip="启动"/>
         <Rectangle Grid.Column="1" Margin="5,10,14.333,82.667" RadiusY="5" Grid.Row="2" RadiusX="5" Stroke="#FF342F2F" Fill="#FF8D9191" StrokeThickness="2"/>
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="36.333" Margin="10,15,0,0" Grid.Row="2" IsReadOnly="True"
-                 Text="{Binding MdChannels[风机变频器电机转速反馈].Value,StringFormat={}{0:F0} r/min,Mode=OneWay}" VerticalAlignment="Top" Width="87" FontSize="18.667" FontWeight="Bold" FontStyle="Italic"
+                 Text="{Binding MdChannels[FirstColdFan].Value,StringFormat={}{0:F1}Hz,Mode=OneWay}" VerticalAlignment="Top" Width="87" FontSize="18.667" FontWeight="Bold" FontStyle="Italic"
                  />
 
         <metro:NumericUpDown Margin="10,56.333,51,91.667" Grid.Column="1" Grid.Row="2" UpDownButtonsWidth="15"
                              Minimum="0"
-                             Value="{Binding Path=MdChannels[风机变频器频率设定].AOValue,UpdateSourceTrigger=LostFocus}" FontSize="16"/>
+                             Value="{Binding Path=MdChannels[FirstColdFan].AOValue,UpdateSourceTrigger=LostFocus}" FontSize="16"/>
         <Button x:Name="button" Grid.Column="1" HorizontalAlignment="Left" Margin="98.756,56.333,0,0" Grid.Row="2" VerticalAlignment="Top" Width="31" Height="30"
-                metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand">
+                metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand"
+                Command="{Binding Path=ExpPointOutputCommand}"
+                CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"
+                ToolTip="启动">
             <Button.Content>
                 <Image>
                     <Image.Source>
@@ -224,13 +230,25 @@
                               Content="..." Background="{x:Null}">
             <metro:DropDownButton.Items>
                 <TextBox Style="{StaticResource HeaderTextBox}"
+                         local:TextHeaderHelper.TextHeader="风机变频器电机转速反馈"
+                         IsReadOnly="True"
+                         >
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0:F1} {1}">
+                            <Binding Path="MdChannels[MOTOSPEED_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[MOTOSPEED_HMI].Unit"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBox Style="{StaticResource HeaderTextBox}"
                          local:TextHeaderHelper.TextHeader="风机变频器电机电流反馈"
                          IsReadOnly="True"
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机变频器电机电流反馈].MeasureValue"/>
-                            <Binding Path="MdChannels[风机变频器电机电流反馈].Unit"/>
+                            <Binding Path="MdChannels[MOTOCURRENT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[MOTOCURRENT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -241,8 +259,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机前轴承温度TT1].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机前轴承温度TT1].Unit"/>
+                            <Binding Path="MdChannels[FJ_QZC_TT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_QZC_TT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -253,8 +271,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机后轴承温度TT2].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机后轴承温度TT2].Unit"/>
+                            <Binding Path="MdChannels[FJ_HZC_TT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_HZC_TT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -265,8 +283,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机绕组U温度TT3].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机绕组U温度TT3].Unit"/>
+                            <Binding Path="MdChannels[FJ_WINDING_U_TT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_WINDING_U_TT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -277,8 +295,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机绕组V温度TT4].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机绕组V温度TT4].Unit"/>
+                            <Binding Path="MdChannels[FJ_WINDING_V_TT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_WINDING_V_TT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -288,8 +306,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机绕组W温度TT5].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机绕组W温度TT5].Unit"/>
+                            <Binding Path="MdChannels[FJ_WINDING_W_TT_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_WINDING_W_TT_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -299,8 +317,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机前轴振动].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机前轴振动].Unit"/>
+                            <Binding Path="MdChannels[FJ_Q_ZD_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_Q_ZD_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>
@@ -310,8 +328,8 @@
                          >
                     <TextBox.Text>
                         <MultiBinding StringFormat="{}{0:F1} {1}">
-                            <Binding Path="MdChannels[风机电机后轴振动].MeasureValue"/>
-                            <Binding Path="MdChannels[风机电机后轴振动].Unit"/>
+                            <Binding Path="MdChannels[FJ_H_ZD_HMI].MeasureValue"/>
+                            <Binding Path="MdChannels[FJ_H_ZD_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
                 </TextBox>

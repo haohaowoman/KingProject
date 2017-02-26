@@ -36,6 +36,7 @@ namespace mcLogic.Execute
             bool bt = true;
             if (ExecutePredicate != null)
             {
+                eVal = TargetVal;
                 bt = ExecutePredicate.Invoke(this, ref eVal);
             }
             return bt;

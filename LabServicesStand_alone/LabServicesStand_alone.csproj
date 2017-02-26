@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
+    <Compile Include="HS\HS_Executers\FirstColdFIRQExecuter.cs" />
     <Compile Include="HS\HS_Executers\HS_FirstColdFanDevice.cs" />
     <Compile Include="HS\HS_Executers\HS_FIRQExecuter.cs" />
     <Compile Include="HS\HS_Executers\HS_HeaterContrller.cs" />

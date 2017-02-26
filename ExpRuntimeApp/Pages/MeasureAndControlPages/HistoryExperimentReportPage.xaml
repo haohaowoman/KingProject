@@ -27,7 +27,7 @@
             <metro:DateTimePicker Margin="5,3" MinWidth="200" VerticalAlignment="Center" FontSize="24"/>
 
             <Button Margin="5,3" Padding="8,3" VerticalAlignment="Center" Style="{DynamicResource SquareButtonStyle}"
-                    Content="查看全部"/>
+                    Content="查看全部" Click="LookAllButton_Click"/>
 
             <TextBox Margin="20,5" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource SearchMetroTextBox}"/>
         </StackPanel>
@@ -39,6 +39,9 @@
             
             <DataGrid Grid.Row="0" GridLinesVisibility="Horizontal">
                 <DataGrid.Columns>
+
+                    <DataGridHyperlinkColumn Header="试验数据文件"/>
+
                     <DataGridHyperlinkColumn Header="试验时间"/>
 
                     <DataGridTextColumn Header="产品型号"/>
@@ -48,11 +51,7 @@
                     <DataGridTextColumn Header="试验名称"/>
 
                     <DataGridTextColumn Header="试验人员"/>
-
-                    <DataGridTextColumn Header="试验结束时间"/>
-
-                    <DataGridTextColumn Header="试验数据文件"/>
-
+                   
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

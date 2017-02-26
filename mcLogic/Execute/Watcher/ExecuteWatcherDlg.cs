@@ -44,9 +44,10 @@ namespace mcLogic.Execute.Watcher
             {
                 PIDKpTextBox.Text = pid.Param.Kp.ToString();
                 PIDKiTextBox.Text = pid.Param.Ti.ToString();
-                PIDTdTextBox.Text = pid.Param.Td.ToString();                
-            }
-
+                PIDTdTextBox.Text = pid.Param.Td.ToString();
+                TsTextBox.Text = pid.Param.Ts.ToString();
+                TargetValueTextBox.Text = pid.TargetVal.ToString();
+            }            
             RefreshBtn_Click(sender, e);
         }
 
@@ -101,7 +102,9 @@ namespace mcLogic.Execute.Watcher
                 pidParam.Kp = Convert.ToDouble(PIDKpTextBox.Text);
                 pidParam.Ti = Convert.ToDouble(PIDKiTextBox.Text);
                 pidParam.Td = Convert.ToDouble(PIDTdTextBox.Text);
-
+                pidParam.Ts = Convert.ToDouble(TsTextBox.Text);
+                pidExe.PeriodInterval = Convert.ToDouble(PeriodTextBox.Text);
+                pidExe.TargetVal = Convert.ToDouble(TargetValueTextBox.Text);
                 if (pidExe.Enabled)
                 {
                     pidExe.ExecuteOver();
@@ -111,9 +114,15 @@ namespace mcLogic.Execute.Watcher
                 else
                 {
                     pidExe.Param = pidParam;
-                }                
+                }
+                                
             }
 
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            _watcher?.TargetExecuter?.Reset();
         }
     }
 }

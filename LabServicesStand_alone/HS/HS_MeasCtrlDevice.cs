@@ -39,7 +39,11 @@ namespace LabMCESystem.Servers.HS
         public const double Defualt_MinQ_HotRoad = 500;
         // 默认设置的二冷最小流量
         public const double Defualt_MinQ_SecendCold = 500;
-                
+
+        /// <summary>
+        /// 在电炉控制时的基础流量，在控制流量下对使用电炉数量计量的基本参数。
+        /// </summary>
+        static public double HeaterControlBaseFlow = 500;
         #region Fields
 
         // 通过通道名创建执行器的映射关系
@@ -125,15 +129,40 @@ namespace LabMCESystem.Servers.HS
             InitialMeasureChannels(dev);
 
             InitialPLCChannels(dev);
+                        
+            InitialStatusChannel(dev);
 
             InitialDianluChannels(dev);
 
             InitialFanDevice(dev);
 
-            InitialStatusChannel(dev);
+            InitialPLCGetChannels();
 
-            
             // 单独为FT0101 与 FT0102创建绑定执行器。
+
+            // 一冷流量控制
+            FeedbackChannel fFlow = dev["FT0103"] as FeedbackChannel;
+            System.Diagnostics.Debug.Assert(fFlow != null);
+
+            var fFlowExe = new FirstColdFIRQExecuter(0, new mcLogic.SafeRange(fFlow.Range.Low, fFlow.Range.Height));
+            fFlowExe.DesignMark = fFlow.Label;
+            fFlowExe.FIRQChannel = fFlow;
+            fFlowExe.FanDevChannel = dev["FirstColdFan"] as FeedbackChannel;
+
+            fFlow.Controller = fFlowExe;
+            _executerMap.Add(fFlow.Label, fFlowExe);
+
+            fFlow.Execute += (sender, e) =>
+            {
+                fFlowExe.TargetVal = fFlow.AOValue;
+                fFlowExe.ExecuteBegin();
+            };
+
+            fFlow.StopExecute += (sender, e) =>
+            {
+                fFlowExe.ExecuteOver();
+                fFlowExe.Reset();
+            };
 
             // 二冷
             Channel ch = dev["FT0101"];
@@ -294,6 +323,7 @@ namespace LabMCESystem.Servers.HS
                 elTempExecuter.StopHeatersOutput();
                 elTempExecuter.Reset();
             };
+            _executerMap.Add(elTemp.Label, elTempExecuter);
             //-------------------------------
             // 热路温度控制器 TT0106控制。
             var rlTemp = dev["TT0106"] as FeedbackChannel;
@@ -312,6 +342,8 @@ namespace LabMCESystem.Servers.HS
             rlTempExecuter.HeaterChannels.Add(dev["HotRoad4#Heater"] as FeedbackChannel);
             rlTempExecuter.HeaterChannels.Add(dev["HotRoad5#Heater"] as FeedbackChannel);
             rlTempExecuter.HeatersFromChannels();
+
+            _executerMap.Add(rlTemp.Label, rlTempExecuter);
 
             rlTemp.Execute += (sender, e) =>
             {
@@ -615,33 +647,26 @@ namespace LabMCESystem.Servers.HS
                 {
                     #region 读取 除数采箱与OPC AI之外的数据 .
 
-
-
-                    // 如果没有找到集合_measureValues的键值 则从PLC OPC服务器中读取数据。
-                    //switch (ch.Style)
-                    //{
-                    //    case ExperimentStyle.Measure:
-                    //        (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
-                    //        break;
-                    //    case ExperimentStyle.Control:
-                    //        ch.Value = ReadAnaloge(ch.Prompt);
-                    //        break;
-                    //    case ExperimentStyle.Feedback:
-                    //        (ch as IAnalogueMeasure).MeasureValue = ReadAnaloge(ch.Prompt);
-                    //        break;
-                    //    case ExperimentStyle.Status:
-                    //        (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
-                    //        break;
-                    //    case ExperimentStyle.StatusControl:
-                    //        (ch as IStatusExpress).Status = ReadStatus(ch.Prompt);
-                    //        break;
-                    //    default:
-                    //        ch.Value = ReadAnaloge(ch.Prompt);
-                    //        break;
-                    //} 
+                    // 如果通道的collecter属性是组合通道转换则赋值。
+                    var multiCh = ch as AnalogueMeasureChannel;
+                    if (multiCh != null)
+                    {
+                        var cov = multiCh.Collector as MultipelChannelConverter;
+                        if (cov != null)
+                        {
+                            multiCh.MeasureValue = cov.Converte();
+                        }
+                    }
+                    
                     #endregion
 
                 }
+            }
+
+            // 2 秒向PLC写入一次测量数据。
+            if (_updatedCount % 7 == 0)
+            {
+                WriteToPLCGetChannels();
             }
 
             _updatedCount++;
@@ -685,6 +710,18 @@ namespace LabMCESystem.Servers.HS
         public void ShowFT0102_PIDWatcher()
         {
             mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["FT0102"]);
+            watcher.ShowWatcherDialog();
+        }
+
+        public void ShowTT0105PIDWatcher()
+        {
+            mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["TT0105"]);
+            watcher.ShowWatcherDialog();
+        }
+
+        public void ShowTT0106PIDWatcher()
+        {
+            mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["TT0106"]);
             watcher.ShowWatcherDialog();
         }
         #endregion

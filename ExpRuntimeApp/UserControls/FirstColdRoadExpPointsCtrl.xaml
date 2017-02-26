@@ -63,8 +63,8 @@
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
                 <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[一冷空气出口压力].MeasureValue"/>
-                    <Binding Path="MdExperPoints[一冷空气出口压力].Unit"/>
+                    <Binding Path="MdExperPoints[LAB_TT6-1_HMI].MeasureValue"/>
+                    <Binding Path="MdExperPoints[LAB_TT6-1_HMI].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">

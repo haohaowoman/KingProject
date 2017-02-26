@@ -61,21 +61,64 @@
             <local:HS_TemperatureSensor Height="96" Canvas.Left="1575" Canvas.Top="466" Width="176" TemperatureChannel="{Binding MdChannels[TT01]}"/>
             <local:EOVCtrlControl Height="123" Canvas.Left="1458" Canvas.Top="844" Width="230" EOVChannel="{Binding MdChannels[PV0109]}"/>
             <Path Data="M44.162998,1.5 L391.163,1.5 C402.20868,1.4999973 411.163,10.454302 411.163,21.499999 L411.163,33.60391 412.38361,33.157155 C414.2624,32.572797 416.25992,32.257997 418.331,32.257997 L419.163,32.257997 C430.20868,32.257997 439.163,41.2123 439.163,52.257997 L439.163,195.63099 C439.163,206.67669 430.20868,215.63099 419.163,215.63099 L418.331,215.63099 C416.25992,215.63099 414.2624,215.31619 412.38361,214.73184 L411.163,214.28508 411.163,228.5 C411.163,239.5457 402.20868,248.5 391.163,248.5 L44.162998,248.5 C33.117305,248.5 24.163,239.5457 24.162999,228.5 L24.162999,215.53854 22.332003,215.63099 21.499999,215.63099 C10.454305,215.63099 1.5,206.67669 1.5,195.63099 L1.5,52.257997 C1.5,41.2123 10.454305,32.257997 21.499999,32.257989 L22.332003,32.257989 24.162999,32.35045 24.162999,21.499999 C24.163,10.454302 33.117305,1.4999973 44.162998,1.5 z" Fill="#FFD1D8DA" Height="250" Canvas.Left="1115.668" Stretch="Fill" Stroke="Black" StrokeThickness="3" Canvas.Top="348" Width="440.664"/>
-            <TextBlock x:Name="textBlock_Copy1" Height="30" Canvas.Left="1232" TextWrapping="Wrap" Text="产品" Canvas.Top="375.627" Width="150" FontSize="24"/>
             <Canvas Height="56" Canvas.Left="617.666" Canvas.Top="658" Width="207.334">
-                <TextBlock x:Name="textBlock1" Height="18.333" TextWrapping="Wrap" Canvas.Top="3.335" Width="76.333"><Run Text="热"/><Run Text="路温度控制"/></TextBlock>
-
-
-                <Custom:NumericUpDown Height="9" Canvas.Left="81.333" Width="120.333"/>
-                <Button x:Name="button" Content="确定" Height="12" Canvas.Left="74.666" Canvas.Top="31" Width="61"/>
-                <Button x:Name="button_Copy1" Content="停止" Height="12" Canvas.Left="146.334" Canvas.Top="31" Width="61"/>
+                <TextBlock x:Name="textBlock1" Height="19" TextWrapping="Wrap" Canvas.Top="7" Width="77"><Run Text="热"/><Run Text="路温度控制"/></TextBlock>
+                <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
+                                      Minimum="{Binding Path=MdExperPoints[热边空气进口温度].RangeLow}"
+                                      Maximum="{Binding Path=MdExperPoints[热边空气进口温度].RangeHigh}"
+                                      Value="{Binding Path=MdExperPoints[热边空气进口温度].MeasureValue}"
+                                      StringFormat="{}{0:F1} ℃"/>
+                <Button x:Name="button" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
+                        Command="{Binding Path=ExpPointOutputCommand}"
+                        CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
+                <Button x:Name="button_Copy1" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
+                        Command="{Binding Path=ExpPointOutputStopCommand}"
+                        CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
 
 
             </Canvas>
-            <TextBlock x:Name="textBlock1_Copy" Height="18.333" TextWrapping="Wrap" Canvas.Left="627.666" Canvas.Top="86.21" Width="96.333"><Run Text="二冷"/><Run Text="路温度控制"/></TextBlock>
-            <Custom:NumericUpDown Height="9" Canvas.Left="627.666" Canvas.Top="111.21" Width="131.334"/>
-            <Button x:Name="button_Copy" Content="确定" Height="12" Canvas.Left="764" Canvas.Top="111.21" Width="61"/>
             <local:FirstColdFan VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="360" Width="300" Canvas.Left="10" Canvas.Top="220"/>
+            <Canvas Height="56" Canvas.Left="618" Canvas.Top="54" Width="207">
+                <TextBlock x:Name="textBlock2" Height="19" TextWrapping="Wrap" Canvas.Top="7" Width="77"><Run Text="二冷"/><Run Text="路温度控制"/></TextBlock>
+                <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
+                    Minimum="{Binding MdExperPoints[二冷空气进口温度].RangeLow}"
+                    Maximum="{Binding MdExperPoints[二冷空气进口温度].RangeHigh}"
+                    Value="{Binding MdExperPoints[二冷空气进口温度].MeasureValue}"
+                    StringFormat="{}{0:F1} ℃"/>
+                <Button x:Name="button1" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
+                    Command="{Binding ExpPointOutputCommand}"
+                    CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
+                <Button x:Name="button_Copy2" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
+                    Command="{Binding ExpPointOutputStopCommand}"
+                    CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
+
+
+            </Canvas>
+            <Canvas Height="155" Canvas.Left="617.666" Canvas.Top="743" Width="213">
+                <ToggleButton x:Name="toggleButton" Content="热路1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                    IsChecked="{Binding MdChannels[RL_1#_RUN].Status}"/>
+                <TextBlock x:Name="textBlock3" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
+                <ToggleButton x:Name="toggleButton_Copy" Content="热路2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                    IsChecked="{Binding MdChannels[RL_2#_RUN].Status}"/>
+                <ToggleButton x:Name="toggleButton_Copy1" Content="热路3#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                    IsChecked="{Binding MdChannels[RL_3#_RUN].Status}"/>
+                <ToggleButton x:Name="toggleButton_Copy2" Content="热路4#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                    IsChecked="{Binding MdChannels[RL_4#_RUN].Status}"/>
+                <ToggleButton x:Name="toggleButton_Copy3" Content="热路5#加热器" Height="64" Canvas.Left="142" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                    IsChecked="{Binding MdChannels[RL_5#_RUN].Status}"/>
+
+
+            </Canvas>
+            <Canvas Height="155" Canvas.Left="618" Canvas.Top="139" Width="213">
+                <ToggleButton x:Name="toggleButton1" Content="二冷1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                    IsChecked="{Binding MdChannels[ELL_1#_RUN].Status}"/>
+                <TextBlock x:Name="textBlock4" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
+                <ToggleButton x:Name="toggleButton_Copy4" Content="二冷2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                    IsChecked="{Binding MdChannels[ELL_2#_RUN].Status}"/>
+
+
+            </Canvas>
+            <TextBlock x:Name="textBlock_Copy1" Height="30" Canvas.Left="1232" TextWrapping="Wrap" Text="产品" Canvas.Top="375.627" Width="150" FontSize="24"/>
 
 
         </Canvas>
