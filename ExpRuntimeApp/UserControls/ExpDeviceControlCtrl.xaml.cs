@@ -40,13 +40,14 @@ namespace ExpRuntimeApp.UserControls
             //    } 
             //}
         }
-
+        //bool bt = false;
         private void FT0101Watcher_BtnClick(object sender, RoutedEventArgs e)
         {
             HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
             if (srvRes != null)
             {
                 srvRes.HS_Device.ShowFT0101_PIDWatcher();
+                //srvRes.HS_Device.BTest(bt = !bt);
             }
         }
 
@@ -74,6 +75,21 @@ namespace ExpRuntimeApp.UserControls
             if (srvRes != null)
             {
                 srvRes.HS_Device.ShowTT0106PIDWatcher();
+            }
+        }
+
+        private void JiLiang_BtnClick(object sender, RoutedEventArgs e)
+        {
+            var gbWnd = new ExpWindows.AnalogyValuesWnd();
+            gbWnd.Show();
+        }
+
+        private void Calibration_BtnClick(object sender, RoutedEventArgs e)
+        {
+            HS_Server srvRes = App.Current.TryFindResource("SingleService") as HS_Server;
+            if (srvRes != null)
+            {
+                srvRes.HS_Device.ShowCablibrationForm();
             }
         }
     }

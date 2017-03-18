@@ -28,7 +28,7 @@ namespace ExpRuntimeApp.DataReport
             /// <summary>
             /// 立即将当时数据添加进表。
             /// </summary>
-            public void AddRowNow()
+            public HS_DataReportRow AddRowNow()
             {
                 var nRow = NewHS_DataReportRow();
                 nRow._dateTime = DateTime.Now;
@@ -48,6 +48,8 @@ namespace ExpRuntimeApp.DataReport
                 nRow._elPressDiff = ElPressDiffChannel?.MeasureValue ?? 0;
                 nRow._heatEmissEffec = HeatEmissEffecChannel?.MeasureValue ?? 0;
                 AddHS_DataReportRow(nRow);
+
+                return nRow;
             }
         }
     }

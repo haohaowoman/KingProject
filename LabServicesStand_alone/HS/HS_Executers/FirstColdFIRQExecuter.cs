@@ -14,7 +14,9 @@ namespace LabMCESystem.Servers.HS.HS_Executers
     {
         public FirstColdFIRQExecuter(double targetVal, SafeRange srange) : base(targetVal, srange, new PIDParam()
         {
-
+            Ts = 5 * 60 * 1000,
+            Kp = 0.88,
+            Ti = 20 * 60 * 1000
         }
         )
         {
@@ -37,6 +39,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         private void FirstColdFIRQExecuter_ExecuteOvered(object obj)
         {
             Debug.Assert(FanDevChannel != null);
+            FanDevChannel.AOValue = 0;
             FanDevChannel.StopControllerExecute();
         }
 
@@ -44,7 +47,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         {
             Debug.Assert(FanDevChannel != null);
             // 风机输出流量对应的频率。
-            FanDevChannel.AOValue = Math.Min(executedVal * 50 / 19300.0, FanDevChannel.Range.Height);
+            FanDevChannel.AOValue = Math.Min(executedVal * 2500 / 20200.0, FanDevChannel.Range.Height);
 
             FanDevChannel.ControllerExecute();
         }

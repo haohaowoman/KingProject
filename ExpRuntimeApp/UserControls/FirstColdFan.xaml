@@ -34,10 +34,6 @@
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard x:Name="OnLoaded1_BeginStoryboard" Storyboard="{StaticResource OnLoaded1}"/>
         </EventTrigger>
-
-        <EventTrigger SourceName="FanPowerOnBtn" RoutedEvent="ToggleButton.Checked">
-
-        </EventTrigger>
     </UserControl.Triggers>
 
     <Grid Margin="2">
@@ -51,7 +47,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Path Data="M7.6872959,354.00344 C7.6872959,344.00325 7.6872959,194.00045 7.6872961,179.0001 7.6872962,171.929 2.6873496,153.99971 32.687287,143.99952 33.977083,143.56957 37.686844,138.99942 37.686844,128.99923 37.686844,122.06664 37.687085,114.88457 37.687285,98.998672 37.687473,83.998391 37.686844,58.997923 37.686844,43.997642 37.686844,22.644394 24.892958,8.9969864 27.686831,8.9969864 27.691818,8.9969864 71.569585,8.9970199 92.548796,8.9971515 107.89587,8.9972478 131.08771,8.9967367&#xD;&#xA;147.68728,8.9971514 162.68725,8.9975261 175.85633,9.7294904 187.95006,13.020385 198.30237,15.837412 204.66835,37.799653 208.09096,48.225126 210.68246,56.119022 211.16527,59.818958 218.16141,63.312873 238.30231,73.37137 269.28343,94.553102 283.61921,103.54686 294.79243,110.55655 293.46806,112.4737 293.36229,116.06718 292.68727,138.9995 292.01203,346.93532 292.68716,354.00344 z" Fill="#FF1F1F23" Margin="-0.812,9.5,9.725,0.5" Stretch="Fill" Stroke="Black" Grid.RowSpan="3" Grid.ColumnSpan="2" StrokeThickness="3"/>
+        <Path Data="M7.6872959,354.00344 C7.6872959,344.00325 7.6872959,194.00045 7.6872961,179.0001 7.6872962,171.929 2.6873496,153.99971 32.687287,143.99952 33.977083,143.56957 37.686844,138.99942 37.686844,128.99923 37.686844,122.06664 37.687085,114.88457 37.687285,98.998672 37.687473,83.998391 37.686844,58.997923 37.686844,43.997642 37.686844,22.644394 24.892958,8.9969864 27.686831,8.9969864 27.691818,8.9969864 71.569585,8.9970199 92.548796,8.9971515 107.89587,8.9972478 131.08771,8.9967367&#xD;&#xA;147.68728,8.9971514 162.68725,8.9975261 175.85633,9.7294904 187.95006,13.020385 198.30237,15.837412 204.66835,37.799653 208.09096,48.225126 210.68246,56.119022 211.16527,59.818958 218.16141,63.312873 238.30231,73.37137 269.28343,94.553102 283.61921,103.54686 294.79243,110.55655 293.46806,112.4737 293.36229,116.06718 292.68727,138.9995 292.01203,346.93532 292.68716,354.00344 z" Fill="#FF646665" Margin="-0.812,9.5,9.725,0.5" Stretch="Fill" Stroke="Black" Grid.RowSpan="3" Grid.ColumnSpan="2" StrokeThickness="3"/>
         <!--Fan-->
         <Border Grid.Row="2" Grid.Column="0" Padding="5" Margin="15"
                 BorderThickness="3" CornerRadius="3" BorderBrush="#FFB8B0B0" Background="#FF4B4747" 
@@ -129,7 +125,7 @@
 
         </Canvas>
         <Canvas Margin="40,20,3,33">
-            <Rectangle Stroke="Black" RadiusX="5" RadiusY="5" StrokeThickness="3" Height="125" Width="105" Fill="#FF423C3C"/>
+            <Rectangle Stroke="Black" RadiusX="5" RadiusY="5" StrokeThickness="3" Height="125" Width="105" Fill="#FF646665"/>
 
             <ToggleButton Canvas.Left="10" Canvas.Top="21" 
                           Style="{DynamicResource StatusSwitchLight}"
@@ -195,24 +191,22 @@
         </Canvas>
         <Path Grid.Column="1" Data="M12.505747,3.2528736 C11.245027,3.2528736 8.0536129,5.5077151 6.5725991,7.1980337 4.676902,9.3616418 3.9350075,11.995393 4.7011494,12.666667 5.4672908,13.33794 6.1847627,9.9222283 8.0804598,7.7586207 9.9761574,5.5950121 10.879494,5.3033747 12.988506,4.4597701 15,3.6551724 13.149425,3.2528736 12.505747,3.2528736 z M15,1 C22.731987,1 29,7.2680135 29,15 29,22.731987 22.731987,29 15,29 7.2680135,29 1,22.731987 1,15 1,7.2680135 7.2680135,1 15,1 z" Fill="#FF1F1F23" Height="30" Margin="0,0,16,25" Stretch="Fill" Stroke="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="30"/>
         <Rectangle Grid.Column="1" Fill="#FF161717" HorizontalAlignment="Left" Margin="0,0,0,3" Grid.Row="2" Stroke="#FF171212" Width="5"/>
-        <metro:ToggleSwitchButton x:Name="FanPowerOnBtn" Grid.Column="1" Margin="47,0,51,25" VerticalAlignment="Bottom" Width="Auto" Height="30"
-                                  Click="FanPowerOnBtn_Click"
-                                  Command="{Binding Path=ExpPointOutputStopCommand}"
-                                  CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"
-                ToolTip="启动"/>
-        <Rectangle Grid.Column="1" Margin="5,10,14.333,82.667" RadiusY="5" Grid.Row="2" RadiusX="5" Stroke="#FF342F2F" Fill="#FF8D9191" StrokeThickness="2"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="36.333" Margin="10,15,0,0" Grid.Row="2" IsReadOnly="True"
-                 Text="{Binding MdChannels[FirstColdFan].Value,StringFormat={}{0:F1}Hz,Mode=OneWay}" VerticalAlignment="Top" Width="87" FontSize="18.667" FontWeight="Bold" FontStyle="Italic"
+        <Rectangle Grid.Column="1" Margin="5,10,14,38" RadiusY="5" Grid.Row="2" RadiusX="5" Stroke="#FF342F2F" Fill="#FF8D9191" StrokeThickness="2"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="36" Margin="10,15,0,0" Grid.Row="2" IsReadOnly="True"
+                 Text="{Binding MdChannels[FirstColdFan].Value,StringFormat={}{0:F0} rmp,Mode=OneWay}" VerticalAlignment="Top" Width="116" FontSize="16" FontWeight="Black" FontStyle="Italic"
                  />
 
-        <metro:NumericUpDown Margin="10,56.333,51,91.667" Grid.Column="1" Grid.Row="2" UpDownButtonsWidth="15"
-                             Minimum="0"
-                             Value="{Binding Path=MdChannels[FirstColdFan].AOValue,UpdateSourceTrigger=LostFocus}" FontSize="16"/>
-        <Button x:Name="button" Grid.Column="1" HorizontalAlignment="Left" Margin="98.756,56.333,0,0" Grid.Row="2" VerticalAlignment="Top" Width="31" Height="30"
+        <metro:NumericUpDown Margin="10,56,22,92" Grid.Column="1" Grid.Row="2" UpDownButtonsWidth="15"
+                             FontSize="16"
+                             Minimum="{Binding Path=MdChannels[FirstColdFan].RangeLow}"
+                             Maximum="{Binding Path=MdChannels[FirstColdFan].RangeHigh}"
+                             StringFormat="{}{0:F0} rmp"
+                             Value="{Binding Path=MdChannels[FirstColdFan].AOValue}"/>
+        <Button x:Name="button" Grid.Column="1" HorizontalAlignment="Left" Margin="84,91,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Height="42"
                 metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand"
                 Command="{Binding Path=ExpPointOutputCommand}"
                 CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"
-                ToolTip="启动">
+                ToolTip="启动风机">
             <Button.Content>
                 <Image>
                     <Image.Source>
@@ -225,9 +219,11 @@
                 </Image>
             </Button.Content>
         </Button>
-        <metro:DropDownButton Grid.Column="1" HorizontalAlignment="Right" Height="26" Margin="0,25.333,18.244,0" Grid.Row="2" VerticalAlignment="Top" Width="31" ArrowVisibility="Collapsed" ArrowBrush="{x:Null}" ArrowMouseOverBrush="{x:Null}" ArrowPressedBrush="{x:Null}" BorderBrush="{x:Null}"
+        <metro:DropDownButton Grid.Column="1" HorizontalAlignment="Right" Height="38" Margin="0,107,51,0" VerticalAlignment="Top" Width="87" ArrowVisibility="Collapsed" ArrowBrush="{x:Null}" ArrowMouseOverBrush="{x:Null}" ArrowPressedBrush="{x:Null}" BorderBrush="{x:Null}"
+                              FontSize="18"
                               MinHeight="20"
-                              Content="..." Background="{x:Null}">
+                              Content="...更多 " Background="{x:Null}"
+                              ToolTip="查看更多风机数据。">
             <metro:DropDownButton.Items>
                 <TextBox Style="{StaticResource HeaderTextBox}"
                          local:TextHeaderHelper.TextHeader="风机变频器电机转速反馈"
@@ -336,6 +332,17 @@
             </metro:DropDownButton.Items>
 
         </metro:DropDownButton>
+        <Button Grid.Column="1" HorizontalAlignment="Left" Margin="10,91,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Height="42"
+            metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand"
+            Command="{Binding ExpPointOutputCommand}"
+            CommandParameter="{Binding MdChannels[FirstColdFan]}"
+            ToolTip="停止风机" Foreground="#FF232738">
+            <Rectangle Width="32" Height="32" Fill="{Binding Path=Foreground,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
 
     </Grid>
 

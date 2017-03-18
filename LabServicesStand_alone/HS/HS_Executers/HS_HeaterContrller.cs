@@ -45,6 +45,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// 标识加热器超过此温度时为高温加热。
         /// </summary>
         static public double WhereIsHeaterHighTemp = 250;
+        /// <summary>
+        /// 加热器的最小设置温度。
+        /// </summary>
+        static public double HeaterMinSetTemp = 100;
 
         /// <summary>
         /// 每个电炉的真实最小要求流量，如果低于此值应该关闭加热器。
@@ -140,12 +144,14 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public bool InitialHeater()
         {
             bool bt;
-            bt = _heaterCtrl.InitCtrl(Addr);
-            bt &= HeaterIsRemote = _heaterCtrl.SetComStyle(true);
-            System.Threading.Thread.Sleep(10);
-            bt &= _heaterCtrl.SetFixStyle(true);
-            bt &= _heaterCtrl.SetRun(true);
-
+            lock (_heaterLocker)
+            {
+                bt = _heaterCtrl.InitCtrl(Addr);
+                bt &= HeaterIsRemote = _heaterCtrl.SetComStyle(true);
+                System.Threading.Thread.Sleep(10);
+                bt &= _heaterCtrl.SetFixStyle(true);
+                bt &= _heaterCtrl.SetRun(true);
+            }
             HeaterConnection = bt;
 
             if (HeaterConnectionChannel != null)
@@ -168,12 +174,15 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// <returns></returns>
         public bool SetTemperature(double tTemp)
         {
+            tTemp = Math.Max(tTemp, HeaterMinSetTemp);
+
             bool bt = true;
             // 电炉准备好输出。
             if (HeaterReadyChannel?.Status == true)
             {
                 double rTemp = 0;
                 bt = GetCtrlTemperature(out rTemp);
+                
                 if (bt)
                 {
                     // 由于数据类型的精度误差 将误差在0.1内的视为相等。
@@ -193,7 +202,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                     else
                     {
                         // 重新设置温度。
-                        bt &= _heaterCtrl.SetTemp((float)tTemp);
+                        lock (_heaterLocker)
+                        {
+                            bt &= _heaterCtrl.SetTemp((float)tTemp);
+                        }                        
 
                         if (bt)
                         {
@@ -214,15 +226,20 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 if (!bt)
                 {
                     // set or get fault,then reset .
-                    bt = _heaterCtrl.SetComStyle(true);
-                    bt &= _heaterCtrl.SetRun(true);
-                    HeaterIsRemote = bt;
-                    HeaterConnection = bt;
-                    if (HeaterConnectionChannel != null)
+                    lock (_heaterLocker)
                     {
-                        HeaterConnectionChannel.Status = bt;
-                    }
+                        bt = _heaterCtrl.SetComStyle(true);
+                        bt &= _heaterCtrl.SetRun(true);
+                    }                    
+                    HeaterIsRemote = bt;
+                    HeaterConnection = bt;                    
                 }
+
+                if (HeaterConnectionChannel != null)
+                {
+                    HeaterConnectionChannel.Status = bt;
+                }
+
             }
             else
             {
@@ -231,6 +248,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
 
             return bt;
         }
+        private object _heaterLocker = new object();
         /// <summary>
         /// 获取电炉的当前设定温度。
         /// </summary>
@@ -239,8 +257,14 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public bool GetCtrlTemperature(out double cTemp)
         {
             cTemp = 0;
-            float sv = 0;
-            bool bt = _heaterCtrl.GetTemp(out sv);
+            float sv = 0;            
+            bool bt = false;
+
+            lock (_heaterLocker)
+            {
+                bt = _heaterCtrl.GetTemp(out sv);
+            }
+
             if (bt)
             {
                 cTemp = sv;
@@ -262,7 +286,12 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         {
             cTemp = 0;
             float pv = 0;
-            bool bt = _heaterCtrl.GetPVData(out pv);
+
+            bool bt = true;
+            lock (_heaterLocker)
+            {
+                bt = _heaterCtrl.GetPVData(out pv);
+            }
             if (bt)
             {
                 cTemp = pv;
@@ -312,7 +341,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 }
                 System.Threading.Thread.Sleep(5);
             }
-            _heaterCtrl.ReleaseCtrl();
+            lock (_heaterLocker)
+            {
+                _heaterCtrl.ReleaseCtrl(); 
+            }
         }
 
         private void HeaterStartStopChannel_Execute(object sender, ControllerEventArgs e)

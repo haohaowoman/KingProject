@@ -8,13 +8,13 @@
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
                    xmlns:Charts="clr-namespace:Visifire.Charts;assembly=WPFVisifire.Charts"
-        Title="环控系统测控试验" Height="980" Width="1900"
+        Title="环形散热器热动力性能试验台测控系统" Height="980" Width="1900"
         FontSize="18"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         Closing="MetroWindow_Closing"
                    Closed="MetroWindow_Closed"
-                   Icon="/ExpRuntimeApp;component/Images/FactoryIcon.ico"
+                   Icon="/ExpRuntimeApp;component/Images/Factory.ico"
         DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}" ShowCloseButton="False" ShowDialogsOverTitleBar="False" ShowMaxRestoreButton="False"
         >
     
@@ -23,7 +23,16 @@
             <Button Margin="1"
                 Click="ShowAllChannelsBtn_Click"
                 ToolTip="查看所有及试验点视图"
-                    Content="查看"/>
+                    Content="详细"/>
+            <Button Margin="1" Width="16" Height="16" Click="QuikChsListBtn_Click"
+                    ToolTip="通道数据快速查看窗口，进行系统固有及自定义通道的数据监测。">
+                <Rectangle Width="16" Height="16" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button,Mode=FindAncestor},Path=Foreground}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Visual="{StaticResource appbar_list}" Stretch="Uniform"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+                
+            </Button>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
     <Grid>
@@ -37,8 +46,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环散系统测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display" Foreground="Black"/>
-
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环形散热器热动力性能试验台测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display" Foreground="Black"/>
 
         <!--fualt status-->
         <DockPanel Grid.Row="1" Margin="5">
@@ -47,7 +55,8 @@
                        Content="试验类型:"/>
                 <ComboBox Margin="8,5" VerticalAlignment="Center" IsEditable="True" Text="{Binding Path=ExpType}">
                     <ComboBox.Items>
-                        <ComboBoxItem Margin="5,1" Content="流体阻力试验"/>
+                        <ComboBoxItem Margin="5,1" Content="设计点性能试验"/>
+                        <ComboBoxItem Margin="5,1" Content="流阻特性曲线试验"/>
                         <ComboBoxItem Margin="5,1" Content="产品散热性能试验"/>
                     </ComboBox.Items>
                 </ComboBox>
@@ -92,8 +101,9 @@
                                     FontSize="18"
                                     Content="故障清除"
                                     Tag="{Binding Path=MdChannels[报警复位]}"
-                                    ToolTip="复位操作套报警。"
-                                    Click="ResetFaultBtn_Click"/>
+                                    ToolTip="复位操作台及风机故障报警。"
+                                    Click="ResetFaultBtn_Click"                                   
+                                    CommandParameter="{Binding Path=MdChannels[FanFaultRest]}"/>
                             </UniformGrid>
                             <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
                                 Content="当前故障信息："/>
@@ -122,95 +132,78 @@
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0" Grid.Column="0" Margin="5" Visibility="Visible">
-                    <Charts:Chart AnimationEnabled="False" BorderBrush="Gray">
-                        <Charts:Chart.Titles>
-                            <Charts:Title Text="试验特性曲线" FontSize="18" HorizontalAlignment="Right"/>
-                        </Charts:Chart.Titles>
-                        <Charts:Chart.Legends>
-                            <Charts:Legend x:Name="HotRoadLengend" TitleFontSize="18" Title="热路" FontSize="18" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
-                            <Charts:Legend x:Name="SecendColdRoadLegend" TitleFontSize="18" Title="二冷" FontSize="18" TitleBackground="{x:Null}"/>
+                    <Grid DockPanel.Dock="Top" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!--control buttons-->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
 
-                            <Charts:Legend x:Name="FirstColdRoadLegend" TitleFontSize="18" Title="一冷" FontSize="18" TitleBackground="{x:Null}"/>
+                            <metro:ToggleSwitch Margin="5,8" Header="试验特性曲线" HeaderFontFamily="Microsoft YaHei" FontFamily="Microsoft YaHei" OnLabel="开" OffLabel="关" IsChecked="{Binding Path=IsShowExpChart}"/>
+                            
+                            <Label Margin="5,8" VerticalAlignment="Center" Content="横坐标轴选择："/>
+                            <ComboBox x:Name="ChartSource" Margin="5,8" MinWidth="180" VerticalAlignment="Center" SelectedIndex="0"
+                                      ItemsSource="{Binding Path=ChartSource}" DisplayMemberPath="XAxiseLabel"/>
+                        </StackPanel>
+                        <!--chart-->
+                        <Charts:Chart Grid.Row="1" AnimationEnabled="False" BorderBrush="Gray" ZoomingEnabled="True" IndicatorEnabled="True" Margin="0,0,0,0"
+                                      DataContext="{Binding ElementName=ChartSource,Path=SelectedItem}">
+                            <Charts:Chart.Titles>
+                                <Charts:Title Text="试验特性曲线" FontSize="16" HorizontalAlignment="Right"/>
+                            </Charts:Chart.Titles>
+                            <Charts:Chart.Legends>
+                                <Charts:Legend x:Name="HotRoadLengend" TitleFontSize="16" Title="" FontSize="16" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
+                                
+                            </Charts:Chart.Legends>
 
-                        </Charts:Chart.Legends>
+                            <Charts:Chart.AxesX>
+                                <Charts:Axis Title="{Binding Path=XAxiseLabel,StringFormat={}{0} Kg/h}"/>
+                            </Charts:Chart.AxesX>
 
-                        <Charts:Chart.AxesX>
-                            <Charts:Axis Title="时间"/>
-                        </Charts:Chart.AxesX>
+                            <Charts:Chart.AxesY>
+                                <Charts:Axis Title="压差△P KPa"/>
+                            </Charts:Chart.AxesY>
+                            <Charts:Chart.Series>
+                                
+                                <!--Hot Road Charts-->
+                                <Charts:DataSeries 
+                                    LegendText="流阻特性" Legend="" ShowInLegend="False" RenderAs="Spline"
+                                    DataPoints="{Binding Path=FlowResistance}" XValueType="Numeric">
+                                    
+                                </Charts:DataSeries>
+                            </Charts:Chart.Series>
+                        </Charts:Chart>
+                        <Charts:Chart Grid.Row="2" AnimationEnabled="False" BorderBrush="Gray" ZoomingEnabled="True" IndicatorEnabled="True" Margin="0,0,0,5"
+                                      DataContext="{Binding ElementName=ChartSource,Path=SelectedItem}">
+                            <Charts:Chart.Titles>
+                                <Charts:Title Text="试验特性曲线" FontSize="16" HorizontalAlignment="Right"/>
+                            </Charts:Chart.Titles>
+                            <Charts:Chart.Legends>
+                                <Charts:Legend x:Name="MissHeatEffic" TitleFontSize="16" Title="" FontSize="16" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
 
-                        <Charts:Chart.AxesY>
-                            <Charts:Axis Title="试验数据"/>
-                        </Charts:Chart.AxesY>
-                        <Charts:Chart.Series>
-                            <!--Hot Road Charts-->
-                            <Charts:DataSeries 
-                                LegendText="空气流量" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine">
-                                <Charts:DataSeries.DataPoints>
-                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
-                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
-                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
-                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
-                                </Charts:DataSeries.DataPoints>
+                            </Charts:Chart.Legends>
 
-                            </Charts:DataSeries>
+                            <Charts:Chart.AxesX>
+                                <Charts:Axis Title="{Binding Path=XAxiseLabel,StringFormat={}{0} Kg/h}"/>
+                            </Charts:Chart.AxesX>
 
-                            <Charts:DataSeries  LegendText="入口压力" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
+                            <Charts:Chart.AxesY>
+                                <Charts:Axis Title="散热效率η KPa"/>
+                            </Charts:Chart.AxesY>
+                            <Charts:Chart.Series>
 
-                            <Charts:DataSeries 
-                                LegendText="入口温度" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
+                                <!--Hot Road Charts-->
+                                <Charts:DataSeries 
+                                    LegendText="产品散热特性" Legend="MissHeatEffic" ShowInLegend="False" RenderAs="Spline"
+                                    DataPoints="{Binding Path=MissHeatEffic}" XValueType="Numeric">
 
-                            <Charts:DataSeries 
-                                LegendText="出口压力" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="出口温度" Legend="HotRoadLengend" ShowInLegend="True" RenderAs="QuickLine"/>
-                            <!--Secend Cold Road Charts-->
-                            <Charts:DataSeries 
-                                LegendText="空气流量" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine">
-                                <Charts:DataSeries.DataPoints>
-                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
-                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
-                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
-                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
-                                </Charts:DataSeries.DataPoints>
-
-                            </Charts:DataSeries>
-
-                            <Charts:DataSeries  LegendText="入口压力" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="入口温度" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="出口压力" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="出口温度" Legend="SecendColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <!--First Cold Road Charts-->
-                            <Charts:DataSeries 
-                                LegendText="空气流量" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine">
-                                <Charts:DataSeries.DataPoints>
-                                    <Charts:LightDataPoint XValue="10" YValue="100"/>
-                                    <Charts:LightDataPoint XValue="11" YValue="110"/>
-                                    <Charts:LightDataPoint XValue="12" YValue="120"/>
-                                    <Charts:LightDataPoint XValue="13" YValue="130"/>
-                                </Charts:DataSeries.DataPoints>
-
-                            </Charts:DataSeries>
-
-                            <Charts:DataSeries  LegendText="入口压力" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="入口温度" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="出口压力" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-
-                            <Charts:DataSeries 
-                                LegendText="出口温度" Legend="FirstColdRoadLegend" ShowInLegend="False" RenderAs="QuickLine"/>
-                        </Charts:Chart.Series>
-                    </Charts:Chart>
+                                </Charts:DataSeries>
+                            </Charts:Chart.Series>
+                        </Charts:Chart>
+                    </Grid>
                 </DockPanel>
 
                 <UniformGrid Grid.Row="0" Grid.Column="1" Columns="2">
@@ -242,41 +235,79 @@
             </Grid>
         </Border>
 
-        <Border Grid.Column="2" Grid.Row="1" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
+        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
             <UniformGrid Columns="1">
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5" Padding="10,5" Command="{Binding Path=AddDataReportNow}"
+                    >
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_cursor_hand}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="手动记录"></TextBlock>
+                    </DockPanel>
+                </Button>
+
                 <Button Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10,5" Command="{Binding Path=Test}">
                     <DockPanel>
-                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_settings}"/>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_settings}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
                         <TextBlock DockPanel.Dock="Bottom" Text="试验设置"></TextBlock>
                     </DockPanel>
                 </Button>
-                <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
+                <Button Click="GBSettingButton_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5,0,5" HorizontalAlignment="Left" Width="164">
                     <DockPanel>
-                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_book}"/>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_book}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
                         <TextBlock DockPanel.Dock="Bottom" Text="试验工步"/>
                     </DockPanel>
                 </Button>
                 <Button Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5"
                         Click="OpenGKUIsBtn_Click">
                     <DockPanel>
-                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_layout_expand_right}"/>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_layout_expand_right}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
                         <TextBlock DockPanel.Dock="Bottom" Text="试验工况"></TextBlock>
                     </DockPanel>
                 </Button>
                 <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
                     <DockPanel>
-                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_console}"/>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_console}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
                         <TextBlock DockPanel.Dock="Bottom" Text="历史数据"></TextBlock>
                     </DockPanel>
                 </Button>
 
                 <Button Click="OpenDataReportWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
                     <DockPanel>
-                        <ContentControl DockPanel.Dock="Top" Content="{StaticResource appbar_office_excel}"/>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_office_publisher}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
                         <TextBlock DockPanel.Dock="Bottom" Text="试验报表"></TextBlock>
                     </DockPanel>
                 </Button>
-                <ToggleButton Content="开始试验" Click="BegainExpTgBtn_Click" Margin="10" BorderThickness="2" BorderBrush="Black" Foreground="White" FontWeight="SemiBold" FontSize="24" Style="{DynamicResource ToggleButtonStyle2}">
+                
+                <ToggleButton x:Name="ExpRunSwitch" Content="开始试验" Click="BegainExpTgBtn_Click" Margin="10" BorderThickness="2" BorderBrush="Black" Foreground="White" FontWeight="SemiBold" FontSize="24" Style="{DynamicResource ToggleButtonStyle2}" IsChecked="{Binding Path=IsExpRunning}">
                     <ToggleButton.Resources>
                         <Style x:Key="ToggleButtonStyle2" TargetType="{x:Type ToggleButton}">
                             <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
@@ -348,40 +379,50 @@
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" BorderThickness="2" CornerRadius="3" BorderBrush="DarkGray">
             <StackPanel Orientation="Horizontal">
                 <Label Grid.Row="2" Content="设备在线状态：" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3"
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[PLCRemoteConnection].Status}"
-                              ToolTip="PLC在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="PLC在线状态"
+                              Content="PLC连接" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[ADDevRemoteConnection].Status}"
-                              ToolTip="数采设备在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="数采设备在线状态"
+                              Content="数采设备" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[FanRemoteConnection].Status}"
-                              ToolTip="风机在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="风机在线状态"
+                              Content="风机变频器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[RL_1#RemoteConnection].Status}"
-                              ToolTip="热路1#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="热路1#加热器在线状态"
+                              Content="热路1#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[RL_2#RemoteConnection].Status}"
-                              ToolTip="热路2#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="热路2#加热器在线状态"
+                              Content="热路2#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[RL_3#RemoteConnection].Status}"
-                              ToolTip="热路3#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="热路3#加热器在线状态"
+                              Content="热路3#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[RL_4#RemoteConnection].Status}"
-                              ToolTip="热路4#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="热路4#加热器在线状态"
+                              Content="热路4#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[RL_5#RemoteConnection].Status}"
-                              ToolTip="热路5#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="热路5#加热器在线状态"
+                              Content="热路5#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[ELL_1#RemoteConnection].Status}"
-                              ToolTip="二冷路1#加热器在线状态"/>
-                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" 
+                              ToolTip="二冷路1#加热器在线状态"
+                              Content="二冷1#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
                               IsChecked="{Binding Path=MdChannels[ELL_2#RemoteConnection].Status}"
-                              ToolTip="二冷路2#加热器在线状态"/>
+                              ToolTip="二冷路2#加热器在线状态"
+                              Content="二冷2#加热器" FontSize="14"/>
 
                 <DockPanel Margin="8,3" HorizontalAlignment="Stretch">
 
-                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="{Binding Path=ExpInformation,StringFormat=信息:{0}}"/>
+                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="{Binding Path=ExpInformation,StringFormat=信息：{0}}"/>
                     <TextBlock DockPanel.Dock="Left" Margin="3" Text="" TextDecorations="Underline"/>
 
                 </DockPanel>

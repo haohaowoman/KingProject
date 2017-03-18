@@ -33,6 +33,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HS\Calibration\Calibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HS\Calibration\Calibration.Designer.cs">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HS\ChannelSet\HS_Elements.cs">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="HS\ChannelSet\HS_Elements.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </Compile>
     <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
     <Compile Include="HS\HS_Executers\FirstColdFIRQExecuter.cs" />
     <Compile Include="HS\HS_Executers\HS_FirstColdFanDevice.cs" />
@@ -98,6 +113,35 @@
       <Project>{9aa6b9d7-b437-4e26-84c1-3e3c402ed4b8}</Project>
       <Name>mcLogic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="HS\ChannelSet\HS_Elements.xsc">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </None>
+    <None Include="HS\ChannelSet\HS_Elements.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HS_Elements.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="HS\ChannelSet\HS_Elements.xss">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HS\Calibration\Calibration.resx">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RS485Ctrl\RS485Ctrl.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="RS485Ctrl\RS485Modbus.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

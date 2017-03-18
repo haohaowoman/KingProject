@@ -99,7 +99,7 @@ namespace LabMCESystem.Servers.HS
 
             sc = dev.CreateStatusChannelIn("风机控制电源合闸");
             sc.Prompt = "FJ_POWER";
-            sc.Summary = "风机控制电源全阐";
+            sc.Summary = "风机控制电源合阐";
 
             FanHMIGroup.AddSubChannel(sc);
             /*---------------------------*/
@@ -471,7 +471,7 @@ namespace LabMCESystem.Servers.HS
 
             _disChannels.Add(eovControl.Label, eovControl);
 
-            SwitchEOVHMISetGroup.AddSubChannel(eovStatus);
+            SwitchEOVHMISetGroup.AddSubChannel(eovControl);
             /*---------------------------*/
 
             eovControl = LabDevice.CreateChannel(dev, "EV0102_HMI_OPEN", ExperimentStyle.StatusControl) as StatusOutputChannel;
@@ -828,8 +828,86 @@ namespace LabMCESystem.Servers.HS
             DIGroup.AddSubChannel(sch);
             /*---------------------------*/
 
-            #endregion
+            // 试验运行状态通道。
+            sch = dev.CreateStatusOutputChannelIn("ExpRunState");
+            sch.Summary = "试验运行状态";
+            sch.Prompt = "HMI.SYS_RUN_GET";
+            exr = new DigitalExecuter() { DesignMark = sch.Prompt };
+            sch.Controller = exr;
+            _executerMap.Add(sch.Label, exr);
 
+            DOHMISetGroup.AddSubChannel(sch);
+
+            // 运行状态控制事件。
+            sch.Execute += (sender, e) =>
+            {
+                var resetCh = sender as StatusOutputChannel;
+                if (resetCh != null)
+                {
+                    var de = resetCh.Controller as DigitalExecuter;
+                    if (resetCh.NextStatus)
+                    {
+                        de.ToHigh();
+                    }
+                    else
+                    {
+                        de.ToLow();
+                    }
+                    de.ExecuteBegin();
+                }
+            };
+
+            exr.ExecuteChanged += (sender, e) =>
+            {
+                // 执行复位脉冲。
+                var pulseExe = sender as DigitalExecuter;
+                if (pulseExe != null)
+                {
+                    DOHMISetGroup.Write(pulseExe.DesignMark,
+                        pulseExe.Enable);
+#if DEBUG
+                    Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.Enable}. ");
+#endif
+                }
+            };
+
+            // 试验运行状态通道。
+            sch = dev.CreateStatusOutputChannelIn("SysAlaram");
+            sch.Summary = "试验运行故障";
+            sch.Prompt = "HMI.SYS_ALARM_GET";
+            exr = new SimplePulseExecuter(1000) { DesignMark = sch.Prompt };
+            
+            sch.Controller = exr;
+            _executerMap.Add(sch.Label, exr);
+
+            DOHMISetGroup.AddSubChannel(sch);
+
+            // 系统故障事件。
+            sch.Execute += (sender, e) =>
+            {
+                var resetCh = sender as StatusOutputChannel;
+                if (resetCh != null)
+                {
+                    (resetCh.Controller as SimplePulseExecuter)?.ExecuteBegin();
+                }
+            };
+
+            exr.ExecuteChanged += (sender, e) =>
+            {
+                // 脉冲。
+                var pulseExe = sender as SimplePulseExecuter;
+                if (pulseExe != null)
+                {
+                    DOHMISetGroup.Write(pulseExe.DesignMark,
+                        pulseExe.NextPulseBit == PulseBit.HighBit ? true : false);
+#if DEBUG
+                    Console.WriteLine($"Pulse executer {pulseExe} execute {pulseExe.NextPulseBit}. ");
+#endif
+                }
+            };
+
+            #endregion
+            
             #endregion
 
             #region 各设备的远程连接在线状态
@@ -877,7 +955,7 @@ namespace LabMCESystem.Servers.HS
         }
 
         /// <summary>
-        /// 初始化所有采集通道
+        /// 初始化所有采集通道,必须第一个进行初始化。
         /// </summary>
         private void InitialMeasureChannels(LabDevice dev)
         {
@@ -917,9 +995,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "℃";
             mCh.Prompt = "01_Ch2";
             mCh.Summary = "热边电炉入口空气温度";
-            mCh.Range = new QRange(0, 60);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 60));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "℃";
             sensor.Label = "TT0102";
             sensor.SensorNumber = "TT0102 000001";
@@ -943,9 +1021,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "℃";
             mCh.Prompt = "02_Ch4";
             mCh.Summary = "热边电炉出口空气温度";
-            mCh.Range = new QRange(0, 700);
+            mCh.Range = new QRange(0, 750);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 700));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 750));
             sensor.Unit = "℃";
             sensor.Label = "TT0104";
             sensor.SensorNumber = "TT0104 000001";
@@ -969,9 +1047,9 @@ namespace LabMCESystem.Servers.HS
             rlTemp.Unit = "℃";
             rlTemp.Prompt = "02_Ch5";
             rlTemp.Summary = "热边实验段入口空气温度";
-            rlTemp.Range = new QRange(0, 700);
+            rlTemp.Range = new QRange(0, 750);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 700));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 750));
             sensor.Unit = "℃";
             sensor.Label = "TT0106";
             sensor.SensorNumber = "TT0106 000001";
@@ -995,9 +1073,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "℃";
             mCh.Prompt = "02_Ch6";
             mCh.Summary = "热边实验段出口空气温度";
-            mCh.Range = new QRange(0, 700);
+            mCh.Range = new QRange(0, 750);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 700));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 750));
             sensor.Unit = "℃";
             sensor.Label = "TT0107";
             sensor.SensorNumber = "TT0107 000001";
@@ -1064,9 +1142,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "℃";
             mCh.Prompt = "01_Ch3";
             mCh.Summary = "二冷电炉出口空气温度";
-            mCh.Range = new QRange(0, 100);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "℃";
             sensor.Label = "TT0103";
             sensor.SensorNumber = "TT0103 000001";
@@ -1090,9 +1168,9 @@ namespace LabMCESystem.Servers.HS
             elTemp.Unit = "℃";
             elTemp.Prompt = "01_Ch4";
             elTemp.Summary = "二冷实验段入口空气温度";
-            elTemp.Range = new QRange(0, 100);
+            elTemp.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "℃";
             sensor.Label = "TT0105";
             sensor.SensorNumber = "TT0105 000001";
@@ -1116,9 +1194,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "℃";
             mCh.Prompt = "01_Ch5";
             mCh.Summary = "二冷实验段出口空气温度";
-            mCh.Range = new QRange(0, 100);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 100));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "℃";
             sensor.Label = "TT0108";
             sensor.SensorNumber = "TT0108 000001";
@@ -1135,9 +1213,9 @@ namespace LabMCESystem.Servers.HS
             firtFlow.Unit = "Kg/h";
             firtFlow.Prompt = "06_Ch5";
             firtFlow.Summary = "一冷入口空气流量";
-            firtFlow.Range = new QRange(0, 30000);
+            firtFlow.Range = new QRange(0, 33000);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 30000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 33000));
             sensor.Unit = "Kg/h";
             sensor.Label = "FT0103";
             sensor.SensorNumber = "FT0103 000001";
@@ -1149,9 +1227,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "KPa";
             mCh.Prompt = "05_Ch1";
             mCh.Summary = "一冷入口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT01";
             sensor.SensorNumber = "PT01 000001";
@@ -1175,9 +1253,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "KPa";
             mCh.Prompt = "05_Ch2";
             mCh.Summary = "一冷入口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT02";
             sensor.SensorNumber = "PT02 000001";
@@ -1201,9 +1279,9 @@ namespace LabMCESystem.Servers.HS
             mCh.Unit = "KPa";
             mCh.Prompt = "05_Ch3";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT03";
             sensor.SensorNumber = "PT03 000001";
@@ -1226,11 +1304,11 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气压力
             mCh = dev.CreateAIChannelIn("PT04");
             mCh.Unit = "KPa";
-            mCh.Prompt = "05_Ch3";
+            mCh.Prompt = "05_Ch4";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT04";
             sensor.SensorNumber = "PT04 000001";
@@ -1239,7 +1317,7 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气温度
             mCh = dev.CreateAIChannelIn("TT04");
             mCh.Unit = "℃";
-            mCh.Prompt = "04_Ch1";
+            mCh.Prompt = "04_Ch2";
             mCh.Summary = "一冷出口空气温度";
             mCh.Range = new QRange(0, 100);
 
@@ -1253,11 +1331,11 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气压力
             mCh = dev.CreateAIChannelIn("PT05");
             mCh.Unit = "KPa";
-            mCh.Prompt = "05_Ch3";
+            mCh.Prompt = "05_Ch5";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT05";
             sensor.SensorNumber = "PT05 000001";
@@ -1266,7 +1344,7 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气温度
             mCh = dev.CreateAIChannelIn("TT05");
             mCh.Unit = "℃";
-            mCh.Prompt = "04_Ch1";
+            mCh.Prompt = "04_Ch3";
             mCh.Summary = "一冷出口空气温度";
             mCh.Range = new QRange(0, 100);
 
@@ -1280,11 +1358,11 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气压力
             mCh = dev.CreateAIChannelIn("PT06");
             mCh.Unit = "KPa";
-            mCh.Prompt = "05_Ch3";
+            mCh.Prompt = "05_Ch6";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT06";
             sensor.SensorNumber = "PT06 000001";
@@ -1293,7 +1371,7 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气温度
             mCh = dev.CreateAIChannelIn("TT06");
             mCh.Unit = "℃";
-            mCh.Prompt = "04_Ch1";
+            mCh.Prompt = "04_Ch4";
             mCh.Summary = "一冷出口空气温度";
             mCh.Range = new QRange(0, 100);
 
@@ -1307,11 +1385,11 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气压力
             mCh = dev.CreateAIChannelIn("PT07");
             mCh.Unit = "KPa";
-            mCh.Prompt = "05_Ch3";
+            mCh.Prompt = "06_Ch1";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT07";
             sensor.SensorNumber = "PT07 000001";
@@ -1320,7 +1398,7 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气温度
             mCh = dev.CreateAIChannelIn("TT07");
             mCh.Unit = "℃";
-            mCh.Prompt = "04_Ch1";
+            mCh.Prompt = "04_Ch5";
             mCh.Summary = "一冷出口空气温度";
             mCh.Range = new QRange(0, 100);
 
@@ -1334,11 +1412,11 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气压力
             mCh = dev.CreateAIChannelIn("PT08");
             mCh.Unit = "KPa";
-            mCh.Prompt = "05_Ch3";
+            mCh.Prompt = "06_Ch2";
             mCh.Summary = "一冷出口空气压力";
-            mCh.Range = new QRange(0, 1000);
+            mCh.Range = new QRange(0, 150);
 
-            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 1000));
+            sensor = new LinerSensor(new QRange(4, 20), new QRange(0, 150));
             sensor.Unit = "KPa";
             sensor.Label = "PT08";
             sensor.SensorNumber = "PT03 000001";
@@ -1347,7 +1425,7 @@ namespace LabMCESystem.Servers.HS
             // 一冷出口空气温度
             mCh = dev.CreateAIChannelIn("TT08");
             mCh.Unit = "℃";
-            mCh.Prompt = "04_Ch1";
+            mCh.Prompt = "04_Ch6";
             mCh.Summary = "一冷出口空气温度";
             mCh.Range = new QRange(0, 100);
 
@@ -1359,10 +1437,50 @@ namespace LabMCESystem.Servers.HS
             mCh.Collector = sensor;
             #endregion
 
+            // 从数据及更新已有采集通道。从文件读取。
+            string eleSetPath = Environment.CurrentDirectory + @"\ElementsSet.xml";
+            try
+            {
+                ChannelsDataset.ReadXml(eleSetPath);
+                if (ChannelsDataset.Channels.ChannelsCount < dev.Channels.Count)
+                {
+                    throw new ArgumentOutOfRangeException("数据集储存通道数小于已初始化话通道数，无效。");
+                }
+                ChannelsDataset.Channels.UpdateToChannels(dev.Channels);
+                // 创建用户自定义通道。
+                int hChCount = dev.Channels.Count;
+                int esChCount = ChannelsDataset.Channels.Count;
+                if (hChCount < esChCount)
+                {
+                    for (int i = hChCount; i < esChCount; i++)
+                    {
+                        var nch = ChannelsDataset.Channels.CreateAMeasureChannel(dev, ChannelsDataset.Channels.Rows[hChCount][0] as string);
+
+                        if (nch != null)
+                        {
+                            var chs = nch.Collector as LinerSensor;
+                            if (chs != null)
+                            {
+                                nch.Unit = chs.Unit;
+                                nch.Range = chs.Range;
+                            }
+                            CustomChannels.Add(nch);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ChannelsDataset.Clear();
+                ChannelsDataset.Channels.AddChannels(dev.Channels);
+                SaveElements();
+            }
+
+
             // 使用已有的通道创建虚拟的 压差 与 散热率通道。
             mCh = dev.CreateAIChannelIn("RL_PRESSUREDIFF");
             mCh.Prompt = "RL_PRE_DIFF";
-            mCh.Summary = "热边压差";
+            mCh.Summary = "热路压差";
             mCh.Unit = "KPa";
 
             var cov = new MultipelChannelConverter();
@@ -1377,7 +1495,30 @@ namespace LabMCESystem.Servers.HS
                 return pt0108.MeasureValue - pt0109.MeasureValue;
             };
 
-            mCh.Collector = cov; 
+            mCh.Collector = cov;
+
+            mCh = dev.CreateAIChannelIn("RL_HEAT");
+            mCh.Prompt = "RL_HEAT";
+            mCh.Summary = "热路散热量";
+            mCh.Unit = "J";
+
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["TT0106"]);
+            cov.Channels.Add(dev["TT0107"]);
+            cov.Channels.Add(dev["FT0102"]);
+            cov.Algorithm = (converter) =>
+            {
+                var TIn = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TIn != null);
+                var TOut = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TOut != null);
+                var flow = converter.Channels[2] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(flow != null);
+
+                return 1000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
+            };
+
+            mCh.Collector = cov;
 
             mCh = dev.CreateAIChannelIn("EL_PRESSUREDIFF");
             mCh.Prompt = "EL_PRE_DIFF";
@@ -1398,10 +1539,107 @@ namespace LabMCESystem.Servers.HS
 
             mCh.Collector = cov;
 
+            mCh = dev.CreateAIChannelIn("EL_HEAT");
+            mCh.Prompt = "EL_HEAT";
+            mCh.Summary = "二冷吸热量";
+            mCh.Unit = "J";
+
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["TT0105"]);
+            cov.Channels.Add(dev["TT0108"]);
+            cov.Channels.Add(dev["FT0101"]);
+            cov.Algorithm = (converter) =>
+            {
+                var TIn = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TIn != null);
+                var TOut = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TOut != null);
+                var flow = converter.Channels[2] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(flow != null);
+
+                return 1000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
+            };
+
+            mCh.Collector = cov;
+
             mCh = dev.CreateAIChannelIn("HEAT_EMISS_EFFIC");
             mCh.Prompt = "HEAT_EMISS_EFFIC";
             mCh.Summary = "散热效率";
+            mCh.Unit = "";
 
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["TT0106"]);
+            cov.Channels.Add(dev["TT0107"]);
+            cov.Channels.Add(dev["TT0105"]);
+            cov.Channels.Add(dev["TT01"]);
+
+            cov.Algorithm = (converter) =>
+            {
+                double n = 0;
+                var rlTIn = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(rlTIn != null);
+                var rlTOut = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(rlTOut != null);
+                var elTIn = converter.Channels[2] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(elTIn != null);
+                var ylTIn = converter.Channels[3] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(ylTIn != null);
+                n = (rlTIn.MeasureValue - (elTIn.MeasureValue + ylTIn.MeasureValue) / 2.0);
+                if (n != 0)
+                {
+                    n = (rlTIn.MeasureValue - rlTOut.MeasureValue) / n;
+                }
+                else
+                {
+                    n = -99999;
+                }
+                return n;
+            };
+
+            mCh.Collector = cov;
+
+            mCh = dev.CreateAIChannelIn("YL_HEAT");
+            mCh.Prompt = "YL_HEAT";
+            mCh.Summary = "一冷吸热量";
+            mCh.Unit = "J";
+
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["TT01"]);
+            cov.Channels.Add(dev["TT05"]);
+            cov.Channels.Add(dev["FT0103"]);
+            cov.Algorithm = (converter) =>
+            {
+                var TIn = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TIn != null);
+                var TOut = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(TOut != null);
+                var flow = converter.Channels[2] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(flow != null);
+
+                return 1000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
+            };
+
+            mCh.Collector = cov;
+
+
+            mCh = dev.CreateAIChannelIn("YL_PRESSUREDIFF");
+            mCh.Prompt = "YL_PRE_DIFF";
+            mCh.Summary = "一冷压差";
+            mCh.Unit = "KPa";
+
+            cov = new MultipelChannelConverter();
+            cov.Channels.Add(dev["PT01"]);
+            cov.Channels.Add(dev["PT05"]);
+            cov.Algorithm = (converter) =>
+            {
+                var pt01 = converter.Channels[0] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt01 != null);
+                var pt05 = converter.Channels[1] as IAnalogueMeasure;
+                System.Diagnostics.Debug.Assert(pt05 != null);
+                return pt01.MeasureValue - pt05.MeasureValue;
+            };
+
+            mCh.Collector = cov;
 
         }
 
@@ -1448,7 +1686,7 @@ namespace LabMCESystem.Servers.HS
             ch.Range = new QRange(0, 100);
             ch.Summary = "电动调节阀FT0102A开度";
 
-            exr = new HS_EOVPIDExecuter("HMI.FV0102A_SET_HMI", 50, ch) { PipeDiameter = 65 };
+            exr = new HS_EOVPIDExecuter("HMI.FV0102A_SET_HMI", 50, ch) { PipeDiameter = /*65*/44 };
             ch.Controller = exr;
             _executerMap.Add(ch.Label, exr);
 
@@ -1470,7 +1708,7 @@ namespace LabMCESystem.Servers.HS
             ch.Range = new QRange(0, 100);
             ch.Summary = "电动调节阀FT0102B开度";
 
-            exr = new HS_EOVPIDExecuter("HMI.FV0102B_SET_HMI", 0, ch) { PipeDiameter = 40 };
+            exr = new HS_EOVPIDExecuter("HMI.FV0102B_SET_HMI", 0, ch) { PipeDiameter = /*40*/17 };
             ch.Controller = exr;
             _executerMap.Add(ch.Label, exr);
 
@@ -1562,7 +1800,7 @@ namespace LabMCESystem.Servers.HS
             ch.Range = new QRange(0, 100);
             ch.Summary = "电动调节阀FT0101A开度";
 
-            exr = new HS_EOVPIDExecuter("HMI.FV0101A_SET_HMI", 50, ch) { PipeDiameter = 150 };
+            exr = new HS_EOVPIDExecuter("HMI.FV0101A_SET_HMI", 50, ch) { PipeDiameter = /*150*/99 };
             ch.Controller = exr;
             _executerMap.Add(ch.Label, exr);
 
@@ -1584,7 +1822,7 @@ namespace LabMCESystem.Servers.HS
             ch.Range = new QRange(0, 100);
             ch.Summary = "电动调节阀FT0101B开度";
 
-            exr = new HS_EOVPIDExecuter("HMI.FV0101B_SET_HMI", 0, ch) { PipeDiameter = 50 };
+            exr = new HS_EOVPIDExecuter("HMI.FV0101B_SET_HMI", 0, ch) { PipeDiameter = /*50*/24 };
             ch.Controller = exr;
             _executerMap.Add(ch.Label, exr);
 
@@ -1643,7 +1881,7 @@ namespace LabMCESystem.Servers.HS
             amc.Summary = "风机变频器电机电流反馈";
             amc.Prompt = "HMI.MOTOCURRENT_HMI";
 
-            FanHMIGroup.AddSubChannel(ch);
+            //FanHMIGroup.AddSubChannel(ch);
             /*---------------------------*/
 
             #region 风机仪表箱
@@ -2256,11 +2494,11 @@ namespace LabMCESystem.Servers.HS
         private void InitialFanDevice(LabDevice dev)
         {
             FeedbackChannel ch = dev.CreateFeedbackChannelIn("FirstColdFan");
-            ch.Unit = "Hz";
+            ch.Unit = "rpm";
             ch.Prompt = "FanCtrl";
             ch.Summary = "风机控制";
 
-            ch.Range = new QRange(0, 70);
+            ch.Range = new QRange(0, 2950);
 
             HS_FirstColdFanDevice he = new HS_FirstColdFanDevice(ch.Label);
 
@@ -2270,7 +2508,8 @@ namespace LabMCESystem.Servers.HS
             he.FanStopChannel = dev["FJ_HMI_STOP"] as StatusOutputChannel;
             he.FanReadyChannel = dev["FJ_READY"] as StatusChannel;
             he.FanConnectionChannel = dev["FanRemoteConnection"] as StatusChannel;
-
+            he.FanIChannel = dev["MOTOCURRENT_HMI"] as IAnalogueMeasure;
+            he.FanDeviceChannel = dev["FirstColdFan"] as FeedbackChannel;
             ch.Controller = he;
             _executerMap.Add(ch.Label, he);
 
@@ -2283,6 +2522,14 @@ namespace LabMCESystem.Servers.HS
             ch.StopExecute += (sender, e) =>
             {
                 he.ExecuteOver();
+                he.Reset();
+            };
+
+            var fanFaultReset = dev.CreateAOChannelIn("FanFaultRest");
+            fanFaultReset.Prompt = "风机故障复位";
+            fanFaultReset.Execute += (sender, e) =>
+            {
+                FanDeviceImp.Fan.ResetError();
             };
         }
 

@@ -48,11 +48,15 @@ namespace ExpRuntimeApp.ExpWindows
         {
             if (MessageBox.Show("是否退出当前试验，并退出应用程序？\n在退出前请做好试验结束工作，关闭相关设备", "退出注意", MessageBoxButton.OKCancel, MessageBoxImage.Hand) == MessageBoxResult.OK)
             {
-                e.Cancel = false;                
+                if (ExpRunSwitch.IsChecked == true)
+                {
+                    ExpRunSwitch.IsChecked = false;
+                }
+                e.Cancel = false;
             }
             else
             {
-                e.Cancel = true;                
+                e.Cancel = true;
             }
         }
 
@@ -73,7 +77,7 @@ namespace ExpRuntimeApp.ExpWindows
                     //var edlg = this.ShowProgressAsync(
                     //"退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序", true, mySettings
                     //);
-                    
+
                 }
                 else
                 {
@@ -111,7 +115,10 @@ namespace ExpRuntimeApp.ExpWindows
             var edlg = await this.ShowProgressAsync(
                 "退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序"
                 );
+
             System.Threading.Thread.Sleep(3000);
+
+            App.Current.Shutdown();
             // await edlg
         }
 
@@ -126,13 +133,30 @@ namespace ExpRuntimeApp.ExpWindows
                     ch.NextStatus = true;
                     ch.ControllerExecute();
                 }
+                ch = btn.CommandParameter as MdChannel;
+                if (ch != null)
+                {
+                    ch.ControllerExecute();
+                }
             }
         }
-
+        
         private void OpenDataReportWndBtn_Click(object sender, RoutedEventArgs e)
         {
-            var reprotWnd = new DataReportWnd();
+            DataReportWnd reprotWnd = new DataReportWnd();
             reprotWnd.Show();
+        }
+
+        private void GBSettingButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gbWnd = new GBSettingsWnd();
+            gbWnd.Show();
+        }
+
+        private void QuikChsListBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var chsWnd = new QuikChsLookListWnd();
+            chsWnd.Show();
         }
     }
 }

@@ -12,6 +12,110 @@ using System.Collections;
 
 namespace ExpRuntimeApp.Modules
 {
+    public class MdLinserSensor : INotifyPropertyChanged, IUnitRange
+    {
+        public MdLinserSensor(LinerSensor sensor)
+        {
+            Sensor = sensor;
+        }
+
+        public QRange Range
+        {
+            get
+            {
+                return ((IUnitRange)Sensor).Range;
+            }
+
+            set
+            {
+                ((IUnitRange)Sensor).Range = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+
+        public LinerSensor Sensor { get; private set; }
+
+        public string Unit
+        {
+            get
+            {
+                return ((IUnitRange)Sensor).Unit;
+            }
+
+            set
+            {
+                ((IUnitRange)Sensor).Unit = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Unit"));
+            }
+        }
+
+        public string Label { get { return Sensor.Label; } }
+
+        public string Summary
+        {
+            get { return Sensor.Summary; }
+            set
+            {
+                Sensor.Summary = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Summary"));
+            }
+        }
+
+        public string SensorNumber
+        {
+            get
+            {
+                return Sensor.SensorNumber;
+            }
+            set
+            {
+                Sensor.SensorNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SenserNumber"));
+            }
+        }
+        public double SensorQRangeLow
+        {
+            get { return Range.Low; }
+            set
+            {
+                Range = new QRange(value, Range.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorQRangeLow"));
+            }
+        }
+
+        public double SensorQRangeHigh
+        {
+            get { return Range.Height; }
+            set
+            {
+                Range = new QRange(Range.Low,value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorQRangeHigh"));
+            }
+        }
+
+        public double SensorElecRangeLow
+        {
+            get { return Sensor.ElectricSignalRange.Low; }
+            set
+            {
+                Sensor.ElectricSignalRange = new QRange(value, Sensor.ElectricSignalRange.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorElecRangeLow"));
+            }
+        }
+
+        public double SensorElecRangHigh
+        {
+            get { return Sensor.ElectricSignalRange.Height; }
+            set
+            {
+                Sensor.ElectricSignalRange = new QRange(Sensor.ElectricSignalRange.Low, value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorElecRangHigh"));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public override string ToString() => $"{Label}/{SensorNumber}";
+    }
     /// <summary>
     /// UI通道模块，实现通道信息的界面更新。
     /// </summary>
@@ -57,6 +161,12 @@ namespace ExpRuntimeApp.Modules
                     {
                         old.NotifyElementLabelChanged -= NotifyElementLabelChanged;
                         old.NotifyValueUpdated -= NotifyValueUpdated;
+
+                        var aoc = old as AnalogueOutputChannel;
+                        if (aoc != null)
+                        {
+                            aoc.AOValueChanged -= NotifyAOValueChanged;
+                        }
                     }
 
                     _channel = value;
@@ -66,12 +176,19 @@ namespace ExpRuntimeApp.Modules
                     {
                         _channel.NotifyElementLabelChanged += NotifyElementLabelChanged;
                         _channel.NotifyValueUpdated += NotifyValueUpdated;
+
+                        var aoc = _channel as AnalogueOutputChannel;
+                        if (aoc != null)
+                        {
+                            aoc.AOValueChanged += NotifyAOValueChanged;
+                        }
                     }
 
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Channel"));
                 }
             }
         }
+
 
         public IAnalogueMeasure AsAIChannel
         {
@@ -188,6 +305,14 @@ namespace ExpRuntimeApp.Modules
         {
             get
             {
+                if (AsAIChannel?.Collector != null)
+                {
+                    var ls = AsAIChannel.Collector as LinerSensor;
+                    if (ls != null)
+                    {
+                        return new MdLinserSensor(ls);
+                    }
+                }
                 return AsAIChannel?.Collector;
             }
 
@@ -300,7 +425,7 @@ namespace ExpRuntimeApp.Modules
                 {
                     AsAOChannel.ControlValue = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ControlValue"));
-                }                    
+                }
             }
         }
 
@@ -327,8 +452,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsStatusController.NextStatus = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NextStatus"));
+                if (AsStatusController != null)
+                {
+                    AsStatusController.NextStatus = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NextStatus")); 
+                }
             }
         }
 
@@ -362,6 +490,11 @@ namespace ExpRuntimeApp.Modules
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MeasureValue"));
             }
+        }
+
+        private void NotifyAOValueChanged(IAnalogueOutput obj)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
         }
 
         private void NotifyElementLabelChanged(LabElement sender, NotifyElementLabelChangedEventArgs arg)

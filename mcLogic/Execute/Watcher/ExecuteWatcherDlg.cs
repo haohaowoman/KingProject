@@ -24,6 +24,12 @@ namespace mcLogic.Execute.Watcher
 
         private void ExecuteWatcherDlg_Load(object sender, EventArgs e)
         {
+            RefreshBtn_Click(sender, e);
+        }
+
+        // 刷新数据
+        private void RefreshBtn_Click(object sender, EventArgs e)
+        {
             ETypeTextBox.Text = _watcher.TargetExecuter.GetType().FullName;
 
             ENameTextBox.Text = nameof(_watcher.TargetExecuter);
@@ -47,13 +53,8 @@ namespace mcLogic.Execute.Watcher
                 PIDTdTextBox.Text = pid.Param.Td.ToString();
                 TsTextBox.Text = pid.Param.Ts.ToString();
                 TargetValueTextBox.Text = pid.TargetVal.ToString();
-            }            
-            RefreshBtn_Click(sender, e);
-        }
+            }
 
-        // 刷新数据
-        private void RefreshBtn_Click(object sender, EventArgs e)
-        {
             var sEv = EChart.Series.FindByName("ExeValue");
             var sFv = EChart.Series.FindByName("FedbackValue");
             var fe = _watcher.TargetExecuter as IDataFeedback;

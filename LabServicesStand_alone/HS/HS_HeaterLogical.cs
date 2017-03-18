@@ -258,6 +258,7 @@ namespace LabMCESystem.Servers.HS
 
             var exe = ch.Controller as HS_ElectricHeaterExecuter;
             exe.ExecuteOver();
+            exe.Reset();
             exe.Heater?.Stop();
         }
         

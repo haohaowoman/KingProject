@@ -148,7 +148,7 @@ namespace mcLogic.Execute
 
             ExecuteChanged += PIDExecuterBase_ExecuteChanged;
 
-            FedbackInTolerance += PIDExecuterBase_FedbackInToleranced;
+            FedbackInTolerance += PIDExecuterBase_FedbackInToleranced;            
         }
 
         /// <summary>
@@ -193,8 +193,7 @@ namespace mcLogic.Execute
 
         public override void Reset()
         {
-            ExecuteOver();
-
+            _periodTimer.Stop();
             ExecuteTCount = 0;
             ECurrent = 0;
             ELastOne = 0;

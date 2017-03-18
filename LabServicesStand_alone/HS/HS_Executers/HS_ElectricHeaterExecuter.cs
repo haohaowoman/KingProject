@@ -18,7 +18,7 @@ namespace LabMCESystem.Servers.HS
     /// </summary>
     class HS_ElectricHeaterExecuter : PredicatePositionPID
     {
-        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 180000, Kp = 0.6, Ti = 10000, Td = 1000})
+        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(100, new SafeRange(0, 800), new PIDParam() { Ts = 60000, Kp = 1, Ti = 0, Td = 0 })
         {
             if (heater == null)
             {
@@ -31,12 +31,14 @@ namespace LabMCESystem.Servers.HS
 
             ExecuteChanged += HS_ElectricHeaterExecuter_ExecuteChanged;
 
+            ExecuteOvered += HS_ElectricHeaterExecuter_ExecuteOvered;
             // 公差为数据类型的精度。
             AllowTolerance = new Tolerance(0.11);
 
             AutoFinish = true;
         }
 
+        
         /// <summary>
         /// 为防止电炉功率过大设置电炉的升温步进为100。
         /// </summary>
@@ -48,10 +50,13 @@ namespace LabMCESystem.Servers.HS
         /// 获取/设置电加热器的最低进入流量。
         /// </summary>
         public double RequireMinInFlow { get; set; }
-        
+
         private void HS_ElectricHeaterExecuter_ExecuteChanged(object sender, double executedVal)
         {
-            Heater?.SetTemperature(executedVal);
+            if(true != Heater?.SetTemperature(executedVal))
+            {
+                System.Diagnostics.Debug.WriteLine($"/********Heater {Heater?.Caption} set tempreature {executedVal:F1} fault.********/");
+            }
         }
 
         private void HS_ElectricHeaterExecuter_UpdateFedback(IDataFeedback sender)
@@ -66,28 +71,37 @@ namespace LabMCESystem.Servers.HS
             }
         }
 
+        private void HS_ElectricHeaterExecuter_ExecuteOvered(object obj)
+        {
+            Reset();
+        }
+
         protected override bool OnExecute(ref double eVal)
         {
-            HS_ElectricHeaterExecuter_UpdateFedback(this);
-
-            if (Heater?.HeaterIsRun == true)
+            //HS_ElectricHeaterExecuter_UpdateFedback(this);
+            bool br = base.OnExecute(ref eVal);
+            if (br)
             {
-                double tc = TargetVal - FedbackData;
-                if (tc <= 0)
+                if (Heater?.HeaterIsRun == true)
                 {
-                    eVal = TargetVal;
+                    double tc = TargetVal - FedbackData;
+
+                    if (tc <= 0)
+                    {
+                        eVal = TargetVal;
+                    }
+                    else
+                    {
+                        eVal = FedbackData + Math.Min(HeaterTempUpStepInterval, tc);
+                    }
                 }
                 else
                 {
-                    eVal = FedbackData + Math.Min(HeaterTempUpStepInterval, tc);
+                    eVal = Math.Min(TargetVal, HeaterTempUpStepInterval);
                 }
             }
-            else
-            {
-                eVal = Math.Min(TargetVal,HeaterTempUpStepInterval);
-            }
-            //eVal = TargetVal;
-            return true;
+
+            return br;
         }
     }
 }

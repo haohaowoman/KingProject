@@ -11,7 +11,7 @@
         DataContext="{StaticResource ExpViewModule}"
         Title="热路温度设置选择" Height="620" Width="920" FontSize="18" 
         Tag="{Binding Path=MdExperPoints[热边空气流量]}"
-                   Closed="MetroWindow_Closed" IsMinButtonEnabled="False" EnableDWMDropShadow="True" Icon="/ExpRuntimeApp;component/Images/CheckRight.ico">
+                   Closed="MetroWindow_Closed" IsMinButtonEnabled="False" EnableDWMDropShadow="True" Icon="/ExpRuntimeApp;component/Images/CheckRight.ico" Background="{DynamicResource HS_BackgroundBrush}">
     <Grid Margin="12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

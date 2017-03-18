@@ -99,7 +99,7 @@
                     Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气进口温度]}"/>
 
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="4" d:LayoutOverrides="Height">
+        <StackPanel Orientation="Vertical" Grid.Row="4" Visibility="Collapsed" d:LayoutOverrides="Height">
 
             <TextBlock Margin="2" VerticalAlignment="Center"
                 Text="一冷路空气流量调节：" d:LayoutOverrides="LeftPosition, RightPosition"/>
@@ -110,7 +110,7 @@
                                  Value="{Binding Path=AOValue}"
                                  />
         </StackPanel>
-        <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width" Visibility="Collapsed">
             <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
                 Content="启动" FontSize="18" Cursor="Hand"
                     Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[一冷空气流量]}"/>
@@ -120,5 +120,32 @@
 
         </StackPanel>
 
+        <StackPanel Orientation="Vertical" Grid.Row="4" d:LayoutOverrides="Height" DataContext="{Binding Path=MdChannels[FirstColdFan]}">
+           
+            <TextBlock Margin="2" VerticalAlignment="Center"
+                d:LayoutOverrides="LeftPosition, RightPosition">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="一冷路风机控制:{0:F0}-{1:F0}">
+                        <Binding Path="RangeLow"/>
+                        <Binding Path="RangeHigh"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <metro:NumericUpDown Margin="2" MinWidth="100" FontSize="18" StringFormat="{}{0:F0} rpm" d:LayoutOverrides="LeftPosition, RightPosition"
+                                 
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"/>
+
+        </StackPanel>
     </Grid>
 </UserControl>

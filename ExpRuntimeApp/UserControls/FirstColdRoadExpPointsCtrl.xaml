@@ -25,52 +25,70 @@
 
             <TextBlock Text="一冷路空气出口温度：" VerticalAlignment="Center"/>
 
+            <TextBlock Text="一冷路压差：" VerticalAlignment="Center"/>
+            
             <TextBlock Text="实验室温度：" VerticalAlignment="Center"/>
 
-            <TextBlock Text="热平衡比：" VerticalAlignment="Center"/>
+            <TextBlock Text="一冷吸热量：" VerticalAlignment="Center"/>
+            
+            <TextBlock Text="散热效率：" VerticalAlignment="Center"/>
         </UniformGrid>
         <UniformGrid Grid.Column="1" Margin="5" Columns="1" d:LayoutOverrides="Width">
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[一冷空气流量].MeasureValue"/>
                     <Binding Path="MdExperPoints[一冷空气流量].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[一冷空气进口压力].MeasureValue"/>
                     <Binding Path="MdExperPoints[一冷空气进口压力].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[一冷空气进口温度].MeasureValue"/>
                     <Binding Path="MdExperPoints[一冷空气进口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[一冷空气出口压力].MeasureValue"/>
                     <Binding Path="MdExperPoints[一冷空气出口压力].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[一冷空气出口温度].MeasureValue"/>
                     <Binding Path="MdExperPoints[一冷空气出口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[LAB_TT6-1_HMI].MeasureValue"/>
-                    <Binding Path="MdExperPoints[LAB_TT6-1_HMI].Unit"/>
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[一冷压差].MeasureValue"/>
+                    <Binding Path="MdExperPoints[一冷压差].Unit"/>
+                </MultiBinding>
+            </TextBox>
+            
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdChannels[LAB_TT6-1_HMI].MeasureValue"/>
+                    <Binding Path="MdChannels[LAB_TT6-1_HMI].Unit"/>
                 </MultiBinding>
             </TextBox>
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
-                    <Binding Path="MdExperPoints[一冷空气出口温度].MeasureValue"/>
-                    <Binding Path="MdExperPoints[一冷空气出口温度].Unit"/>
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[一冷吸热量].MeasureValue"/>
+                    <Binding Path="MdExperPoints[一冷吸热量].Unit"/>
+                </MultiBinding>
+            </TextBox>
+
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F3} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[散热效率].MeasureValue"/>
+                    <Binding Path="MdExperPoints[散热效率].Unit"/>
                 </MultiBinding>
             </TextBox>
         </UniformGrid>

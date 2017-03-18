@@ -7,10 +7,10 @@
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
         mc:Ignorable="d"
-        Title="环散系统试验历史数据分析" Height="800" Width="800"
+        Title="历史数据分析" Height="800" Width="800"
         FontSize="24"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        WindowState="Maximized" Background="{DynamicResource HS_BackgroundBrush}" Icon="/ExpRuntimeApp;component/Images/History.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,9 +20,7 @@
         <Frame Grid.Row="1" Margin="2" Name="PageFram" Source="/Pages/MeasureAndControlPages/HistoryExperimentReportPage.xaml"/>
 
         <DockPanel Grid.Row="2" Margin="3">
-            <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10" Padding="20,10" HorizontalAlignment="Right" 
-                    Click="Button_Click"
-                    Content="打开"/>
+            
         </DockPanel>
     </Grid>
 </metro:MetroWindow>

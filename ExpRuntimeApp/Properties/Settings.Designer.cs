@@ -25,13 +25,97 @@ namespace ExpRuntimeApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\\\ExperiemtFiles\\\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\ExperiemtFiles\\")]
         public string DefualtSaveFileDic {
             get {
                 return ((string)(this["DefualtSaveFileDic"]));
             }
             set {
                 this["DefualtSaveFileDic"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int WriteInterval {
+            get {
+                return ((int)(this["WriteInterval"]));
+            }
+            set {
+                this["WriteInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoWrite {
+            get {
+                return ((bool)(this["AutoWrite"]));
+            }
+            set {
+                this["AutoWrite"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Admin")]
+        public string LastUserName {
+            get {
+                return ((string)(this["LastUserName"]));
+            }
+            set {
+                this["LastUserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0001")]
+        public string LastUserID {
+            get {
+                return ((string)(this["LastUserID"]));
+            }
+            set {
+                this["LastUserID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProductType {
+            get {
+                return ((string)(this["LastProductType"]));
+            }
+            set {
+                this["LastProductType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProductID {
+            get {
+                return ((string)(this["LastProductID"]));
+            }
+            set {
+                this["LastProductID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastExpType {
+            get {
+                return ((string)(this["LastExpType"]));
+            }
+            set {
+                this["LastExpType"] = value;
             }
         }
     }

@@ -24,21 +24,21 @@
         <UniformGrid Grid.Column="1" Margin="5" Columns="1">
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气进口温度].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气进口温度].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气出口压力].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气出口压力].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气出口温度].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气出口温度].Unit"/>
                 </MultiBinding>
@@ -46,21 +46,21 @@
 
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气流量].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气流量].Unit"/>
                 </MultiBinding>
             </TextBox>
 
             <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
-                <MultiBinding StringFormat="{}{0:F2} {1}" Mode="OneWay">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
                     <Binding Path="MdExperPoints[热边空气流量].MeasureValue"/>
                     <Binding Path="MdExperPoints[热边空气流量].Unit"/>
                 </MultiBinding>

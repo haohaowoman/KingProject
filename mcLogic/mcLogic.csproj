@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Sample.cs" />
+    <Compile Include="Demarcate\DemarcateFactory.cs" />
     <Compile Include="Demarcate\LinerDemarcater.cs" />
     <Compile Include="Demarcate\RangeDemarcater.cs" />
     <Compile Include="Execute\DigitalExecuter.cs" />

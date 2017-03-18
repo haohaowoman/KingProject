@@ -18,10 +18,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public HS_TempreatureExecute() : base(0, new SafeRange(0, 800),
             new PIDParam()
             {
-                Ts = 60 * 1000 * 20,
-                Kp = 0.88,
-                Td = 0,
-                Ti = 1000 * 60 * 40
+                Ts = 60 * 1000 * 1.5,
+                Kp = 0.58,
+                Td = 10 * 1000,
+                Ti = 1000 * 60 * 30
             }
             )
         {
@@ -31,7 +31,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             UpdateFedback += HS_TempreatureExecute_UpdateFedback;
             ExecuteChanged += HS_TempreatureExecute_ExecuteChanged;
             ExecutePredicate = TempExecutePridicate;
-
+            ExecuteOvered += HS_TempreatureExecute_ExecuteOvered;
         }
 
         #region Properties
@@ -76,10 +76,58 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 return minFlow;
             }
         }
-
+        /// <summary>
+        /// 记录辅助测量温度值样本集合。
+        /// </summary>
+        private Queue<double> _secTempSamples = new Queue<double>();
+        /// <summary>
+        /// 获取辅助测量温度的测量标准差。
+        /// </summary>
+        public double SecTempDeviation { get; private set; } = 0;
+        /// <summary>
+        /// 温度采样深度。
+        /// </summary>
+        private const double TempSamplesWidth = 60;
+        /// <summary>
+        /// 温度的有效稳态标准差。
+        /// </summary>
+        private const double EfficTempDev = 1.2;
         #endregion
 
         #region Operators
+        /// <summary>
+        /// 计算辅助测量温度的测量标准差过程。
+        /// </summary>
+        private void ProSecTempDeviation()
+        {
+            if (SecTempChannel != null)
+            {
+                _secTempSamples.Enqueue(TargetTempChannel.MeasureValue);
+                int sfCount = _secTempSamples.Count;
+                double fE = 0;
+                if (sfCount > 0)
+                {
+                    if (sfCount > TempSamplesWidth)
+                    {
+                        _secTempSamples.Dequeue();
+
+                        sfCount--;
+                    }
+                    fE = _secTempSamples.Average();
+
+                    double tempSum = 0;
+                    foreach (var item in _secTempSamples)
+                    {
+                        tempSum += (item - fE) * (item - fE);
+                    }
+                    double t_var = tempSum / ((double)sfCount - 1.0);
+
+                    double t_dev = Math.Sqrt(t_var);
+
+                    SecTempDeviation = t_dev;
+                }
+            }
+        }
         // 加热条件。
         private bool TempExecutePridicate(object excuter, ref double val)
         {
@@ -90,30 +138,44 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 StopHeatersOutput();
                 be = false;
             }
+            // 计算温度标准差。
+            ProSecTempDeviation();
+
+            if (SecTempDeviation > EfficTempDev)
+            {
+                return false;
+            }
 
             return be;
         }
 
         private void HS_TempreatureExecute_ExecuteChanged(object sender, double executedVal)
         {
-            foreach (var hCh in HeaterChannels)
+            var tCh = TargetTempChannel as IAnalogueMeasure;
+            var sCh = SecTempChannel as IAnalogueMeasure;
+            if (tCh != null && sCh != null)
             {
-                var exe = hCh.Controller as HS_ElectricHeaterExecuter;
-
-                Debug.Assert(exe != null && exe.Heater != null);
-
-                if (exe.Heater.HeaterIsAuto)
+                // 计算热损失温度。
+                //double tempMiss = 1 - tCh.MeasureValue / sCh.MeasureValue;
+                //executedVal += tempMiss * executedVal;
+                foreach (var hCh in HeaterChannels)
                 {
-                    hCh.AOValue = executedVal;
-                    hCh.ControllerExecute();
-                }
+                    var exe = hCh.Controller as HS_ElectricHeaterExecuter;
 
+                    Debug.Assert(exe != null && exe.Heater != null);
+
+                    if (exe.Heater.HeaterIsAuto)
+                    {
+                        hCh.AOValue = executedVal;
+                        hCh.ControllerExecute();
+                    }
+                }
             }
         }
 
         private void HS_TempreatureExecute_UpdateFedback(IDataFeedback sender)
         {
-            sender.FedbackData = (/*TargetTempChannel*/SecTempChannel as IAnalogueMeasure)?.MeasureValue ?? 0;
+            sender.FedbackData = (TargetTempChannel/*SecTempChannel*/ as IAnalogueMeasure)?.MeasureValue ?? 0;
         }
         /// <summary>
         /// 从已添加的加热器通道添加电炉集合。
@@ -128,7 +190,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                     System.Diagnostics.Debug.Assert(exe != null);
                     Heaters.Add(exe.Heater);
                 }
-            }            
+            }
         }
         /// <summary>
         /// 停止所有电炉的输出运行。
@@ -140,18 +202,26 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 hCh.StopControllerExecute();
             }
         }
+        
+        private void HS_TempreatureExecute_ExecuteOvered(object obj)
+        {
+            _secTempSamples.Clear();
+            SecTempDeviation = 0;
+        }
+
         #endregion
 
         #region Overrides
 
         protected override bool OnExecute(ref double eVal)
         {
-            //if (ExecutePredicate?.Invoke(this, ref eVal) != false && base.OnExecute(ref eVal))
-            //{
-            //    return true;
-            //}
-            //return false;
-            return base.OnExecute(ref eVal);
+            bool rb = base.OnExecute(ref eVal);
+            if (ExecuteTCount < 1)
+            {
+                // 在第一次计算控制值时直接输出目标值。                
+                eVal = Math.Max(TargetVal, 100);
+            }
+            return rb;
         }
 
         #endregion

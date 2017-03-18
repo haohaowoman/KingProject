@@ -61,7 +61,13 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                         }
                         break;
                     case ExperimentStyle.Control:
-
+                        {
+                            IController se = cv.Channel as IController;
+                            if (se != null)
+                            {
+                                rt = StatusOutputTemplate;
+                            }
+                        }
                         break;
                     case ExperimentStyle.Feedback:
                         {

@@ -9,6 +9,7 @@ namespace mcLogic.Demarcate
     /// <summary>
     /// 通过线必方程计算得到的工程量的标定器。
     /// </summary>
+    [Serializable]
     public class LinerDemarcater : IDemarcate
     {        
         public LinerDemarcater()

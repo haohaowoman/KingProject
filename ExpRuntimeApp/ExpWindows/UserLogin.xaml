@@ -10,7 +10,8 @@
         Title="进入环散系统" Height="697" Width="800"
         FontSize="24"
                    WindowStartupLocation="CenterScreen"
-                   WindowState="Normal" ShowMaxRestoreButton="False" EnableDWMDropShadow="True">
+                   WindowState="Normal" ShowMaxRestoreButton="False" EnableDWMDropShadow="True" Icon="pack://siteoforigin:,,,/Images/DefualtUserImage.png"
+                   DataContext="{StaticResource ExpViewModule}">
     <Grid HorizontalAlignment="Center" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -24,9 +25,9 @@
 
             <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
                 <TextBlock Text="姓名:" Margin="5,3"/>
-                <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True"/>
+                <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True" Text="{Binding Path=UserName}"/>
                 <TextBlock Text="工号:" Margin="5,3"/>
-                <TextBox Margin="5,3" />
+                <TextBox Margin="5,3" Text="{Binding Path=UserID}" />
             </StackPanel>
 
             <uc:HS_ProductInforCtrl DockPanel.Dock="Right" Margin="20,5"/>

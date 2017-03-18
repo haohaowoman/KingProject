@@ -27,7 +27,7 @@ namespace EM9118
         int index;  //二维数组下标
         Thread mthread; //采集数据线程
         int _moveWndWidth; //保存二维数组列数
-        byte[] recv = new byte[4800]; //收到数据存放
+        byte[] recv = new byte[9600]; //收到数据存放
         private int[] _moveWndVsSum = new int[6];
         short[,] tmp = new short[6, 20];
         int[] tempSum = new int[6];   //收到数据的总和
@@ -71,9 +71,9 @@ namespace EM9118
             while (!isWork)
             {
                 int rl = revMessByData(recv);
-                if (rl % 240 == 0)     //收到的数据如果不是20组，则抛弃整个数据
+                if (rl > 0 && rl % 240 == 0)     //收到的数据如果不是20组，则抛弃整个数据
                     extData(rl);
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
         }
         #endregion
@@ -152,6 +152,8 @@ namespace EM9118
             {
                 case 1:
                     dataSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    dataSocket.ReceiveBufferSize = 9600;
+                    dataSocket.DontFragment = true;
                     break;
                 default:
                     return -1;
@@ -243,8 +245,7 @@ namespace EM9118
         {
             int recvLenth;
             try
-            {
-
+            {                
                 recvLenth = this.dataSocket.Receive(recvData, recv.Length, SocketFlags.None);
                 return recvLenth;
             }
@@ -272,19 +273,19 @@ namespace EM9118
                     for (int i = 0; i < 6; i++)
                     {
                         tmp[i, c] = (short)((recv[p * 240 + c * 12 + i * 2 + 1] << 8 | recv[p * 240 + c * 12 + i * 2]) & 0xffff);
-                        if ((tmp[i, c] & 0xFF00) == 0xFF00)
-                        {
-                            // 出现错误代码。                            
-                            if (c == 0)
-                            {
-                                tmp[i, c] = 0;
-                            }
-                            else
-                            {
-                                tmp[i, c] = tmp[i, c - 1];
-                            }
-                            //Console.WriteLine($"Card {commondIP} channel {i} data is error 0x{tmp[i, c]:x4}-{tmp[i, c]:d}.");
-                        }
+                        //if ((tmp[i, c] & 0xFF00) == 0xFF00)
+                        //{
+                        //    // 出现错误代码。                            
+                        //    if (c == 0)
+                        //    {
+                        //        tmp[i, c] = 0;
+                        //    }
+                        //    else
+                        //    {
+                        //        tmp[i, c] = tmp[i, c - 1];
+                        //    }
+                        //    //Console.WriteLine($"Card {commondIP} channel {i} data is error 0x{tmp[i, c]:x4}-{tmp[i, c]:d}.");
+                        //}
                         tempSum[i] += tmp[i, c];
                         tempMax[i] = Math.Max(tempMax[i], tmp[i, c]);
                         tempMin[i] = Math.Max(tempMin[i], tmp[i, c]);
@@ -302,18 +303,25 @@ namespace EM9118
                         {
                             _moveWndVsSum[i] -= saveData[i, index % _moveWndWidth];
                         }
-                        
+
                         if (index > 0)
                         {
                             // 排除掉较大跳变值。
                             int ct = lbs - saveData[i, (index - 1) % _moveWndWidth];
-                            if (ct >= 9600/*saveData[i, (index - 1) % _moveWndWidth] / 2*/ || ct <= -9600/*-saveData[i, (index - 1) % _moveWndWidth] / 2*/)
+                            if (ct >= 2048/*saveData[i, (index - 1) % _moveWndWidth] / 2*/ || ct <= -2048/*-saveData[i, (index - 1) % _moveWndWidth] / 2*/)
                             {
 #if DEBUG
-                                Console.WriteLine($"Card {commondIP} channel {i} data {lbs} is error re={saveData[i, (index - 1) % _moveWndWidth]} at {DateTime.Now.ToShortTimeString()}.");
+                                Console.WriteLine($"Card {commondIP} channel {i} data {lbs} is error re={saveData[i, (index - 1) % _moveWndWidth]} at {DateTime.Now.ToShortTimeString()}, buffer size is {bytesCount}.");
+                                StringBuilder sb = new StringBuilder();
+                                for (int n = 0; n < 20; n++)
+                                {
+                                    sb.AppendFormat("{0:X4}",tmp[i,n]);
+                                    sb.Append(" ");
+                                }
+                                Console.WriteLine(sb.ToString());
 #endif
-                                lbs = saveData[i, (index - 1) % _moveWndWidth];
-                                
+                                //lbs = saveData[i, (index - 1) % _moveWndWidth];
+
                             }
                         }
 
@@ -358,7 +366,9 @@ namespace EM9118
         public double finalVer(int channelNum, double recvData)
         {
             double tmp = (((double)recvData / 29490.0) * 4.500);
-            tmp = ChannelInfo.getCorrectData(this.boardNum, channelNum + 1, tmp);
+            //tmp = ChannelInfo.getCorrectData(this.boardNum, channelNum + 1, tmp);
+            // 直接计算电流值
+            tmp = tmp * 1000.0 / 249.0;
             return tmp;
         }
         #endregion

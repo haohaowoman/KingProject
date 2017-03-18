@@ -19,7 +19,7 @@
         </Path>
         <Ellipse Fill="#FFCDD4B6"  Canvas.Left="10" Stroke="Black" Canvas.Top="10" Width="130" Height="130"/>
         <Ellipse  Canvas.Left="15.255" Stroke="Black" Canvas.Top="14.745" Width="120" Height="120" Fill="#FFF4F4F5"/>
-        <TextBox x:Name="textBox" Height="41" Canvas.Left="26" TextWrapping="Wrap" Text="{Binding Path=MeasureValue,StringFormat={}{0:F1}}" Canvas.Top="46" Width="99"
+        <TextBox x:Name="textBox" Height="41" Canvas.Left="26" TextWrapping="Wrap" Text="{Binding Path=MeasureValue,StringFormat={}{0:F0}}" Canvas.Top="46" Width="99"
                  IsReadOnly="True" FontSize="24" IsHitTestVisible="False" TextAlignment="Center" BorderThickness="2"/>
         <TextBlock x:Name="textBlock" TextAlignment="Center" FontSize="18" Height="24" Canvas.Left="27" TextWrapping="Wrap" Text="{Binding Path=Unit}" Canvas.Top="87" Width="98" FontStyle="Italic"/>
         <Ellipse Fill="#FFF7FB95" Height="12" Canvas.Left="15" Stroke="Black" Canvas.Top="15" Width="12"/>

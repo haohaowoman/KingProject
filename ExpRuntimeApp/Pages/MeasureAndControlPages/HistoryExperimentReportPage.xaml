@@ -7,9 +7,10 @@
       xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
       mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="800"
+      d:DesignHeight="960" d:DesignWidth="1024"
+      Loaded="Page_Loaded"
       Title="历史试验查看"
-      FontSize="18">
+      FontSize="16" DataContext="{StaticResource ExpViewModule}" Unloaded="Page_Unloaded">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,40 +19,98 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="46*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="3">
-            <Label Margin="5,3" VerticalAlignment="Center" Content="按时间查询试验记录："/>
-            <metro:DateTimePicker Margin="5,3" MinWidth="200" VerticalAlignment="Center" FontSize="24"/>
 
-            <Button Margin="5,3" Padding="8,3" VerticalAlignment="Center" Style="{DynamicResource SquareButtonStyle}"
-                    Content="查看全部" Click="LookAllButton_Click"/>
+        <DockPanel Grid.Row="1" Grid.Column="0" Margin="5">
+            <TextBox DockPanel.Dock="Top" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{DynamicResource SearchMetroTextBox}"/>
+            <ListBox DockPanel.Dock="Top" Margin="0,3" BorderThickness="1" BorderBrush="#DA547AA8" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage},Path=ReportFiles}" DisplayMemberPath="Name" SelectionChanged="ListBox_SelectionChanged"/>
+        </DockPanel>
 
-            <TextBox Margin="20,5" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource SearchMetroTextBox}"/>
-        </StackPanel>
-        
-        <Grid Grid.Column="1" Grid.Row="1" Margin="3">
-            <Grid.RowDefinitions>                
+        <StackPanel Grid.Column="1" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="3"/>
+
+        <Grid Grid.Column="1" Grid.Row="1" Margin="3"  DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryExperimentReportPage,Mode=FindAncestor}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             
-            <DataGrid Grid.Row="0" GridLinesVisibility="Horizontal">
+            <UniformGrid Grid.Row="0" Grid.Column="0" Margin="3" Columns="2" HorizontalAlignment="Left">
+                <Label VerticalAlignment="Center" Content="试验类型："/>
+                <TextBox VerticalAlignment="Center" MinWidth="120" IsReadOnly="True" Text="{Binding Path=ExpType}"/>
+                <Label VerticalAlignment="Center" Content="产品型号："/>
+                <TextBox VerticalAlignment="Center" IsReadOnly="True" Text="{Binding Path=ProductType}"/>
+                <Label VerticalAlignment="Center" Content="产品编号："/>
+                <TextBox VerticalAlignment="Center" IsReadOnly="True" Text="{Binding Path=ProductID}"/>
+            </UniformGrid>
+
+            <DockPanel Grid.Row="0" Margin="3" Grid.Column="2">
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5"
+                        Command="{Binding Path=ReportToExcel,Source={StaticResource ExpViewModule}}"
+                        CommandParameter="{Binding Path=DataReport,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage}}">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_office_excel}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="导出Excel"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5" VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding Source={StaticResource ExpViewModule},Path=SaveAsReport}" CommandParameter="{Binding Path=DataReport,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage}}"
+                    >
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_book_open_text_image}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="另存为"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Right" Click="OpenButton_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="3" Padding="10,5" VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding Source={StaticResource ExpViewModule}, Path=LoadReport}"
+                        CommandParameter="{Binding Path=DataReport,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage}}"
+                    >
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="打开"></TextBlock>
+                    </DockPanel>
+                </Button>
+            </DockPanel>
+
+            <DataGrid x:Name="ReportGrid" Grid.Row="1" Grid.ColumnSpan="2" Margin="3" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage},Path=DataReport.HS_DataReport.DefaultView}" IsReadOnly="True" AutoGenerateColumns="False" BorderThickness="1">
                 <DataGrid.Columns>
-
-                    <DataGridHyperlinkColumn Header="试验数据文件"/>
-
-                    <DataGridHyperlinkColumn Header="试验时间"/>
-
-                    <DataGridTextColumn Header="产品型号"/>
-
-                    <DataGridTextColumn Header="产品编号"/>
-
-                    <DataGridTextColumn Header="试验名称"/>
-
-                    <DataGridTextColumn Header="试验人员"/>
-                   
+                    <DataGridTextColumn Header="一冷流量 Kg/h" Binding="{Binding Path=_ylFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="一冷进口温度 ℃" Binding="{Binding Path=_ylInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷流量 Kg/h" Binding="{Binding Path=_elFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷进口温度 ℃" Binding="{Binding Path=_elInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷出口温度 ℃" Binding="{Binding Path=_elOutTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷进口压力 KPa" Binding="{Binding Path=_elInPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷出口压力 KPa" Binding="{Binding Path=_elOutPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="二冷压差 KPa" Binding="{Binding Path=_elPressDiff,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边流量 Kg/h" Binding="{Binding Path=_rlFlow,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边出口压力 KPa" Binding="{Binding Path=_rlOutPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边进口压力 KPa" Binding="{Binding Path=_rlInPress,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边进口温度 ℃" Binding="{Binding Path=_rlInTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边出口温度 ℃" Binding="{Binding Path=_rlOutTemp,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="热边压差 KPa" Binding="{Binding Path=_rlPressDiff,StringFormat={}{0:F1}}"/>
+                    <DataGridTextColumn Header="散热效率" Binding="{Binding Path=_heatEmissEffec,StringFormat={}{0:F1}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

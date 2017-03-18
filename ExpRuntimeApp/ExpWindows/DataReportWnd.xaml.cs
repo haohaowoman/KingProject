@@ -18,7 +18,7 @@ namespace ExpRuntimeApp.ExpWindows
     /// <summary>
     /// DataReportWnd.xaml 的交互逻辑
     /// </summary>
-    public partial class DataReportWnd : Window
+    public partial class DataReportWnd
     {
         public DataReportWnd()
         {

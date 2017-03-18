@@ -3,7 +3,28 @@
   <Profiles />
   <Settings>
     <Setting Name="DefualtSaveFileDic" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.\\ExperiemtFiles\\</Value>
+      <Value Profile="(Default)">.\ExperiemtFiles\</Value>
+    </Setting>
+    <Setting Name="WriteInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="AutoWrite" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LastUserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Admin</Value>
+    </Setting>
+    <Setting Name="LastUserID" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0001</Value>
+    </Setting>
+    <Setting Name="LastProductType" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastProductID" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastExpType" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

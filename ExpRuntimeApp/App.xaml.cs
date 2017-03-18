@@ -24,7 +24,7 @@ namespace ExpRuntimeApp
         private void Application_Startup(object sender, StartupEventArgs e)
        {
             HS_Server srvRes = TryFindResource("SingleService") as HS_Server;
-
+            //var r = this.Resources.MergedDictionaries;
             //if (srvRes != null)
             //{
             //    // Tyr load server from bin data file.
@@ -63,6 +63,8 @@ namespace ExpRuntimeApp
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            var vmd = TryFindResource("ExpViewModule") as ViewModules.ExperimentViewModule;
+            vmd?.Dispose();
             HS_Server srvRes = TryFindResource("SingleService") as HS_Server;
             srvRes?.Close();
         }

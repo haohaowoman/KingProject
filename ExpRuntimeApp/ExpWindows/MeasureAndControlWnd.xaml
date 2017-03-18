@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:UserControls="clr-namespace:ExpRuntimeApp.UserControls" x:Class="ExpRuntimeApp.ExpWindows.MeasureAndControlWnd"
+        Icon="/Images/Factory.ico"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        Title="试验工况" Height="1050" Width="1900"
+        Title="试验工况" Height="1050" Width="1900" Background="{DynamicResource HS_BackgroundBrush}"
     >
     <Grid>
         <Grid.RowDefinitions>

@@ -24,9 +24,9 @@ namespace ExpRuntimeApp.ExpWindows
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            PageFram.Navigate(new Uri("Pages/MeasureAndControlPages/HistoryDataAnalysePage.xaml", UriKind.Relative));
-        }
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    PageFram.Navigate(new Uri("Pages/MeasureAndControlPages/HistoryDataAnalysePage.xaml", UriKind.Relative));
+        //}
     }
 }

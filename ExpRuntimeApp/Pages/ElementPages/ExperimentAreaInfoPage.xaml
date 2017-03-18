@@ -8,7 +8,7 @@
       xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="800"
-      FontSize="24"
+      FontSize="18"
       xmlns:label="clr-namespace:LabMCESystem.LabElement;assembly=LabElement"
       DataContext="{StaticResource ExpViewModule}"
       Title="ExperimentAreaInfoPage" Loaded="Page_Loaded">
@@ -29,7 +29,7 @@
         <!--Devices information data grid.-->
         <DataGrid Name="epGrid" Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding Path=MdExperPoints}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="试验点名称" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                <DataGridTextColumn Header="试验点名称" IsReadOnly="True" Binding="{Binding Path=Label}"></DataGridTextColumn>
                 
                 <DataGridComboBoxColumn Header="连接通道" 
                                         ItemsSource="{Binding Source={StaticResource ExpViewModule}, Path=MdChannels}"
@@ -39,42 +39,9 @@
                                         SelectedValuePath="Channel"
                                         
                                         />
-
-                <DataGridTextColumn Header="单位" Binding="{Binding Path=Unit}"/>
-
-                <DataGridTemplateColumn Header="范围">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="{x:Type md:MdExperPoint}">
-                            <TextBlock Margin="3">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0:F1}~{1:F1}">
-                                        <Binding Path="Range.Low"/>
-                                        <Binding Path="Range.Height"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate DataType="{x:Type md:MdExperPoint}">
-                            <Grid Margin="3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <metro:NumericUpDown Grid.Column="0" Margin="2" VerticalAlignment="Center"
-                                                     MinWidth="100"
-                                                     Value="{Binding Path=RangeLow}"/>
-                                <TextBlock Grid.Column="1" Text="~" VerticalAlignment="Center"/>
-                                <metro:NumericUpDown Grid.Column="2" Margin="2" VerticalAlignment="Center"
-                                                     MinWidth="100"
-                                                     Value="{Binding Path=RangeHigh}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="值" MinWidth="80" IsReadOnly="True" Binding="{Binding Path=MeasureValue,StringFormat={}{0:F1}}"/>
+                <DataGridTextColumn Header="单位" IsReadOnly="True" Binding="{Binding Path=Unit}"/>
             </DataGrid.Columns>
 
             <DataGrid.GroupStyle>

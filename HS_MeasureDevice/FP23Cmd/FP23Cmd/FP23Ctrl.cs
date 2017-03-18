@@ -28,6 +28,7 @@ namespace FP23
         private bool bInit = false;
         private byte[] recv;
         private FP23.FP23Cmd mFP23Cmd = new FP23.FP23Cmd();
+        private const int EfficSleepInterval = 50;
         public FP23Ctrl(string com, Int32 bps,Parity parity, Int32 n, StopBits stopBit)
         {
             m_com = com;
@@ -65,7 +66,7 @@ namespace FP23
             try
             {
                 m_addr = addr;
-                sport.ReadTimeout = 100;
+                sport.ReadTimeout = 500;
                 if (!(sport.IsOpen))
                 {
                     sport.Open();
@@ -100,6 +101,7 @@ namespace FP23
                     sport.Close();
                 }
                 bInit = false;
+                sport.Dispose();
                 return true;
             }
             catch (System.Exception ex)
@@ -125,11 +127,11 @@ namespace FP23
                     cmd = GetFP23Cmd(m_addr, 1, "W", "018C", 0, 0);//关闭COM控制，设为本地LOC
 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 
                 if (sport.BytesToRead > 0) 
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -158,10 +160,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0800", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -188,10 +190,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0800", 0, 1);//0: PROG 1: FIX
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (recv[8] == '0' && recv[9] == '0' && recv[10] == '0' && recv[11] == '1')
@@ -225,10 +227,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0100", 0, 1);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -257,10 +259,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0182", 0, FloatToInt(temp));
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -287,10 +289,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0102", 0, 1);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -320,10 +322,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0107", 0, 1);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -359,10 +361,10 @@ namespace FP23
                 int t = 1024 + (index - 1) * 8;
                 cmd = GetFP23Cmd(m_addr, 1, "R", string.Format("{0:x4}", t), 7, 1);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -411,10 +413,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data[i]);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -465,10 +467,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data[i]);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(50);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -504,10 +506,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0300", 0, FloatToInt(temp));
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(50);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -534,10 +536,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "R", "0101", 0, 1);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -569,10 +571,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0184", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -601,10 +603,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0185", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -633,10 +635,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0190", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -665,10 +667,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0191", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -697,7 +699,7 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0192", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
                     Int32 n = sport.Read(recv, 0, 128);
@@ -729,10 +731,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0244", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -761,10 +763,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0245", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -793,10 +795,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0250", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -825,10 +827,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0251", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -857,10 +859,10 @@ namespace FP23
                 else
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0252", 0, 0);
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -894,10 +896,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -937,10 +939,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -980,10 +982,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -1024,10 +1026,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -1067,10 +1069,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -1110,10 +1112,10 @@ namespace FP23
                 {
                     cmd = GetFP23Cmd(m_addr, 1, "W", string.Format("{0:x4}", t + i), 0, data);
                     sport.Write(cmd, 0, cmd.GetLength(0));
-                    System.Threading.Thread.Sleep(80);
+                    System.Threading.Thread.Sleep(EfficSleepInterval);
                     if (sport.BytesToRead > 0)
                     {
-                        Int32 n = sport.Read(recv, 0, 128);
+                        Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                         if (n > 0)
                         {
                             if (!GetError(recv))
@@ -1149,10 +1151,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0590", 0,(int)(data*10));
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1182,10 +1184,10 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0591", 0,(int)(data*10));
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1215,10 +1217,10 @@ namespace FP23
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0592", 0, 0);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1248,10 +1250,10 @@ namespace FP23
                     cmd = GetFP23Cmd(m_addr, 1, "W", "0597", 0, 0);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1282,10 +1284,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "05B0", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1316,10 +1318,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0611", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1350,10 +1352,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0614", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1384,10 +1386,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0802", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1414,10 +1416,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0950", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1444,10 +1446,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0951", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))
@@ -1478,10 +1480,10 @@ namespace FP23
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0952", 0, data);
                 
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(80);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
-                    Int32 n = sport.Read(recv, 0, 128);
+                    Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));
                     if (n > 0)
                     {
                         if (GetError(recv))

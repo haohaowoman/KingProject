@@ -15,6 +15,10 @@ using mcLogic.Demarcate;
 using HS_DeviceInteract;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LabMCESystem.Servers.HS.HS_Executers;
+using System.Xml.Serialization;
+using System.IO;
+using mcLogic.Data;
+using LabMCESystem.Servers.HS.ChannelSet;
 
 namespace LabMCESystem.Servers.HS
 {
@@ -76,6 +80,11 @@ namespace LabMCESystem.Servers.HS
         }
 
         /// <summary>
+        /// 获取数采通道电流值。
+        /// </summary>
+        public double[] AnalogyValues { get; private set; }
+
+        /// <summary>
         /// 保存数采箱通道标号与其对应的下标集合。
         /// </summary>
         private Dictionary<string, int> _devPromptIndexDic;
@@ -84,6 +93,14 @@ namespace LabMCESystem.Servers.HS
 
         // 记录已更新数据的次数。
         private ulong _updatedCount = 0;
+        /// <summary>
+        /// 热路流量通道。
+        /// </summary>
+        private FeedbackChannel _rlFlowChannel;
+        /// <summary>
+        /// 二冷流量通道。
+        /// </summary>
+        private FeedbackChannel _elFlowChannel;
         #endregion
 
         #region Properties
@@ -102,13 +119,25 @@ namespace LabMCESystem.Servers.HS
         /// <summary>
         /// 获取/设置实验室的报警温度上限。
         /// </summary>
-        public double LabFaultTemprature { get; set; } = 45;
+        public double LabFaultTemprature { get; set; } = 50;
 
         /// <summary>
         /// 获取数采箱的交互。
         /// </summary>
         public HS_DeviceInteract.IADDeviceInteract ADDeviceInteract { get; private set; }
 
+        public List<LinerDemarcater> ADBoxDemarcaters { get; set; }
+
+        public List<SamplePointCollection> SamplePoints { get; private set; }
+
+        /// <summary>
+        /// 获取用于储存采集通道于传感器的数据集。
+        /// </summary>
+        public HS_Elements ChannelsDataset { get; private set; } = new HS_Elements();
+        /// <summary>
+        /// 获取设备中用户自定义添加的通道集合。
+        /// </summary>
+        public List<Channel> CustomChannels { get; private set; } = new List<Channel>();
         #endregion
 
         #region Operators
@@ -129,7 +158,7 @@ namespace LabMCESystem.Servers.HS
             InitialMeasureChannels(dev);
 
             InitialPLCChannels(dev);
-                        
+
             InitialStatusChannel(dev);
 
             InitialDianluChannels(dev);
@@ -154,8 +183,8 @@ namespace LabMCESystem.Servers.HS
 
             fFlow.Execute += (sender, e) =>
             {
-                fFlowExe.TargetVal = fFlow.AOValue;
-                fFlowExe.ExecuteBegin();
+                //fFlowExe.TargetVal = fFlow.AOValue;
+                //fFlowExe.ExecuteBegin();
             };
 
             fFlow.StopExecute += (sender, e) =>
@@ -176,14 +205,16 @@ namespace LabMCESystem.Servers.HS
                 (HS_EOVPIDExecuter)_executerMap["FT0101B"],
                 "FT0101#A&B"
                 );
-
+            FIRQE.ProductInEovChannel = Device["PV0107"] as IFeedback;
+            
             var elFlowCh = ch as FeedbackChannel;
+            _elFlowChannel = elFlowCh;
 
             System.Diagnostics.Debug.Assert(elFlowCh != null);
 
             elFlowCh.Execute += Flow_Execute;
             elFlowCh.StopExecute += Flow_StopExecute;
-
+            FIRQE.SafeRange = new mcLogic.SafeRange(elFlowCh.Range.Low, /*elFlowCh.Range.Height*/50000);
             elFlowCh.Controller = FIRQE;
 
             _executerMap.Add(ch.Label, FIRQE);
@@ -201,18 +232,22 @@ namespace LabMCESystem.Servers.HS
                 (HS_EOVPIDExecuter)_executerMap["FT0102B"],
                 "FT0102#A&B"
                 );
-
+            // 重置热路调节PID参数。
+            FIRQE.Param = new PIDParam() { Ts = 15000, Kp = 0.64, Ti = 80000, Td = 4000 };
+            FIRQE.ProductInEovChannel = Device["PV0108"] as IFeedback;
+            FIRQE.ProductOutEovChannel = Device["PV0109"] as IFeedback;
             var rlFlowCh = ch as FeedbackChannel;
+            _rlFlowChannel = rlFlowCh;
 
             System.Diagnostics.Debug.Assert(elFlowCh != null);
 
             rlFlowCh.Execute += Flow_Execute;
             rlFlowCh.StopExecute += Flow_StopExecute;
-
+            FIRQE.SafeRange = new mcLogic.SafeRange(rlFlowCh.Range.Low, /*rlFlowCh.Range.Height*/50000);
             rlFlowCh.Controller = FIRQE;
-            
+
             _executerMap.Add(ch.Label, FIRQE);
-            
+
             InitialEExceptions();
 
             // 为可控制通道关联控制处理事件。
@@ -245,7 +280,7 @@ namespace LabMCESystem.Servers.HS
                     ext.ExecuteChanged += HS_SwitchEOV_ExecuteChanged;
                 }
             }
-            
+
             // 为采集通道映射数据
             int index = 0;
             _devPromptIndexDic = new Dictionary<string, int>(48);
@@ -259,7 +294,7 @@ namespace LabMCESystem.Servers.HS
             }
 
             _mvDicKeys = _measureValues.Keys.ToArray();
-            
+
             // 打开数采箱设备。
             ADDeviceInteract = new EM9118.BoardManage();
             if (ADDeviceInteract != null)
@@ -359,8 +394,49 @@ namespace LabMCESystem.Servers.HS
             };
             //-------------------------------
 
+            // 读取数采箱通道校准样点值文件xml。
+            string path = Environment.CurrentDirectory;
+            path += @"\SamplePoints.xml";
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(List<SamplePointCollection>));
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    SamplePoints = xs.Deserialize(fs) as List<SamplePointCollection>;
+                    if (SamplePoints.Count != 48)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                InitialSamplePoints();
+            }
+
+            // 从样点创建所有通道的标定器。
+            ADBoxDemarcaters = new List<LinerDemarcater>(48);
+            UpdateADBoxDemarcaters();
+
+            // 将产品入口阀门、出口阀门全开。
+            var eov = Device["PV0107"] as IFeedback;
+            System.Diagnostics.Debug.Assert(eov != null);
+            eov.AOValue = 100;
+            eov.ControllerExecute();
+
+            eov = Device["PV0108"] as IFeedback;
+            System.Diagnostics.Debug.Assert(eov != null);
+            eov.AOValue = 100;
+            eov.ControllerExecute();
+
+            eov = Device["PV0109"] as IFeedback;
+            System.Diagnostics.Debug.Assert(eov != null);
+            eov.AOValue = 100;
+            eov.ControllerExecute();
         }
 
+        
         #region 电磁开关阀执行器事件
         // 电磁开关阀控制。
         private void HS_SwitchEOV_ExecuteChanged(object sender, double executedVal)
@@ -555,8 +631,25 @@ namespace LabMCESystem.Servers.HS
             // 如果流量不满足，则不执行本次控制，并首先执行增加入口流量执行机制
 
             // 如果连续出现流量不足状态则进行保护措施 关闭电炉 打开EV0103 与EV0104进电炉进行冲刷 强制执行故障异常保护
-
-            return true;
+            HS_ElectricHeaterExecuter ehExe = sender as HS_ElectricHeaterExecuter;
+            bool be = true;
+            if (ehExe != null)
+            {
+                if (ehExe.Heater.Caption.Contains("RL"))
+                {
+                    //ehExe.Heater.HeaterTrueRequirMinFlow; 
+                    be &= ehExe.Heater.HeaterTrueRequirMinFlow <= _rlFlowChannel.MeasureValue;
+                }
+                else if(ehExe.Heater.Caption.Contains("EL"))
+                {
+                    be &= ehExe.Heater.HeaterTrueRequirMinFlow <= _elFlowChannel.MeasureValue;
+                }
+                else
+                {
+                    be = false;
+                }
+            }
+            return be;
         }
 
         /// <summary>
@@ -576,7 +669,7 @@ namespace LabMCESystem.Servers.HS
 
             return true;
         }
-        static double iio = 4;
+
         // 定时器进行数据的读取和更新。
         private void _updateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -587,29 +680,31 @@ namespace LabMCESystem.Servers.HS
                 SwitchEOVHMIGroup.Read();
                 FanHMIGroup.Read();
                 HeaterHMIGroup.Read();
+                HeaterHMISetGroup.Read();
+                DOHMISetGroup.Read();
             }
 
             HeaterHMIGroup.Read();
             EOVHMIGroup.Read();
-
-            HeaterHMISetGroup.Read();
-            DOHMISetGroup.Read();
+            
             // 从采集设备读取所有通道数据
 
             double[] mvalues = ADDeviceInteract?.AllChannelsValue ?? new double[48];
-
-            if (ADDeviceInteract == null)
+ 
+            // 对数据进行校准。
+            if (ADBoxDemarcaters != null && ADBoxDemarcaters.Count == 48)
             {
                 for (int i = 0; i < 48; i++)
                 {
-                    mvalues[i] = i + iio;
-                }
-                iio += 0.01;
-                if (iio >= 20.0)
-                {
-                    iio = 4;
+                    mvalues[i] = ADBoxDemarcaters[i].Demarcate(mvalues[i]);
                 }
             }
+
+            if (AnalogyValues == null)
+            {
+                AnalogyValues = new double[mvalues.Length];
+            }
+            Array.Copy(mvalues, AnalogyValues, mvalues.Length);
 
             //
             var chs = Device.Channels;
@@ -627,13 +722,27 @@ namespace LabMCESystem.Servers.HS
                     if (amc != null)
                     {
                         var sensor = amc.Collector as LinerSensor;
-                        if (sender != null)
+                        if (sensor != null)
                         {
                             RangeDemarcater rd = new RangeDemarcater(
                                 new mcLogic.SafeRange(sensor.ElectricSignalRange.Low, sensor.ElectricSignalRange.Height),
                                 new mcLogic.SafeRange(sensor.Range.Low, sensor.Range.Height)
                                 );
-                            amc.MeasureValue = rd.Demarcate(mvalues[index]);
+                            double dv = 0;
+                            if (mvalues[index] > 3)
+                            {
+                                if (mvalues[index] < 4)
+                                {
+                                    mvalues[index] = 4;
+                                }
+                                dv = rd.Demarcate(mvalues[index]);
+                            }
+                            else
+                            {
+                                //dv = double.MinValue;
+                                dv = -99999;                                
+                            }
+                            amc.MeasureValue = dv;
                             //amc.MeasureValue = mvalues[index];
                         }
                         else
@@ -664,9 +773,26 @@ namespace LabMCESystem.Servers.HS
             }
 
             // 2 秒向PLC写入一次测量数据。
-            if (_updatedCount % 7 == 0)
+            if (_updatedCount % 4 == 0)
             {
                 WriteToPLCGetChannels();
+                if (_bTest)
+                {
+                    sb.Append(DateTime.Now.ToLongTimeString());
+                    sb.Append(',');
+                    IAnalogueMeasure am = Device["FT0101"] as IAnalogueMeasure;
+                    sb.Append(am.MeasureValue);
+                    sb.Append(',');
+                    am = Device["FT0101A"] as IAnalogueMeasure;
+                    sb.Append(am.MeasureValue);
+                    sb.Append(',');
+                    am = Device["PT0103"] as IAnalogueMeasure;
+                    sb.Append(am.MeasureValue);
+                    sb.Append(',');
+                    am = Device["PT0105"] as IAnalogueMeasure;
+                    sb.Append(am.MeasureValue);
+                    sb.AppendLine();
+                }
             }
 
             _updatedCount++;
@@ -724,6 +850,132 @@ namespace LabMCESystem.Servers.HS
             mcLogic.Execute.Watcher.ExecuteWatcher watcher = new mcLogic.Execute.Watcher.ExecuteWatcher(_executerMap["TT0106"]);
             watcher.ShowWatcherDialog();
         }
+
+        public void ShowCablibrationForm()
+        {
+            var cForm = new Calibration.Calibration();
+            cForm.HS_Device = this;
+            cForm.Show();
+        }
+
+        public void SaveCalibrations()
+        {
+            UpdateADBoxDemarcaters();
+            SaveSamplePoints();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        private bool _bTest = false;
+        public void BTest(bool bstart)
+        {
+            _bTest = bstart;
+            if (!_bTest)
+            {
+                using (StreamWriter sw = new StreamWriter(@"D:\Test.csv", true, Encoding.UTF8))
+                {
+                    sw.Write(sb.ToString());
+                }
+                sb.Clear();
+            }
+        }
+
+        /// <summary>
+        /// 初始化样点集合。
+        /// </summary>
+        private void InitialSamplePoints()
+        {
+            SamplePoints = new List<SamplePointCollection>(48);
+            for (int i = 0; i < 48; i++)
+            {
+                var spc = new SamplePointCollection();
+                spc.Add(new SamplePoint(4, 4));
+                spc.Add(new SamplePoint(15, 15));
+                SamplePoints.Add(spc);
+            }
+        }
+
+        /// <summary>
+        /// 更新数采箱标定器。
+        /// </summary>
+        private void UpdateADBoxDemarcaters()
+        {
+            for (int i = 0; i < 48; i++)
+            {
+                ADBoxDemarcaters.Add(DemarcateFactory.LinerDemFromSamplePoints(SamplePoints[i]));
+            }
+        }
+        /// <summary>
+        /// 将样点集合保存至文件。
+        /// </summary>
+        private void SaveSamplePoints()
+        {
+            string path = Environment.CurrentDirectory;
+            path += @"\SamplePoints.xml";
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(List<SamplePointCollection>));
+                using (FileStream fs = new FileStream(path,FileMode.Create,FileAccess.Write))
+                {
+                    xs.Serialize(fs, SamplePoints);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"{ex.Message} \n 保存样点文件错误。");
+                throw;
+            }
+        }
+        
+        public void SaveElements()
+        {
+            string eleSetPath = Environment.CurrentDirectory + @"\ElementsSet.xml";
+            ChannelsDataset.WriteXml(eleSetPath);
+        }
+        /// <summary>
+        /// 从数据集更新通道信息。
+        /// </summary>
+        public void UpdateMeasureChannels()
+        {
+            ChannelsDataset.Channels.UpdateToChannels(Device.Channels);
+        }
+
+        public void AddAMeasureChannel(AnalogueMeasureChannel mch)
+        {
+            ChannelsDataset.Channels.AddChannel(mch);
+            CustomChannels.Add(mch);
+        }
+
+        public void UpdateAMeasureChannel(AnalogueMeasureChannel mch)
+        {
+            ChannelsDataset.Channels.UpdateFromChannel(mch);
+        }
+
+        /// <summary>
+        /// 将测量通道更新到数据集。
+        /// </summary>
+        public void UpdateAMeasureChannel()
+        {
+            ChannelsDataset.Channels.UpdateFromChannels(Device.Channels);
+        }
+        /// <summary>
+        /// 删除自定义测量通道。
+        /// </summary>
+        /// <param name="mch"></param>
+        /// <returns>true删除成功。</returns>
+        public bool DeleteAMeasureChannel(AnalogueMeasureChannel mch)
+        {
+            if (CustomChannels.Contains(mch))
+            {
+                ChannelsDataset.Channels.DeleteChannel(mch);
+                Device.RemoveElement(mch);
+                CustomChannels.Remove(mch);
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Base class Override
@@ -750,6 +1002,8 @@ namespace LabMCESystem.Servers.HS
             }
 
             CloseOpcInteractGroup();
+
+            SaveSamplePoints();
         }
 
         protected override bool OnClosing()

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RS485Ctrl", "RS485Ctrl\RS485Ctrl.vcxproj", "{F42737C0-5420-44A6-8FE9-1C08F130FEBB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2F324D86-FC4D-49D7-ACE7-284806E066E5} = {2F324D86-FC4D-49D7-ACE7-284806E066E5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RS485Modbus", "RS485Modbus\RS485Modbus.vcxproj", "{2F324D86-FC4D-49D7-ACE7-284806E066E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F42737C0-5420-44A6-8FE9-1C08F130FEBB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F42737C0-5420-44A6-8FE9-1C08F130FEBB}.Debug|Win32.Build.0 = Debug|Win32
+		{F42737C0-5420-44A6-8FE9-1C08F130FEBB}.Release|Win32.ActiveCfg = Release|Win32
+		{F42737C0-5420-44A6-8FE9-1C08F130FEBB}.Release|Win32.Build.0 = Release|Win32
+		{2F324D86-FC4D-49D7-ACE7-284806E066E5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2F324D86-FC4D-49D7-ACE7-284806E066E5}.Debug|Win32.Build.0 = Debug|Win32
+		{2F324D86-FC4D-49D7-ACE7-284806E066E5}.Release|Win32.ActiveCfg = Release|Win32
+		{2F324D86-FC4D-49D7-ACE7-284806E066E5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
