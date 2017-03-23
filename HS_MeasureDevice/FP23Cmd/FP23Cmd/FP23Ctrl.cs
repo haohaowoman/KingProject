@@ -28,7 +28,7 @@ namespace FP23
         private bool bInit = false;
         private byte[] recv;
         private FP23.FP23Cmd mFP23Cmd = new FP23.FP23Cmd();
-        private const int EfficSleepInterval = 50;
+        private const int EfficSleepInterval = 80;
         public FP23Ctrl(string com, Int32 bps,Parity parity, Int32 n, StopBits stopBit)
         {
             m_com = com;
@@ -506,7 +506,7 @@ namespace FP23
                 byte[] cmd;
                 cmd = GetFP23Cmd(m_addr, 1, "W", "0300", 0, FloatToInt(temp));
                 sport.Write(cmd, 0, cmd.GetLength(0));
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(EfficSleepInterval);
                 if (sport.BytesToRead > 0)
                 {
                     Int32 n = sport.Read(recv, 0, Math.Min(sport.BytesToRead, recv.Length));

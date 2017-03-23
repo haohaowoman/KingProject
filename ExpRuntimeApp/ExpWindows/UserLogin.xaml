@@ -41,7 +41,8 @@
         <Canvas Grid.Row="2">
             <Button DockPanel.Dock="Left" Content="进入试验" 
                     Padding="20,8" Style="{DynamicResource AccentedSquareButtonStyle}" Canvas.Left="317.571" IsDefault="True" Canvas.Top="8.224"
-                    Click="Button_Click"/>
+                    Click="Button_Click"
+                    IsEnabled="{Binding ElementName=MakeSure,Path=BeSured}"/>
             <Button Content="取消" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" 
                     FontSize="24" Canvas.Left="475.071" Height="47.923" IsCancel="True" Canvas.Top="8.224"
                     Click="CancelButton_Click"/>

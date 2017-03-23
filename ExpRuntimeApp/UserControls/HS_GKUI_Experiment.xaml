@@ -6,145 +6,227 @@
              xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
              xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ExpRuntimeApp.UserControls.HS_GKUI_Experiment"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" d:DesignWidth="1900"
+             d:DesignHeight="1000" d:DesignWidth="1920"
              DataContext="{StaticResource ExpViewModule}">
     <Grid Background="#FFF9F7F7">
-        <Canvas Margin="10,0,-10,0" >
-            <Rectangle Fill="#FF929A9B" Stroke="Black" Height="150" Width="1710" Canvas.Left="74" Canvas.Top="400"/>
-            <Path Data="M1222.5,0.5 L1259.5,0.5 1259.5,314.00001 1259.5,352 1222.5,352 0.5,352 0.5,314.00001 1222.5,314.00001 z" Fill="#FF929A9B" Height="352.5" Canvas.Left="30" Stretch="Fill" Stroke="Black" Canvas.Top="576.5" Width="1260"/>
-            <Path Data="M0.5,0.5 L1259.5,0.5 1259.5,14.499994 1259.5,44.499992 1259.5,325.49999 1222.5,325.49999 1222.5,44.499992 0.5,44.499992 z" Height="326" Canvas.Left="30" Stretch="Fill" Stroke="Black" Canvas.Top="42" Width="1260" Fill="#FF929A9B"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="374" Canvas.Top="721" Width="230" EOVChannel="{Binding MdChannels[FT0102B]}"/>
-            <local:HS_FlowSensorCtrl Height="151" Canvas.Left="30" Canvas.Top="778" Width="162" FlowChannel="{Binding MdChannels[FT0102]}"/>
-            <local:HS_FlowSensorCtrl Height="150" Canvas.Left="663" Canvas.Top="400" Width="162" FlowChannel="{Binding MdChannels[FT0103]}"/>
-            <local:HS_FlowSensorCtrl Height="150" Canvas.Left="30" Canvas.Top="10" Width="162" FlowChannel="{Binding MdChannels[FT0101]}"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="374" Canvas.Top="844" Width="230" EOVChannel="{Binding MdChannels[FT0102A]}"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="374" Width="230" EOVChannel="{Binding MdChannels[FT0101A]}"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="374" Canvas.Top="119" Width="230" EOVChannel="{Binding MdChannels[FT0101B]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="198" Canvas.Top="743" Width="176" TemperatureChannel="{Binding MdChannels[TT0102]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="198" Canvas.Top="839" Width="176" PressureChannel="{Binding MdChannels[PT0104]}"/>
-            <local:SwtichEOVControl Canvas.Left="374" Canvas.Top="510" Height="223" Width="230" SwitchEOVChannel="{Binding MdChannels[EV0103]}"/>
-            <local:SwtichEOVControl Canvas.Left="371" Height="223" Width="230" Canvas.Top="215" RenderTransformOrigin="0.5,0.5" SwitchEOVChannel="{Binding MdChannels[EV0101]}">
-                <local:SwtichEOVControl.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="180"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </local:SwtichEOVControl.RenderTransform>
-            </local:SwtichEOVControl>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="198" Canvas.Top="119" Width="176" TemperatureChannel="{Binding MdChannels[TT0101]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="198" Canvas.Top="18" Width="176" PressureChannel="{Binding MdChannels[PT0103]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="841" Canvas.Top="128" Width="176" TemperatureChannel="{Binding MdChannels[TT0103]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="841" Canvas.Top="27" Width="176" PressureChannel="{Binding MdChannels[PT0105]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="1070" Canvas.Top="247" Width="176" TemperatureChannel="{Binding MdChannels[TT0105]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1070" Canvas.Top="146" Width="176" PressureChannel="{Binding MdChannels[PT0107]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="841" Canvas.Top="743" Width="176" TemperatureChannel="{Binding MdChannels[TT0104]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="841" Canvas.Top="839" Width="176" PressureChannel="{Binding MdChannels[PT0106]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="905" Canvas.Top="370" Width="176" PressureChannel="{Binding MdChannels[PT01]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="905" Canvas.Top="466" Width="176" TemperatureChannel="{Binding MdChannels[TT01]}"/>
-            <Rectangle Fill="#FFF4F4F5" Height="277" Canvas.Left="604" Stroke="Black" Canvas.Top="652" Width="237" RadiusX="8" RadiusY="8"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="1017" Canvas.Top="844" Width="230" EOVChannel="{Binding MdChannels[PV0108]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="1071" Canvas.Top="637" Width="176" TemperatureChannel="{Binding MdChannels[TT0106]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1071" Canvas.Top="733" Width="176" PressureChannel="{Binding MdChannels[PT0108]}"/>
-            <TextBlock x:Name="textBlock" Height="30" Canvas.Left="609" TextWrapping="Wrap" Text="热路加热器" Canvas.Top="617" Width="150" FontSize="24"/>
-            <Rectangle Fill="#FFF4F4F5" Height="277" Canvas.Left="604" Stroke="Black" Canvas.Top="42" Width="237" RadiusX="8" RadiusY="8"/>
-            <TextBlock x:Name="textBlock_Copy" Height="30" Canvas.Left="609" TextWrapping="Wrap" Text="二冷路加热器" Canvas.Top="324" Width="150" FontSize="24"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="1016" Width="230" EOVChannel="{Binding MdChannels[PV0107]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="1458" Canvas.Top="637" Width="176" TemperatureChannel="{Binding MdChannels[TT0107]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1458" Canvas.Top="733" Width="176" PressureChannel="{Binding MdChannels[PT0109]}"/>
-            <Path Data="M0.5,0.5 L37.499996,0.5 37.499996,313.5 363.5,313.5 363.5,352 37.499996,352 0.5,352 0.5,313.5 z" Fill="#FF929A9B" Height="352.5" Canvas.Left="1420" Stretch="Fill" Stroke="Black" Canvas.Top="576.5" Width="364"/>
-            <Path Data="M0.5,0.5 L363.5,0.5 363.5,40.499998 37.499996,40.499998 37.499996,255.5 0.5,255.5 0.5,40.499998 0.5,21.499999 z" Fill="#FF929A9B" Height="256" Canvas.Left="1420" Stretch="Fill" Stroke="Black" Canvas.Top="98" Width="364"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="1458" Canvas.Top="139" Width="176" TemperatureChannel="{Binding MdChannels[TT0108]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1458" Canvas.Top="235" Width="176" PressureChannel="{Binding MdChannels[PT0110]}"/>
-            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1575" Canvas.Top="370" Width="176" PressureChannel="{Binding MdChannels[PT05]}"/>
-            <local:HS_TemperatureSensor Height="96" Canvas.Left="1575" Canvas.Top="466" Width="176" TemperatureChannel="{Binding MdChannels[TT05]}"/>
-            <local:EOVCtrlControl Height="123" Canvas.Left="1458" Canvas.Top="844" Width="230" EOVChannel="{Binding MdChannels[PV0109]}"/>
-            <Path Data="M44.162998,1.5 L391.163,1.5 C402.20868,1.4999973 411.163,10.454302 411.163,21.499999 L411.163,33.60391 412.38361,33.157155 C414.2624,32.572797 416.25992,32.257997 418.331,32.257997 L419.163,32.257997 C430.20868,32.257997 439.163,41.2123 439.163,52.257997 L439.163,195.63099 C439.163,206.67669 430.20868,215.63099 419.163,215.63099 L418.331,215.63099 C416.25992,215.63099 414.2624,215.31619 412.38361,214.73184 L411.163,214.28508 411.163,228.5 C411.163,239.5457 402.20868,248.5 391.163,248.5 L44.162998,248.5 C33.117305,248.5 24.163,239.5457 24.162999,228.5 L24.162999,215.53854 22.332003,215.63099 21.499999,215.63099 C10.454305,215.63099 1.5,206.67669 1.5,195.63099 L1.5,52.257997 C1.5,41.2123 10.454305,32.257997 21.499999,32.257989 L22.332003,32.257989 24.162999,32.35045 24.162999,21.499999 C24.163,10.454302 33.117305,1.4999973 44.162998,1.5 z" Fill="#FFD1D8DA" Height="250" Canvas.Left="1115.668" Stretch="Fill" Stroke="Black" StrokeThickness="3" Canvas.Top="348" Width="440.664"/>
-            <Canvas Height="56" Canvas.Left="617.666" Canvas.Top="658" Width="207.334">
-                <TextBlock x:Name="textBlock1" Height="19" TextWrapping="Wrap" Canvas.Top="7" Width="77"><Run Text="热"/><Run Text="路温度控制"/></TextBlock>
-                <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
-                                      Minimum="{Binding Path=MdExperPoints[热边空气进口温度].RangeLow}"
-                                      Maximum="{Binding Path=MdExperPoints[热边空气进口温度].RangeHigh}"
-                                      Value="{Binding Path=MdExperPoints[热边空气进口温度].AOValue}"
-                                      StringFormat="{}{0:F1} ℃"/>
-                <Button x:Name="button" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
-                        Command="{Binding Path=ExpPointOutputCommand}"
-                        CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
-                <Button x:Name="button_Copy1" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
-                        Command="{Binding Path=ExpPointOutputStopCommand}"
-                        CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
+        <Canvas >
 
 
+            <Path Data="M0.5,0.5 L20.96653,0.50587556 C20.96653,0.50587556 21.009398,330.89537 21.009398,330.89537 21.009398,330.89537 362.5094,332.89537 362.5094,332.89537 L363.5,352 37.499996,352 13,352 C4.2143093,352.16855 0.049264774,347.47628 0.5,337.5 z" Fill="#FF929A9B" Height="352.504" Canvas.Left="1419.967" Stretch="Fill" Stroke="Black" Canvas.Top="563" Width="364.033"/>
+            <Path Data="M1238,0.50000978 C1238,0.49999672 1260,0.49999672 1260,0.50000978 L1259.5,376.31299 C1259.2759,381.46838 1259.1417,386.11841 1259.0382,390.181 L1258.9312,394.5 1754.667,394.5 1754.667,415 1239,415 1238,415 1162.4397,414.99228 C778.75195,414.91681 359.375,414.31299 -22.5,414.31299 -22.5,414.31299 -22.5,392 -22.5,392 L105.58195,392 105.5,391.18698 105.5,172.49998 C105.5,168.08171 109.08172,164.49998 113.50002,164.5 L122.5,164.5 C126.91828,164.49998 130.5,168.08171 130.50002,172.49998 L130.50002,391.18698 130.41805,392 524,392 C524,392 524,214.49998 524,214.49998 524,210.08171 524.08173,206.49998 528.5,206.5 L540.5,206.5 C544.91827,206.49998 548.5,210.08171 548.5,214.49998 L548.5,392 1237.5,392 C1237.5,392 1238,0.49998146 1238,0.50000978 z" Fill="Gray" Height="415.5" Canvas.Left="7" Stretch="Fill" Stroke="Black" Canvas.Top="569" Width="1778.167"/>
+
+
+            <Path Data="M1273.1992,0.5 L1274.741,0.83398771 1276.199,0.68699789 1778.866,0.68699789 C1783.2843,0.68701982 1786.866,4.2687416 1786.866,8.6869969 L1786.866,11.687003 C1786.866,16.105298 1783.2843,19.68702 1778.866,19.687002 L1287.6992,19.687002 1287.6992,46.99999 1287.7048,347.90874 C1287.7048,347.90874 1268.2048,347.76241 1268.2048,347.76241 L1268.1992,20.499998 581.19898,20.499998 581.19898,191.68701 C581.19897,196.10528 577.61725,199.68701 573.19898,199.68701 L567.19897,199.68701 C562.7807,199.68701 559.19897,196.10528 559.19897,191.68701 L559.19897,20.499998 C415.00389,20.499998 127.199,19.582426 127.199,20.686986 127.53233,67.853655 127.86524,118.02034 128.19858,165.18701 128.19858,165.18703 109.29973,166.68984 109.29973,166.68983 109.29973,166.68983 108.29973,20.853652 108.29973,20.853652 108.29973,20.853652 38.261098,19.597811 0.5,19.146718 L1,1.6467166 z" Fill="#FF929A9B" Height="348.409" Canvas.Left="2.301" Stretch="Fill" Stroke="Black" Canvas.Top="54.813" Width="1787.366"/>
+
+
+            <Rectangle Fill="#FF929A9B" Stroke="Black" Height="79" Width="1656" Canvas.Left="212" Canvas.Top="463"/>
+            <local:HS_FlowSensorCtrl Height="151" Canvas.Left="212" Canvas.Top="843.44" Width="162" FlowChannel="{Binding MdChannels[FT0102]}"/>
+            <local:HS_FlowSensorCtrl Height="150" Canvas.Left="586" Canvas.Top="430.627" Width="162" FlowChannel="{Binding MdChannels[FT0103]}"/>
+            <local:HS_FlowSensorCtrl Height="150" Canvas.Left="212" Width="162" FlowChannel="{Binding MdChannels[FT0101]}" Canvas.Top="15"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="374" Canvas.Top="803.813" Width="176" TemperatureChannel="{Binding MdChannels[TT0102]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="374" Canvas.Top="899.813" Width="176" PressureChannel="{Binding MdChannels[PT0104]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="374" Canvas.Top="106" Width="176" TemperatureChannel="{Binding MdChannels[TT0101]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="374" Canvas.Top="15" Width="176" PressureChannel="{Binding MdChannels[PT0103]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="946" Canvas.Top="90" Width="176" TemperatureChannel="{Binding MdChannels[TT0103]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="946" Canvas.Top="1" Width="176" PressureChannel="{Binding MdChannels[PT0105]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="1114" Canvas.Top="264" Width="176" TemperatureChannel="{Binding MdChannels[TT0105]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1114" Canvas.Top="175" Width="176" PressureChannel="{Binding MdChannels[PT0107]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="946" Canvas.Top="808.813" Width="176" TemperatureChannel="{Binding MdChannels[TT0104]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="946" Canvas.Top="904.813" Width="176" PressureChannel="{Binding MdChannels[PT0106]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="903" Canvas.Top="408.222" Width="176" PressureChannel="{Binding MdChannels[PT01]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="903" Canvas.Top="496.222" Width="176" TemperatureChannel="{Binding MdChannels[TT01]}"/>
+            <Rectangle Fill="#FFF4F4F5" Height="277" Canvas.Left="709" Stroke="Black" Canvas.Top="723.813" Width="237" RadiusX="8" RadiusY="8"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="1114" Canvas.Top="644.5" Width="176" TemperatureChannel="{Binding MdChannels[TT0106]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1114" Canvas.Top="736.5" Width="176" PressureChannel="{Binding MdChannels[PT0108]}"/>
+            <TextBlock x:Name="textBlock" Height="30" Canvas.Left="719" TextWrapping="Wrap" Text="热路加热器" Canvas.Top="688.813" Width="150" FontSize="24"/>
+            <Rectangle Fill="#FFF4F4F5" Height="277" Canvas.Left="704" Stroke="Black" Canvas.Top="10" Width="237" RadiusX="8" RadiusY="8"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="1420" Canvas.Top="644.5" Width="176" TemperatureChannel="{Binding MdChannels[TT0107]}"/>
+            <Path Data="M7.499988,26 C0.5,26 363.5,26 363.5,26 370.67866,32.285684 370.04407,38.506432 364.16667,44.687 364.16667,44.687 18.328866,44.687 18.328866,44.687 18.328866,44.687 17.6622,274.687 17.6622,274.687 17.6622,274.687 0.5,274.687 0.5,274.687 0.5,209.60064 0.5,43.794486 0.5,33.020333 0.90843378,28.756547 3.0514257,26.226219 7.499988,26 z" Fill="#FF929A9B" Height="249.687" Canvas.Left="1425" Stretch="Fill" Stroke="Black" Canvas.Top="152.813" Width="369.23"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="1420" Canvas.Top="175" Width="176" TemperatureChannel="{Binding MdChannels[TT0108]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1420" Canvas.Top="263" Width="176" PressureChannel="{Binding MdChannels[PT0110]}"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1605.967" Canvas.Top="408.222" Width="176" PressureChannel="{Binding MdChannels[PT05]}"/>
+            <local:HS_TemperatureSensor Height="96" Canvas.Left="1605.967" Canvas.Top="504.222" Width="176" TemperatureChannel="{Binding MdChannels[TT05]}"/>
+            <Path Data="M368.21652,142.59746 L368.21652,229.96611 372.22433,229.96611 372.22433,142.59746 z M358.19696,142.59746 L358.19696,229.96611 362.2048,229.96611 362.2048,142.59746 z M348.17743,142.59746 L348.17743,229.96611 352.18524,229.96611 352.18524,142.59746 z M338.15787,142.59746 L338.15787,229.96611 342.16568,229.96611 342.16568,142.59746 z M328.13831,142.59746 L328.13831,229.96611 332.14615,229.96611 332.14615,142.59746 z M318.11877,142.59746 L318.11877,229.96611 322.12659,229.96611 322.12659,142.59746 z M308.09921,142.59746 L308.09921,229.96611 312.10703,229.96611 312.10703,142.59746 z M298.07968,142.59746 L298.07968,229.96611 302.08749,229.96611 302.08749,142.59746 z M288.06012,142.59746 L288.06012,229.96611 292.06793,229.96611 292.06793,142.59746 z M278.04056,142.59746 L278.04056,229.96611 282.0484,229.96611 282.0484,142.59746 z M268.02103,142.59746 L268.02103,229.96611 272.02884,229.96611 272.02884,142.59746 z M258.00146,142.59746 L258.00146,229.96611 262.00928,229.96611 262.00928,142.59746 z M247.98192,142.59746 L247.98192,229.96611 251.98973,229.96611 251.98973,142.59746 z M237.96237,142.59746 L237.96237,229.96611 241.97018,229.96611 241.97018,142.59746 z M227.94281,142.59746 L227.94281,229.96611 231.95064,229.96611 231.95064,142.59746 z M217.92326,142.59746 L217.92326,229.96611 221.93109,229.96611 221.93109,142.59746 z M207.90372,142.59746 L207.90372,229.96611 211.91153,229.96611 211.91153,142.59746 z M197.88417,142.59746 L197.88417,229.96611 201.89198,229.96611 201.89198,142.59746 z M188.86656,142.59746 L188.86656,229.96611 192.87439,229.96611 192.87439,142.59746 z M178.84702,142.59746 L178.84702,229.96611 182.85484,229.96611 182.85484,142.59746 z M168.82747,142.59746 L168.82747,229.96611 172.83528,229.96611 172.83528,142.59746 z M158.80792,142.59746 L158.80792,229.96611 162.81573,229.96611 162.81573,142.59746 z M148.78836,142.59746 L148.78836,229.96611 152.79619,229.96611 152.79619,142.59746 z M138.76881,142.59746 L138.76881,229.96611 142.77664,229.96611 142.77664,142.59746 z M128.74927,142.59746 L128.74927,229.96611 132.75708,229.96611 132.75708,142.59746 z M479.66299,51.833003 L479.66299,190.127 487.32999,190.127 487.32999,51.833003 z M26.333004,51.833003 L26.333004,190.127 34,190.127 34,51.833003 z M111.10329,1 L390.66446,1 C399.56345,1.0000027 406.7775,9.5917849 406.7775,20.190285 L406.7775,31.804154 407.76089,31.375498 C409.27454,30.814795 410.88385,30.51274 412.55243,30.512742 L413.22272,30.512742 C422.12167,30.51274 513.5,37.598166 513.5,48.196665 513.5,48.196673 513.5,185.76509 513.5,185.76509 513.5,196.3636 422.12167,206.46173 413.22272,206.46173 L412.55243,206.46173 C410.88385,206.46173 409.27454,206.15967 407.76089,205.59897 L406.7775,205.17031 406.7775,218.80974 C406.7775,229.40824 399.56345,238 390.66446,238 L111.10329,238 C102.20431,238 94.99025,229.40824 94.99025,218.80974 L94.99025,206.37302 93.515106,206.46173 92.844795,206.46173 C83.945816,206.46173 1,199.37631 1,188.7778 L1,51.209376 C1,40.610877 83.945816,30.51274 92.844795,30.512734 L93.515106,30.512734 94.99025,30.601443 94.99025,20.190285 C94.99025,9.5917849 102.20431,1.0000027 111.10329,1 z" Fill="#FFD1D8DA" Height="239" Canvas.Left="1087.5" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Top="390" Width="514.5"/>
+            <local:FirstColdFan VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="360" Width="300" Canvas.Top="300.547" Canvas.Left="146"/>
+            <Canvas Height="240" Canvas.Left="719" Canvas.Top="744.5" Width="213">
+                <Canvas Height="56" Width="207.334">
+                    <TextBlock x:Name="textBlock1" Height="19" TextWrapping="Wrap" Canvas.Top="7" Width="77"><Run Text="热"/><Run Text="路温度控制"/></TextBlock>
+                    <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
+                        Minimum="{Binding MdExperPoints[热边空气进口温度].RangeLow}"
+                        Maximum="{Binding MdExperPoints[热边空气进口温度].RangeHigh}"
+                        Value="{Binding MdExperPoints[热边空气进口温度].AOValue}"
+                        StringFormat="{}{0:F1} ℃"/>
+                    <Button x:Name="button" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdExperPoints[热边空气进口温度]}"/>
+                    <Button x:Name="button_Copy1" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
+                        Command="{Binding ExpPointOutputStopCommand}"
+                        CommandParameter="{Binding MdExperPoints[热边空气进口温度]}"/>
+
+
+                </Canvas>
+                <Canvas Height="155" Canvas.Top="85" Width="213">
+                    <ToggleButton x:Name="toggleButton" Content="热路1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                        IsChecked="{Binding MdChannels[RL_1#_RUN].Status}"/>
+                    <TextBlock x:Name="textBlock3" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
+                    <ToggleButton x:Name="toggleButton_Copy" Content="热路2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                        IsChecked="{Binding MdChannels[RL_2#_RUN].Status}"/>
+                    <ToggleButton x:Name="toggleButton_Copy1" Content="热路3#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                        IsChecked="{Binding MdChannels[RL_3#_RUN].Status}"/>
+                    <ToggleButton x:Name="toggleButton_Copy2" Content="热路4#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                        IsChecked="{Binding MdChannels[RL_4#_RUN].Status}"/>
+                    <ToggleButton x:Name="toggleButton_Copy3" Content="热路5#加热器" Height="64" Canvas.Left="142" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
+                        IsChecked="{Binding MdChannels[RL_5#_RUN].Status}"/>
+
+
+                </Canvas>
             </Canvas>
-            <local:FirstColdFan VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="360" Width="300" Canvas.Left="10" Canvas.Top="220"/>
-            <Canvas Height="56" Canvas.Left="618" Canvas.Top="54" Width="207">
-                <TextBlock x:Name="textBlock2" Height="19" TextWrapping="Wrap" Canvas.Top="7">二冷路温度控制</TextBlock>
-                <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
-                    Minimum="{Binding MdExperPoints[二冷空气进口温度].RangeLow}"
-                    Maximum="{Binding MdExperPoints[二冷空气进口温度].RangeHigh}"
-                    Value="{Binding MdExperPoints[二冷空气进口温度].AOValue}"
-                    StringFormat="{}{0:F1} ℃"/>
-                <Button x:Name="button1" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
-                    Command="{Binding ExpPointOutputCommand}"
-                    CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
-                <Button x:Name="button_Copy2" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
-                    Command="{Binding ExpPointOutputStopCommand}"
-                    CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
+            <Canvas Height="240" Canvas.Left="719" Canvas.Top="35.626" Width="213">
+                <Canvas Height="56" Width="207">
+                    <TextBlock x:Name="textBlock2" Height="19" TextWrapping="Wrap" Canvas.Top="7"><Run Text="二冷路温度控制"/></TextBlock>
+                    <Custom:NumericUpDown Height="9" Width="120" Canvas.Top="30"
+                        Minimum="{Binding MdExperPoints[二冷空气进口温度].RangeLow}"
+                        Maximum="{Binding MdExperPoints[二冷空气进口温度].RangeHigh}"
+                        Value="{Binding MdExperPoints[二冷空气进口温度].AOValue}"
+                        StringFormat="{}{0:F1} ℃"/>
+                    <Button x:Name="button1" Content="确定" Height="12" Canvas.Left="136" Canvas.Top="31" Width="61"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
+                    <Button x:Name="button_Copy2" Content="停止" Height="12" Canvas.Left="136" Canvas.Top="3" Width="61"
+                        Command="{Binding ExpPointOutputStopCommand}"
+                        CommandParameter="{Binding MdExperPoints[二冷空气进口温度]}"/>
 
 
+                </Canvas>
+                <Canvas Height="155" Canvas.Top="85" Width="213">
+                    <ToggleButton x:Name="toggleButton1" Content="二冷1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                        IsChecked="{Binding MdChannels[ELL_1#_RUN].Status}"/>
+                    <TextBlock x:Name="textBlock4" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
+                    <ToggleButton x:Name="toggleButton_Copy4" Content="二冷2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
+                        IsChecked="{Binding MdChannels[ELL_2#_RUN].Status}"/>
+                    <TextBlock x:Name="textBlock_Copy" Height="30" TextWrapping="Wrap" Text="二冷路加热器" Canvas.Top="130.627" Width="150" FontSize="24"/>
+
+
+                </Canvas>
             </Canvas>
-            <Canvas Height="155" Canvas.Left="617.666" Canvas.Top="743" Width="213">
-                <ToggleButton x:Name="toggleButton" Content="热路1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
-                    IsChecked="{Binding MdChannels[RL_1#_RUN].Status}"/>
-                <TextBlock x:Name="textBlock3" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
-                <ToggleButton x:Name="toggleButton_Copy" Content="热路2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
-                    IsChecked="{Binding MdChannels[RL_2#_RUN].Status}"/>
-                <ToggleButton x:Name="toggleButton_Copy1" Content="热路3#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
-                    IsChecked="{Binding MdChannels[RL_3#_RUN].Status}"/>
-                <ToggleButton x:Name="toggleButton_Copy2" Content="热路4#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
-                    IsChecked="{Binding MdChannels[RL_4#_RUN].Status}"/>
-                <ToggleButton x:Name="toggleButton_Copy3" Content="热路5#加热器" Height="64" Canvas.Left="142" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="91" Width="71"
-                    IsChecked="{Binding MdChannels[RL_5#_RUN].Status}"/>
-
-
-            </Canvas>
-            <Canvas Height="155" Canvas.Left="618" Canvas.Top="139" Width="213">
-                <ToggleButton x:Name="toggleButton1" Content="二冷1#加热器" Height="64" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
-                    IsChecked="{Binding MdChannels[ELL_1#_RUN].Status}"/>
-                <TextBlock x:Name="textBlock4" Height="23" Text="加热器运行状态：" TextWrapping="Wrap" Width="102"/>
-                <ToggleButton x:Name="toggleButton_Copy4" Content="二冷2#加热器" Height="64" Canvas.Left="71" Style="{DynamicResource StatusSwitchLight}" Canvas.Top="22" Width="71"
-                    IsChecked="{Binding MdChannels[ELL_2#_RUN].Status}"/>
-
-
-            </Canvas>
-            <TextBlock x:Name="textBlock_Copy1" Height="30" Canvas.Left="1232" TextWrapping="Wrap" Text="产品" Canvas.Top="375.627" Width="150" FontSize="24"/>
-            <Border BorderBrush="#FF80BDF9" BorderThickness="2" Height="284" Canvas.Left="1639" Canvas.Top="579" Width="229" CornerRadius="10">
+            <TextBlock x:Name="textBlock_Copy1" Height="30" Canvas.Left="1270" TextWrapping="Wrap" Text="产品" Canvas.Top="433" Width="150" FontSize="24"/>
+            <Border BorderBrush="#FF80BDF9" BorderThickness="2" Height="284" Canvas.Left="1666.5" Canvas.Top="599.847" Width="229" CornerRadius="10">
                 <Border.Background>
                     <SolidColorBrush Color="#FFD6DEE6" Opacity="0.84"/>
                 </Border.Background>
                 <Canvas>
                     <Label x:Name="label" Content="标识" Height="37" Canvas.Left="84" Width="55" FontSize="18"/>
-                    <Label x:Name="label_Copy" Content="流量传感器：黄色" Height="37" Canvas.Left="10" Canvas.Top="37" Width="205" FontSize="18"/>
-                    <Label x:Name="label_Copy1" Content="温度传感器：橙色" Height="37" Canvas.Left="10" Canvas.Top="74" Width="205" FontSize="18"/>
-                    <Label x:Name="label_Copy2" Content="压力传感器：蓝色" Height="37" Canvas.Left="10" Canvas.Top="111" Width="205" FontSize="18"/>
-                    <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Padding="10,5" Command="{Binding Path=AddDataReportNow}" Canvas.Left="119" Canvas.Top="168"
+                    <Label x:Name="label_Copy" Content="流量传感器：黄色" Height="37" Canvas.Left="10" Canvas.Top="37" Width="159" FontSize="18"/>
+                    <Label x:Name="label_Copy1" Content="温度传感器：橙色" Height="37" Canvas.Left="10" Canvas.Top="74" Width="159" FontSize="18"/>
+                    <Label x:Name="label_Copy2" Content="压力传感器：蓝色" Height="37" Canvas.Left="10" Canvas.Top="111" Width="159" FontSize="18"/>
+                    <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Padding="10,5" Command="{Binding AddDataReportNow}" Canvas.Left="119" Canvas.Top="168"
                     >
                         <DockPanel>
-                            <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}, Mode=FindAncestor}}">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_cursor_hand}" Stretch="None"/>
                                 </Rectangle.OpacityMask>
                             </Rectangle>
-                            <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="手动记录"></TextBlock>
+                            <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="手动记录"/>
                         </DockPanel>
                     </Button>
+                    <Rectangle Fill="#FFEFF113" Height="37" Canvas.Left="174" Stroke="Black" Canvas.Top="37" Width="36"/>
+                    <Rectangle Fill="DarkSalmon" Height="37" Canvas.Left="174" Stroke="Black" Canvas.Top="74" Width="36"/>
+                    <Rectangle Fill="DarkBlue" Height="37" Canvas.Left="174" Stroke="Black" Canvas.Top="111" Width="36"/>
                 </Canvas>
             </Border>
-            <TextBlock x:Name="textBlock_Copy2" Height="226" Canvas.Left="1295" TextWrapping="Wrap" Text="热路空气入口" Canvas.Top="603" Width="29" FontSize="24"/>
-            <TextBlock x:Name="textBlock_Copy3" Height="226" Canvas.Left="1391" TextWrapping="Wrap" Text="热路空气出口" Canvas.Top="603" Width="29" FontSize="24"/>
-            <TextBlock x:Name="textBlock_Copy4" Height="226" Canvas.Left="1295" TextWrapping="Wrap" Text="二冷空气入口" Canvas.Top="122" Width="29" FontSize="24"/>
-            <TextBlock x:Name="textBlock_Copy5" Height="226" Canvas.Left="1391" TextWrapping="Wrap" Text="二冷空气出口" Canvas.Top="119" Width="29" FontSize="24"/>
+            <TextBlock x:Name="textBlock_Copy2" Height="226" Canvas.Left="1295" TextWrapping="Wrap" Text="热路空气入口" Canvas.Top="665.5" Width="29" FontSize="24"/>
+            <TextBlock x:Name="textBlock_Copy3" Height="226" Canvas.Left="1385.967" TextWrapping="Wrap" Text="热路空气出口" Canvas.Top="665.5" Width="29" FontSize="24"/>
+            <TextBlock x:Name="textBlock_Copy4" Height="188" Canvas.Left="1295" TextWrapping="Wrap" Text="二冷空气入口" Canvas.Top="166" Width="29" FontSize="24"/>
+            <TextBlock x:Name="textBlock_Copy5" Height="186" Canvas.Left="1391" TextWrapping="Wrap" Text="二冷空气出口" Canvas.Top="173" Width="29" FontSize="24"/>
+            <TextBlock x:Name="textBlock_Copy6" Height="30" Canvas.Left="748" TextWrapping="Wrap" Text="一冷空气入口" Canvas.Top="488.222" Width="150" FontSize="24" Foreground="#FFFBF9F9"/>
+            <TextBlock Height="100.653" Canvas.Left="1839" TextWrapping="Wrap" Text="消音坑" Canvas.Top="885.847" Width="29" FontSize="24"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="584" Canvas.Top="90" Width="120"
+                              EovChannel="{Binding MdChannels[FT0101B]}"/>
+            <local:HS_SwitchEovCtrl Height="80" Canvas.Left="584" Canvas.Top="175" Width="120" SwitchEovChannel="{Binding MdChannels[EV0101]}"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="584" Canvas.Top="10" Width="120"
+                              EovChannel="{Binding MdChannels[FT0101A]}"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="1127" Width="120"
+                EovChannel="{Binding MdChannels[PV0107]}" Canvas.Top="10"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="10" Canvas.Top="106" Width="120"
+                EovChannel="{Binding MdChannels[PV0103]}"/>
+            <TextBlock Height="129" Canvas.Left="135" TextWrapping="Wrap" Text="去消音坑" Canvas.Top="94.627" Width="29" FontSize="24"/>
+            <local:HS_SwitchEovCtrl Height="80" Canvas.Left="1391" Canvas.Top="10" Width="120" SwitchEovChannel="{Binding MdChannels[EV0102]}"/>
+            <TextBlock Height="107" Canvas.Left="1839" TextWrapping="Wrap" Text="消音坑" Canvas.Top="63" Width="29" FontSize="24"/>
+            <Canvas Height="245" Canvas.Left="580" Canvas.Top="744.5" Width="120">
+                <local:HS_EovCtrl Height="80" Canvas.Top="85" Width="120"
+                    EovChannel="{Binding MdChannels[FT0102A]}"/>
+                <local:HS_EovCtrl Height="80" Canvas.Top="165" Width="120"
+                    EovChannel="{Binding MdChannels[FT0102B]}"/>
+                <local:HS_SwitchEovCtrl Height="80" Width="120" SwitchEovChannel="{Binding MdChannels[EV0103]}"/>
+            </Canvas>
+            <local:HS_EovCtrl Height="80" Canvas.Left="1127" Canvas.Top="911.813" Width="120"
+                EovChannel="{Binding MdChannels[PV0108]}"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="44" Canvas.Top="803.813" Width="120"
+                EovChannel="{Binding MdChannels[PV0104]}"/>
+            <TextBlock Height="129" Canvas.Left="169" TextWrapping="Wrap" Text="去消音坑" Canvas.Top="712.127" Width="29" FontSize="24"/>
+            <local:HS_EovCtrl Height="80" Canvas.Left="1472.967" Canvas.Top="850" Width="120"
+                EovChannel="{Binding MdChannels[PV0108]}"/>
+            <local:HS_SwitchEovCtrl Height="80" Canvas.Left="1618.467" Canvas.Top="914.44" Width="120" SwitchEovChannel="{Binding MdChannels[EV0104]}"/>
+            <TextBlock Height="107" Canvas.Left="1871.5" TextWrapping="Wrap" Text="消音坑" Canvas.Top="449.5" Width="29" FontSize="24"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="455" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="488.222" Width="99" Stroke="Black"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1306" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="956.5" Width="99" Stroke="Black"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1231.5" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="113" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1229" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="882" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1295" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="50.313" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1475.967" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="147" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="2.301" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="50.313" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="24" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="957" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5"/>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="98" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="719" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="72" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="222.5" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1382" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="843.5" Width="99" Stroke="Black" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+            <Path Data="M68,0.5 C68,0.50000095 98.5,14.500001 98.5,14.500001 L68,29.000001 68,20.666001 0.5,20.666001 0.5,9.1660019 68,9.1660019 z" Fill="#FFC7CFEC" Height="29.5" Canvas.Left="1772.5" Stretch="Fill" StrokeEndLineCap="Triangle" Canvas.Top="488.222" Width="99" Stroke="Black"/>
+            <local:HS_PressureSensorCtrl Height="96" Canvas.Left="1420" Canvas.Top="734.5" Width="176" PressureChannel="{Binding MdChannels[PT0109]}"/>
 
 
         </Canvas>

@@ -7,7 +7,7 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              
-             d:DesignHeight="800" d:DesignWidth="1000" DataContext="{StaticResource ExpViewModule}">
+             d:DesignHeight="800" d:DesignWidth="1680" DataContext="{StaticResource ExpViewModule}">
     <UserControl.Resources>
         <local:SwitchEOVStatusConverter x:Key="SwitchConterter"/>
     </UserControl.Resources>
@@ -272,7 +272,7 @@
                                TextWrapping="WrapWithOverflow"
                                Text="注意：&#x0d;对风机和加热器进行手动控制时为直接硬件操作，请人为确保其控制条件，否则请不要随意进行手动操作。"/>
                 </DockPanel>
-                                
+
             </GroupBox>
         </Grid>
 
@@ -290,6 +290,7 @@
         <GroupBox Grid.Row="1" Grid.Column="0" Margin="5,8" Header="热路阀门调节">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -318,6 +319,9 @@
                 <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0104]}"
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[PV0104]}"/>
+                <TextBlock Grid.Row="0" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0104].Summary}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102A：" Margin="2,3"/>
@@ -332,6 +336,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[FT0102A]}"
                         />
+                <TextBlock Grid.Row="1" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0102A].Summary}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0102B：" Margin="2,3"/>
@@ -346,6 +353,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[FT0102B]}"
                         />
+                <TextBlock Grid.Row="2" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0102B].Summary}"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0108：" Margin="2,3"/>
@@ -360,6 +370,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[PV0108]}"
                         />
+                <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0108].Summary}"/>
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0109：" Margin="2,3"/>
@@ -374,6 +387,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[PV0109]}"
                         />
+                <TextBlock Grid.Row="4" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0109].Summary}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0103：" Margin="2,3"/>
@@ -389,6 +405,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[EV0103]}"
                         />
+                <TextBlock Grid.Row="5" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0103].Summary}"/>
 
                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0104：" Margin="2,3"/>
@@ -403,12 +422,16 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[EV0104]}"
                         />
+                <TextBlock Grid.Row="6" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0104].Summary}"/>
             </Grid>
         </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="1" Margin="5,8" Header="二冷路阀门调节">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -436,6 +459,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[PV0103]}"
                         />
+                <TextBlock Grid.Row="0" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0103].Summary}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101A：" Margin="2,3"/>
@@ -450,6 +476,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[FT0101A]}"
                         />
+                <TextBlock Grid.Row="1" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0101A].Summary}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                 Text="FT0101B：" Margin="2,3"/>
@@ -464,6 +493,10 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[FT0101B]}"
                         />
+                <TextBlock Grid.Row="2" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0101B].Summary}"/>
+
 
                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
                                 Text="PV0107：" Margin="2,3"/>
@@ -478,6 +511,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[PV0107]}"
                         />
+                <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0107].Summary}"/>
 
                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0101：" Margin="2,3"/>
@@ -493,6 +529,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[EV0101]}"
                         />
+                <TextBlock Grid.Row="4" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0101].Summary}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 Text="EV0102：" Margin="2,3"/>
@@ -508,6 +547,9 @@
                         Command="{Binding ExpPointOutputCommand}"
                         CommandParameter="{Binding MdChannels[EV0102]}"
                         />
+                <TextBlock Grid.Row="5" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0102].Summary}"/>
             </Grid>
         </GroupBox>
 

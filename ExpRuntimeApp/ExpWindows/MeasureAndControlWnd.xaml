@@ -24,7 +24,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="Black">
-            <UserControls:HS_GKUI_Experiment Height="980" Width="1860"/>
+            <UserControls:HS_GKUI_Experiment Height="1000" Width="1920"/>
 
         </ScrollViewer>
 

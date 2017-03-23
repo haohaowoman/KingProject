@@ -18,7 +18,7 @@ namespace LabMCESystem.Servers.HS
     /// </summary>
     class HS_ElectricHeaterExecuter : PredicatePositionPID
     {
-        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(100, new SafeRange(0, 800), new PIDParam() { Ts = 60000, Kp = 1, Ti = 0, Td = 0 })
+        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(100, new SafeRange(0, 800), new PIDParam() { Ts = 45000, Kp = 1, Ti = 0, Td = 0 })
         {
             if (heater == null)
             {
@@ -37,8 +37,7 @@ namespace LabMCESystem.Servers.HS
 
             AutoFinish = true;
         }
-
-        
+                
         /// <summary>
         /// 为防止电炉功率过大设置电炉的升温步进为100。
         /// </summary>

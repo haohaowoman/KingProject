@@ -193,14 +193,14 @@
         <Rectangle Grid.Column="1" Fill="#FF161717" HorizontalAlignment="Left" Margin="0,0,0,3" Grid.Row="2" Stroke="#FF171212" Width="5"/>
         <Rectangle Grid.Column="1" Margin="5,10,14,38" RadiusY="5" Grid.Row="2" RadiusX="5" Stroke="#FF342F2F" Fill="#FF8D9191" StrokeThickness="2"/>
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="36" Margin="10,15,0,0" Grid.Row="2" IsReadOnly="True"
-                 Text="{Binding MdChannels[FirstColdFan].Value,StringFormat={}{0:F0} rmp,Mode=OneWay}" VerticalAlignment="Top" Width="116" FontSize="16" FontWeight="Black" FontStyle="Italic"
+                 Text="{Binding MdChannels[FirstColdFan].Value,StringFormat={}{0:F0} rpm,Mode=OneWay}" VerticalAlignment="Top" Width="116" FontSize="16" FontWeight="Black" FontStyle="Italic"
                  />
 
         <metro:NumericUpDown Margin="10,56,22,92" Grid.Column="1" Grid.Row="2" UpDownButtonsWidth="15"
                              FontSize="16"
                              Minimum="{Binding Path=MdChannels[FirstColdFan].RangeLow}"
                              Maximum="{Binding Path=MdChannels[FirstColdFan].RangeHigh}"
-                             StringFormat="{}{0:F0} rmp"
+                             StringFormat="{}{0:F0} rpm"
                              Value="{Binding Path=MdChannels[FirstColdFan].AOValue}"/>
         <Button x:Name="button" Grid.Column="1" HorizontalAlignment="Left" Margin="84,91,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Height="42"
                 metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand"
@@ -223,9 +223,9 @@
                               FontSize="18"
                               MinHeight="20"
                               Content="...更多 " Background="{x:Null}"
-                              ToolTip="查看更多风机数据。">
+                              ToolTip="查看更多风机数据。" Foreground="#FFFDE603">
             <metro:DropDownButton.Items>
-                <TextBox Style="{StaticResource HeaderTextBox}"
+                <!--<TextBox Style="{StaticResource HeaderTextBox}"
                          local:TextHeaderHelper.TextHeader="风机变频器电机转速反馈"
                          IsReadOnly="True"
                          >
@@ -235,7 +235,7 @@
                             <Binding Path="MdChannels[MOTOSPEED_HMI].Unit"/>
                         </MultiBinding>
                     </TextBox.Text>
-                </TextBox>
+                </TextBox>-->
 
                 <TextBox Style="{StaticResource HeaderTextBox}"
                          local:TextHeaderHelper.TextHeader="风机变频器电机电流反馈"
@@ -334,7 +334,7 @@
         </metro:DropDownButton>
         <Button Grid.Column="1" HorizontalAlignment="Left" Margin="10,91,0,0" Grid.Row="2" VerticalAlignment="Top" Width="42" Height="42"
             metro:ButtonHelper.CornerRadius="10" Background="{x:Null}" Cursor="Hand"
-            Command="{Binding ExpPointOutputCommand}"
+            Command="{Binding ExpPointOutputStopCommand}"
             CommandParameter="{Binding MdChannels[FirstColdFan]}"
             ToolTip="停止风机" Foreground="#FF232738">
             <Rectangle Width="32" Height="32" Fill="{Binding Path=Foreground,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}}">

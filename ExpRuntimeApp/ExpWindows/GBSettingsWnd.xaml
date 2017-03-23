@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="工步设置" Height="768" Width="1080"
         WindowStartupLocation="CenterScreen"
-        WindowState="Normal" Background="{DynamicResource HS_BackgroundBrush}" Icon="/ExpRuntimeApp;component/Images/Format.ico" EnableDWMDropShadow="True">
+        Background="{DynamicResource HS_BackgroundBrush}" Icon="/ExpRuntimeApp;component/Images/Format.ico">
     <Grid>
         <Frame Grid.Row="0" Margin="2" Name="PageFram" Source="/Pages/MeasureAndControlPages/ExpTaskerPage.xaml"/>
     </Grid>

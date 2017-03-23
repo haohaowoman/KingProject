@@ -42,8 +42,8 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="源" Binding="{Binding Source}"/>
                                 <DataGridTextColumn Header="时间" Binding="{Binding AppearTime,StringFormat={}{0:HH:mm:ss}}"/>
-                                <DataGridTextColumn Header="位置" Binding="{Binding Position}"/>
-                                <DataGridTextColumn Header="触发源" Binding="{Binding OriginalSource}"/>
+                                <DataGridTextColumn Header="位置" Binding="{Binding Position.Label}"/>
+                                <DataGridTextColumn Header="触发源" Binding="{Binding OriginalSource.Summary}"/>
                             </DataGrid.Columns>                           
                             
                         </DataGrid>

@@ -25,9 +25,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -51,6 +53,24 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Images\FactoryIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DDE39360B3D86318FA5786B1B12900171B1111B6</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ExpRuntimeApp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=1.3.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -192,6 +212,9 @@
     <Compile Include="UserControls\HotRoadExpPointsCtrl.xaml.cs">
       <DependentUpon>HotRoadExpPointsCtrl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HS_EovCtrl.xaml.cs">
+      <DependentUpon>HS_EovCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\HS_ExpControlToleranceCtrl.xaml.cs">
       <DependentUpon>HS_ExpControlToleranceCtrl.xaml</DependentUpon>
     </Compile>
@@ -218,6 +241,9 @@
     </Compile>
     <Compile Include="UserControls\HS_ProductInforCtrl.xaml.cs">
       <DependentUpon>HS_ProductInforCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_SwitchEovCtrl.xaml.cs">
+      <DependentUpon>HS_SwitchEovCtrl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HS_TemperatureSensor.xaml.cs">
       <DependentUpon>HS_TemperatureSensor.xaml</DependentUpon>
@@ -421,6 +447,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\HS_EovCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\HS_ExpControlToleranceCtrl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -454,6 +484,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\HS_ProductInforCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_SwitchEovCtrl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -517,7 +551,9 @@
     <None Include="DataReport\HS_ExpDataReport.xss">
       <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
     </None>
+    <None Include="ExpRuntimeApp_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

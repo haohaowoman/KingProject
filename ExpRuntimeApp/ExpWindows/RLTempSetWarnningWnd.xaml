@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="注意" Height="380" Width="600" FontSize="18"
+        Title="注意" Height="520" Width="680" FontSize="18"
         Icon="/ExpRuntimeApp;component/Images/Warning-Message.ico" WindowStartupLocation="CenterScreen" EnableDWMDropShadow="True" IsMinButtonEnabled="False" IsWindowDraggable="False" IsCloseButtonEnabled="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -25,7 +25,7 @@
         <DockPanel Grid.Row="0" Grid.Column="1">
             <TextBlock DockPanel.Dock="Top" Margin="3,10" Text="请将置于自动状态的加热器：" TextWrapping="WrapWithOverflow"/>
             <TextBlock DockPanel.Dock="Top" Margin="20,10" FontWeight="Bold" Foreground="DarkRed" FontSize="24" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:RLTempSetWarnningWnd},Path=MessageString}"/>
-            <TextBlock DockPanel.Dock="Top" Margin="3,10" Text="电炉入口阀门打开，并将热路其余电炉关闭。&#x0d;完成之后单击“确定”开始启动加热。&#x0d;是否已经完成？" TextWrapping="WrapWithOverflow"/>
+            <TextBlock DockPanel.Dock="Top" Margin="3,10" Text="待阀门开关完成之后单击“确定”开始启动加热。&#x0d;&#x0d;是否已经完成？" TextWrapping="WrapWithOverflow"/>
         </DockPanel>
 
         <DockPanel Grid.Row="2" Grid.Column="1" Margin="10" HorizontalAlignment="Right">

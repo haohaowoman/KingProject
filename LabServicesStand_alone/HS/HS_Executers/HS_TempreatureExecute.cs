@@ -18,8 +18,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public HS_TempreatureExecute() : base(0, new SafeRange(0, 800),
             new PIDParam()
             {
-                Ts = 60 * 1000 * 1.5,
-                Kp = 0.58,
+                Ts = 60 * 1000,
+                Kp = 0.72,
                 Td = 10 * 1000,
                 Ti = 1000 * 60 * 30
             }
@@ -140,10 +140,22 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             }
             // 计算温度标准差。
             ProSecTempDeviation();
-
-            if (SecTempDeviation > EfficTempDev)
+            // 反馈温度小于目标温度 升温 等温度稳定，否则降温更快。
+            if (TargetVal >= TargetTempChannel.MeasureValue)
+            {                              
+                if (SecTempDeviation > EfficTempDev)
+                {
+                    var np = Param;
+                    np.Ts = 60 * 1000;
+                    Param = np;
+                    return false;
+                }
+            }
+            else
             {
-                return false;
+                var np = Param;
+                np.Ts = 30 * 1000;
+                Param = np;
             }
 
             return be;

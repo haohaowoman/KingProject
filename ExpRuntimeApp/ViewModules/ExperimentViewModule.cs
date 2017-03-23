@@ -83,9 +83,9 @@ namespace ExpRuntimeApp.ViewModules
 
     class ExperimentViewModule : IDisposable, INotifyPropertyChanged
     {
-        
+
         public ExperimentViewModule()
-        {            
+        {
             // 每100ms从服务读取一次数据
             CurRutimeReport.ExperimentInfo.AddExperimentInfoRow(
                 DateTime.Now,
@@ -93,6 +93,9 @@ namespace ExpRuntimeApp.ViewModules
 
             _readValueTimer = new Timer(150);
             _readValueTimer.Elapsed += _readValueTimer_Elapsed;
+
+            _cmdCanExeTimer.Interval = TimeSpan.FromMinutes(1);
+            _cmdCanExeTimer.Tick += _cmdCanExeTimer_Tick;
 
             WriteInterval = Properties.Settings.Default.WriteInterval;
             AutoWrite = Properties.Settings.Default.AutoWrite;
@@ -106,7 +109,17 @@ namespace ExpRuntimeApp.ViewModules
 
             ExpPointOutputCommand = new MCommand();
             ExpPointOutputCommand.Executed += ExpPointOutputCommand_Executed;
-            ExpPointOutputCommand.CanExecuteHandler = (o) => { return !Taskers.IsRunning; };
+            ExpPointOutputCommand.CanExecuteHandler = (o) =>
+            {
+                // 风机停止之后需要6分钟才能再次控制。
+                bool bEn = !Taskers.IsRunning;
+                MdChannel mc = o as MdChannel;
+                if (mc != null && mc.Label == "FirstColdFan")
+                {
+                    bEn = _fanCanExeTime == TimeSpan.Zero;
+                }
+                return bEn;
+            };
 
             ExpPointOutputStopCommand = new MCommand();
             ExpPointOutputStopCommand.Executed += ExpPointOutputStopCommand_Executed;
@@ -166,6 +179,10 @@ namespace ExpRuntimeApp.ViewModules
         public RoutedCommand TestCommand { get; set; }
 
         private Timer _readValueTimer;
+
+        private DispatcherTimer _cmdCanExeTimer = new DispatcherTimer();
+
+        private TimeSpan _fanCanExeTime = TimeSpan.Zero;
 
         public MdChannelsCollection Test { get; set; } = new MdChannelsCollection();
 
@@ -392,6 +409,16 @@ namespace ExpRuntimeApp.ViewModules
                     {
                         SaveReport.Execute(CurRutimeReport);
                     }
+
+                    if (System.Windows.MessageBox.Show("是否停止当前的所有输出控制？\n\n注意：停止试验之后请等待加热器温度下降至室温再关闭阀门和气源！"
+                        , "提示", System.Windows.MessageBoxButton.YesNo,
+                        System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.OK)
+                    {
+                        foreach (var item in _mdChannels)
+                        {
+                            item?.StopControllerExecute();
+                        }
+                    }
                 }
 
                 var rsc = _mdChannels["ExpRunState"];
@@ -610,6 +637,22 @@ namespace ExpRuntimeApp.ViewModules
             }
         }
 
+        private void _cmdCanExeTimer_Tick(object sender, EventArgs e)
+        {
+            _fanCanExeTime += TimeSpan.FromMinutes(1);
+            var lt = (TimeSpan.FromMinutes(7) - _fanCanExeTime);
+            if (lt == TimeSpan.Zero)
+            {
+                _fanCanExeTime = TimeSpan.Zero;
+                ExpInformation = "风机已经可以再次启动。";
+                _cmdCanExeTimer.Stop();
+            }
+            else
+            {
+                ExpInformation = $"风机还剩{lt.TotalMinutes}分钟可以再次启动。";
+            }            
+        }
+
         /// <summary>
         /// 环散设备的通道集合改变事件。
         /// </summary>
@@ -709,6 +752,8 @@ namespace ExpRuntimeApp.ViewModules
                     case "热边空气进口温度":
 
                         var prpWnd = new ExpWindows.RLTempSetPropWnd();
+                        prpWnd.ShowActivated = true;
+                        prpWnd.ShowDialogsOverTitleBar = true;
                         if (prpWnd.ShowDialog() == true)
                         {
                             mCh.ControllerExecute();
@@ -731,6 +776,16 @@ namespace ExpRuntimeApp.ViewModules
             if (mCh != null)
             {
                 mCh.StopControllerExecute();
+                if (mCh.Label == "FirstColdFan")
+                {
+                    var rsc = _mdChannels["风机变频器运行"];
+                    if (rsc?.Status == true)
+                    {
+                        _fanCanExeTime += TimeSpan.FromMinutes(1);
+                        _cmdCanExeTimer.Start();
+                        ExpInformation = $"风机还剩6分钟可以再次启动。";
+                    }
+                }
             }
         }
 

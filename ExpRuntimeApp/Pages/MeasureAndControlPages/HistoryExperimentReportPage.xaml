@@ -25,8 +25,11 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="1" Grid.Column="0" Margin="5">
-            <TextBox DockPanel.Dock="Top" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{DynamicResource SearchMetroTextBox}"/>
-            <ListBox DockPanel.Dock="Top" Margin="0,3" BorderThickness="1" BorderBrush="#DA547AA8" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage},Path=ReportFiles}" DisplayMemberPath="Name" SelectionChanged="ListBox_SelectionChanged"/>
+            <TextBox x:Name="SearchTextBox" DockPanel.Dock="Top" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{DynamicResource SearchMetroTextBox}" Visibility="Visible"
+                     TextChanged="TextBox_TextChanged"/>
+            <ListBox DockPanel.Dock="Top" Margin="0,3" BorderThickness="1" BorderBrush="#DA547AA8"
+                     Width="280"
+                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HistoryExperimentReportPage},Path=ReportFiles}" DisplayMemberPath="Name" SelectionChanged="ListBox_SelectionChanged"/>
         </DockPanel>
 
         <StackPanel Grid.Column="1" Orientation="Horizontal" d:LayoutOverrides="Height" Margin="3"/>

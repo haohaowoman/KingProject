@@ -72,17 +72,17 @@ namespace ExpRuntimeApp.ExpWindows
                 if (lCount == 0)
                 {
                     // 状态已对。可以进行确定。
-                    showStr = $"当前需要将{hCount}个加热器设置为远程状态，已设置{rAuto}个，可以启动温度控制。";
+                    showStr = $"当前需要将{hCount}个加热器设置为自动状态，已设置{rAuto}个，可以启动温度控制。";
                     OKBtn.IsEnabled = true;
                 }
                 else if (lCount > 0)
                 {
-                    showStr = $"当前需要将{hCount}个加热器设置为远程状态，已设置{rAuto}个，还需要设置{lCount}个。";
+                    showStr = $"当前需要将{hCount}个加热器设置为自动状态，已设置{rAuto}个，还需要设置{lCount}个。";
                     OKBtn.IsEnabled = false;
                 }
                 else
                 {
-                    showStr = $"当前需要将{hCount}个加热器设置为远程状态，已设置{rAuto}个，还需要取消{-lCount}个。";
+                    showStr = $"当前需要将{hCount}个加热器设置为自动状态，已设置{rAuto}个，还需要取消{-lCount}个。";
                     OKBtn.IsEnabled = false;
                 }
             }
@@ -101,9 +101,14 @@ namespace ExpRuntimeApp.ExpWindows
             {
                 if (tbtn.IsChecked == true)
                 {
-                    strb.AppendLine($"\t{tbtn.Content.ToString()}");
+                    strb.AppendLine($"\t将{tbtn.Content.ToString()}－{tbtn.ToolTip.ToString()}打开；");
+                }
+                else
+                {
+                    strb.AppendLine($"\t将{tbtn.Content.ToString()}－{tbtn.ToolTip.ToString()}关闭；");
                 }
             }
+            
             RLTempSetWarnningWnd warnWnd = new RLTempSetWarnningWnd(strb.ToString());
 
             if (warnWnd.ShowDialog() == true)

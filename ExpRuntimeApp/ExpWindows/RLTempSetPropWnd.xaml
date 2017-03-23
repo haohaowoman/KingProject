@@ -26,9 +26,9 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Center" FontSize="16" FontStyle="Italic" Foreground="Red">
             <Run>注意：当进行热路温度控制时请根据当前热路控制流量进行热路加热器的启停选择。&#x000D;"</Run>
             <LineBreak/>            
-            <Run>需要您手动去将加热器的 “远程/就地” 开关旋转至 “远程”或者“就地”，并且需要确保对应电炉的入口阀门打开/关闭。</Run>
+            <Run>需要您手动去将加热器的 “自动/手动” 开关旋转至 “自动”或者“手动”，并且需要确保对应电炉的入口阀门打开/关闭。</Run>
             <LineBreak/> 
-            <Run>“远程”表示由程序控制加热器，“本地”表示面板操作且不能由程序控制。</Run>
+            <Run>“自动”表示由程序控制加热器，“手动”表示面板操作且不能由程序控制。</Run>
         </TextBlock>
 
         <Grid Grid.Row="1" Margin="10">
@@ -41,23 +41,28 @@
             <TextBlock Grid.Row="0" Margin="3" FontSize="18"
                        Text="{Binding Path=MdChannels[FT0102].AOValue,StringFormat=当前热路空气流量控制值为：{0:F1} Kg/h}"/>
             <DockPanel Grid.Row="1" Margin="1">
-                <Label DockPanel.Dock="Top" Margin="0,10" Content="当前加热器的远程/就地状态(蓝绿色表示远程)："/>
+                <Label DockPanel.Dock="Top" Margin="0,10" Content="当前加热器的自动/手动状态(绿色表示加热器自动，否则表示加热器手动或停止)："/>
                 <UniformGrid DockPanel.Dock="Top" Margin="1,10" Columns="5">
                     <ToggleButton Name="HR1" Style="{StaticResource StatusSwitchLight}" Margin="10" FontSize="18"
                                   IsChecked="{Binding Path=MdChannels[RL_1#_AUTO].Status,Mode=OneWay}"
-                                  Content="热路1#加热器"/>
+                                  Content="热路1区加热器"
+                                  ToolTip="手动阀MG16"/>
                     <ToggleButton Name="HR2" Style="{StaticResource StatusSwitchLight}" Margin="10" FontSize="18"
                                   IsChecked="{Binding Path=MdChannels[RL_2#_AUTO].Status,Mode=OneWay}" 
-                                  Content="热路2#加热器"/>
+                                  Content="热路2区加热器"
+                                  ToolTip="手动阀MG17"/>
                     <ToggleButton Name="HR3" Style="{StaticResource StatusSwitchLight}" Margin="10" FontSize="18"
                                   IsChecked="{Binding Path=MdChannels[RL_3#_AUTO].Status}"
-                                  Content="热路3#加热器"/>
+                                  Content="热路3区加热器"
+                                  ToolTip="手动阀MG18"/>
                     <ToggleButton Name="HR4" Style="{StaticResource StatusSwitchLight}" Margin="10" FontSize="18"
                                   IsChecked="{Binding Path=MdChannels[RL_4#_AUTO].Status,Mode=OneWay}"
-                                  Content="热路4#加热器"/>
+                                  Content="热路4区加热器"
+                                  ToolTip="手动阀MG19"/>
                     <ToggleButton Name="HR5" Style="{StaticResource StatusSwitchLight}" Margin="10" FontSize="18"
                                   IsChecked="{Binding Path=MdChannels[RL_5#_AUTO].Status,Mode=OneWay}"
-                                  Content="热路5#加热器"/>
+                                  Content="热路5区加热器"
+                                  ToolTip="手动阀MG20"/>
                     
                 </UniformGrid>
                 <TextBlock Name="MsgShow" DockPanel.Dock="Top" Margin="1,10" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" TextWrapping="Wrap"/>

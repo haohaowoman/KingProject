@@ -648,6 +648,22 @@ namespace LabMCESystem.Servers.HS
                 {
                     be = false;
                 }
+
+                // 如果加热器温度超温设定启动温度100 则报警并停止加热器。
+                double heaterPv = 0;                
+                double heaterSv = 0;                
+                if (ehExe.Heater.GetCurrentTemperature(out heaterPv) && ehExe.Heater.GetCtrlTemperature(out heaterSv))
+                {
+                    double drt = heaterPv - heaterSv;
+                    if (heaterPv < 0 || heaterPv > 700 || drt >= HS_ElectricHeaterExecuter.HeaterTempUpStepInterval)
+                    {
+                        // 读取PV值无效 或者过高 停止、报警。
+                        ehExe.Heater.HeaterFualtChannel.Status = true;
+                        ehExe.Heater.Stop();
+                        ehExe.ExecuteOver();                        
+                        be = false;
+                    }
+                }
             }
             return be;
         }

@@ -7,13 +7,13 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("ExpRuntimeApp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("用于环形散热器热动力性能试验台测控程序")]
+[assembly: AssemblyDescription("用于环形散热器热动力性能试验台测控系统试验")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("成都康拓兴业科技有限责任公司")]
 [assembly: AssemblyProduct("ExpRuntimeApp")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("成都康拓兴业")]
 [assembly: AssemblyCulture("")]
 
 //将 ComVisible 设置为 false 将使此程序集中的类型

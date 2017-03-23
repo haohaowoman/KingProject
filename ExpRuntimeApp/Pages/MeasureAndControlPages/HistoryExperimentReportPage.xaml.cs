@@ -33,6 +33,23 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
             _updataTime = new DispatcherTimer();
             _updataTime.Interval = TimeSpan.FromSeconds(2);
             _updataTime.Tick += _updataTime_Tick;
+
+            CollectionView fView = (CollectionView)CollectionViewSource.GetDefaultView(ReportFiles);
+            if (fView.CanFilter)
+            {
+                fView.Filter = (o) =>
+                {
+                    if (SearchTextBox.Text != null && SearchTextBox.Text != string.Empty)
+                    {
+                        FileInfo fi = o as FileInfo;
+                        if (fi != null)
+                        {
+                            return fi.Name.Contains(SearchTextBox.Text);
+                        }
+                    }
+                    return true;
+                };
+            }
         }
 
         DispatcherTimer _updataTime;
@@ -46,7 +63,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         // Using a DependencyProperty as the backing store for ReportFiles.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ReportFilesProperty =
             DependencyProperty.Register("ReportFiles", typeof(ObservableCollection<FileInfo>), typeof(HistoryDataAnalysePage), new PropertyMetadata(null));
-        
+
         public HS_ExpDataReport DataReport
         {
             get { return (HS_ExpDataReport)GetValue(DataReportProperty); }
@@ -56,7 +73,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         // Using a DependencyProperty as the backing store for DataReport.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DataReportProperty =
             DependencyProperty.Register("DataReport", typeof(HS_ExpDataReport), typeof(HistoryDataAnalysePage), new PropertyMetadata(null));
-        
+
         public string ExpType
         {
             get { return (string)GetValue(ExpTypeProperty); }
@@ -66,7 +83,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         // Using a DependencyProperty as the backing store for ExpType.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExpTypeProperty =
             DependencyProperty.Register("ExpType", typeof(string), typeof(HistoryExperimentReportPage), new PropertyMetadata(string.Empty));
-        
+
         public string ProductType
         {
             get { return (string)GetValue(ProductTypeProperty); }
@@ -76,7 +93,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         // Using a DependencyProperty as the backing store for ProductType.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ProductTypeProperty =
             DependencyProperty.Register("ProductType", typeof(string), typeof(HistoryExperimentReportPage), new PropertyMetadata(string.Empty));
-        
+
         public string ProductID
         {
             get { return (string)GetValue(ProductIDProperty); }
@@ -87,7 +104,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         public static readonly DependencyProperty ProductIDProperty =
             DependencyProperty.Register("ProductID", typeof(string), typeof(HistoryExperimentReportPage), new PropertyMetadata(string.Empty));
 
-        
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             string dpath = ExpRuntimeApp.Properties.Settings.Default.DefualtSaveFileDic;
@@ -96,7 +113,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
             {
                 var files = dinfo.GetFiles();
                 foreach (var file in files)
-                {                    
+                {
                     if (file.Extension == ".xml")
                     {
                         ReportFiles.Add(file);
@@ -112,7 +129,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
             {
                 var fInfo = e.AddedItems[0] as FileInfo;
                 if (fInfo != null)
-                {                    
+                {
                     try
                     {
                         DataReport.Clear();
@@ -123,7 +140,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                     catch (Exception ex)
                     {
                         MessageBox.Show($"{ex.Message}\n数据文件错误，请确定数据文件是否有效？", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                        
+
                     }
                 }
             }
@@ -158,7 +175,16 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            _updataTime.Stop();            
+            _updataTime.Stop();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //if (SearchTextBox.Text != null && SearchTextBox.Text != string.Empty)
+            {
+                CollectionView fView = (CollectionView)CollectionViewSource.GetDefaultView(ReportFiles);
+                fView.Refresh();
+            }
         }
     }
 }

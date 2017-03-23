@@ -657,7 +657,7 @@ namespace LabMCESystem.Servers.HS
             // 电炉入口 DN50 电动开关阀， 为防止电炉干烧 紧急异常情况下需要打开此
             StatusOutputChannel sch = dev.CreateStatusOutputChannelIn("EV0101");
             sch.Prompt = "EV0101";
-            sch.Summary = "EV0101开关阀开状态";
+            sch.Summary = "二冷路流量调节旁通开关阀";
 
             Executer exr = new DigitalExecuter() { DesignMark = "EV0101" };
             sch.Controller = exr;
@@ -666,7 +666,7 @@ namespace LabMCESystem.Servers.HS
             // 电炉出口应急状态、关机时使用 去消音坑 电动开关阀 常闭
             sch = dev.CreateStatusOutputChannelIn("EV0102");
             sch.Prompt = "EV0102";
-            sch.Summary = "EV0102开关阀开状态";
+            sch.Summary = "二冷路加热器后端排空开关阀";
 
             exr = new DigitalExecuter() { DesignMark = "EV0102" };
             sch.Controller = exr;
@@ -675,7 +675,7 @@ namespace LabMCESystem.Servers.HS
             // 电炉入口 DN50 电动开关阀， 为防止电炉干烧 紧急异常情况下需要打开此
             sch = dev.CreateStatusOutputChannelIn("EV0103");
             sch.Prompt = "EV0103";
-            sch.Summary = "EV0103开关阀开状态";
+            sch.Summary = "热路流量调节旁通开关阀";
 
             exr = new DigitalExecuter() { DesignMark = "EV0103" };
             sch.Controller = exr;
@@ -684,7 +684,7 @@ namespace LabMCESystem.Servers.HS
             // 电炉出口应急状态、关机时使用 去消音坑 电动开关阀 常闭
             sch = dev.CreateStatusOutputChannelIn("EV0104");
             sch.Prompt = "EV0104";
-            sch.Summary = "EV0104开关阀开状态";
+            sch.Summary = "热路加热器后端排空开关阀";
 
             exr = new DigitalExecuter() { DesignMark = "EV0104" };
             sch.Controller = exr;
@@ -1500,7 +1500,7 @@ namespace LabMCESystem.Servers.HS
             mCh = dev.CreateAIChannelIn("RL_HEAT");
             mCh.Prompt = "RL_HEAT";
             mCh.Summary = "热路散热量";
-            mCh.Unit = "J";
+            mCh.Unit = "KW";
 
             cov = new MultipelChannelConverter();
             cov.Channels.Add(dev["TT0106"]);
@@ -1515,7 +1515,7 @@ namespace LabMCESystem.Servers.HS
                 var flow = converter.Channels[2] as IAnalogueMeasure;
                 System.Diagnostics.Debug.Assert(flow != null);
 
-                return 1000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
+                return 1.000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
             };
 
             mCh.Collector = cov;
@@ -1557,7 +1557,7 @@ namespace LabMCESystem.Servers.HS
                 var flow = converter.Channels[2] as IAnalogueMeasure;
                 System.Diagnostics.Debug.Assert(flow != null);
 
-                return 1000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
+                return 1.000 * flow.MeasureValue * Math.Abs(TIn.MeasureValue - TOut.MeasureValue) / 3600.0;
             };
 
             mCh.Collector = cov;
@@ -1565,7 +1565,7 @@ namespace LabMCESystem.Servers.HS
             mCh = dev.CreateAIChannelIn("HEAT_EMISS_EFFIC");
             mCh.Prompt = "HEAT_EMISS_EFFIC";
             mCh.Summary = "散热效率";
-            mCh.Unit = "";
+            mCh.Unit = "%";
 
             cov = new MultipelChannelConverter();
             cov.Channels.Add(dev["TT0106"]);
@@ -1587,7 +1587,7 @@ namespace LabMCESystem.Servers.HS
                 n = (rlTIn.MeasureValue - (elTIn.MeasureValue + ylTIn.MeasureValue) / 2.0);
                 if (n != 0)
                 {
-                    n = (rlTIn.MeasureValue - rlTOut.MeasureValue) / n;
+                    n = (rlTIn.MeasureValue - rlTOut.MeasureValue) * 100.0 / n;
                 }
                 else
                 {
@@ -1661,7 +1661,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.PV0104_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀PVO1O4开度";
+            ch.Summary = "热路加热器前端泄压调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.PV0104_SET_HMI", 0, ch);
 
@@ -1684,7 +1684,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.FV0102A_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀FT0102A开度";
+            ch.Summary = "热路流量粗调调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.FV0102A_SET_HMI", 50, ch) { PipeDiameter = /*65*/44 };
             ch.Controller = exr;
@@ -1706,7 +1706,7 @@ namespace LabMCESystem.Servers.HS
             ch.Prompt = "HMI.FV0102B_HMI";
             ch.Unit = "%";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀FT0102B开度";
+            ch.Summary = "热路流量细调调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.FV0102B_SET_HMI", 0, ch) { PipeDiameter = /*40*/17 };
             ch.Controller = exr;
@@ -1728,7 +1728,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.PV0108_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀PV0108开度";
+            ch.Summary = "热路产品入口调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.PV0108_SET_HMI", 90, ch) { PipeDiameter = 80 };
             ch.Controller = exr;
@@ -1750,7 +1750,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.PV0109_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀PV0109开度";
+            ch.Summary = "热路产品出口调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.PV0109_SET_HMI", 90, ch) { PipeDiameter = 80 };
             ch.Controller = exr;
@@ -1776,7 +1776,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.PV0103_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀PV0103开度";
+            ch.Summary = "二冷路加热器前端泄压调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.PV0103_SET_HMI", 0, ch);
             ch.Controller = exr;
@@ -1798,7 +1798,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.FV0101A_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀FT0101A开度";
+            ch.Summary = "二冷路流量粗调调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.FV0101A_SET_HMI", 50, ch) { PipeDiameter = /*150*/99 };
             ch.Controller = exr;
@@ -1820,7 +1820,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.FV0101B_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀FT0101B开度";
+            ch.Summary = "二冷路流量细调调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.FV0101B_SET_HMI", 0, ch) { PipeDiameter = /*50*/24 };
             ch.Controller = exr;
@@ -1842,7 +1842,7 @@ namespace LabMCESystem.Servers.HS
             ch.Unit = "%";
             ch.Prompt = "HMI.PV0107_HMI";
             ch.Range = new QRange(0, 100);
-            ch.Summary = "电动调节阀PV0107开度";
+            ch.Summary = "二冷路产品入口调节阀";
 
             exr = new HS_EOVPIDExecuter("HMI.PV0107_SET_HMI", 80, ch) { PipeDiameter = 80 };
             ch.Controller = exr;
@@ -2506,10 +2506,14 @@ namespace LabMCESystem.Servers.HS
             he.FanFrequencePlcChannel = dev["FJ_PL_SET_HMI"] as FeedbackChannel;
             he.FanStartChannel = dev["FJ_HMI_START"] as StatusOutputChannel;
             he.FanStopChannel = dev["FJ_HMI_STOP"] as StatusOutputChannel;
-            he.FanReadyChannel = dev["FJ_READY"] as StatusChannel;
+            he.FanReadyChannel = dev["风机变频器准备就绪"] as StatusChannel;
             he.FanConnectionChannel = dev["FanRemoteConnection"] as StatusChannel;
             he.FanIChannel = dev["MOTOCURRENT_HMI"] as IAnalogueMeasure;
             he.FanDeviceChannel = dev["FirstColdFan"] as FeedbackChannel;
+            he.FanFreqErrorChannel = dev["风机变频器故障"] as StatusChannel;
+            he.FanBeRunChannel = dev["风机变频器运行"] as StatusChannel;
+            he.FanBeStopChannel = dev["风机变频器停止"] as StatusChannel;
+            he.FanRemoteLocalChannel = dev["风机远程控制"] as StatusChannel;
             ch.Controller = he;
             _executerMap.Add(ch.Label, he);
 

@@ -21,7 +21,7 @@ namespace mcLogic.Execute
     /// </summary>
     public class SimplePulseExecuter : PeriodExecuter
     {
-        public SimplePulseExecuter(double pulsePeriod = 200) : base(1, new SafeRange(0, 1))
+        public SimplePulseExecuter(double pulsePeriod = 500) : base(1, new SafeRange(0, 1))
         {
             PeriodInterval = pulsePeriod;
         }

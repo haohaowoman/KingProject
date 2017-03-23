@@ -34,7 +34,7 @@
                 <DataGridComboBoxColumn Header="连接通道" 
                                         ItemsSource="{Binding Source={StaticResource ExpViewModule}, Path=MdChannels}"
                                         
-                                        
+                                        IsReadOnly="True"
                                         SelectedValueBinding="{Binding Path=PairedChannel}"
                                         SelectedValuePath="Channel"
                                         

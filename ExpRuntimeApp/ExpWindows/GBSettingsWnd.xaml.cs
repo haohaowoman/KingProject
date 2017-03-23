@@ -18,10 +18,11 @@ namespace ExpRuntimeApp.ExpWindows
     /// GBSettingsWnd.xaml 的交互逻辑
     /// </summary>
     public partial class GBSettingsWnd
-    {
+    { 
         public GBSettingsWnd()
         {
             InitializeComponent();
         }
+        
     }
 }

@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.HS_SwitchEovCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="120">
+    <UserControl.Resources>
+        <local:SwitchStatusStrConverter x:Key="SwitchCov"/>
+        <local:ElesSwitchCtrlConverter x:Key="ElseBtnSwitchCov"/>
+    </UserControl.Resources>
+    <Grid Width="120" Height="80" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:HS_SwitchEovCtrl}},Path=SwitchEovChannel}"
+          ToolTip="{Binding Path=Summary}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Canvas Grid.RowSpan="2">
+            <Path Data="M40.499999,0.5 L79.5,0.5 79.5,10.000406 80,10.000406 C92.555698,4.6325749 105.72323,1.9911347 119.5,2.0644873 L119.5,49.5 C106.74307,48.203656 93.669941,45.463959 80,40.000099 L39.999999,40.000099 C27.832105,44.564465 14.726877,47.817078 0.5,49.5 L0.5,2.0644873 C13.873295,2.3118694 27.030416,5.0679477 39.999999,10.000406 L40.499999,10.000406 z" Fill="DarkGray" Height="50" Stretch="Fill" Stroke="Black" Canvas.Top="30" Width="120"/>
+            <Rectangle Fill="DarkGray" Height="48.437" Stroke="Black" Canvas.Top="31.563" Width="10"/>
+            <Path Data="M0.5,10.5 C0.5,4.9771525 4.9771525,0.5 10.5,0.5 L69.5,0.5 C75.022847,0.5 79.5,4.9771525 79.5,10.5 79.5,10.5 79.5,21.063 79.5,21.063 98.805004,26.393192 88.978784,30.941828 69.5,31.063 L10.5,31.063 C-7.6451287,30.738683 -18.286957,26.253218 0.5,21.063 0.5,21.063 0.5,10.5 0.5,10.5 z" Fill="DarkCyan" Height="31.563" Canvas.Left="10.123" Stretch="Fill" Stroke="Indigo" Width="100.334" />
+            <Rectangle Fill="DarkGray" Height="48.437" Stroke="Black" Canvas.Top="31.563" Width="10" Canvas.Left="110"/>
+            <Rectangle Height="25" Canvas.Left="25" Stroke="BlueViolet" Canvas.Top="42.331" Width="70" RadiusY="5" RadiusX="5" Fill="Wheat"/>
+            <TextBlock Canvas.Top="45" Canvas.Left="30" TextWrapping="Wrap" FontSize="16" FontWeight="Bold" TextAlignment="Center" Height="20" Width="60"
+                       Text="{Binding Path=Status,Converter={StaticResource SwitchCov}}" />
+            <Ellipse Fill="#FF848F9E" Height="5" Canvas.Left="90" Stroke="#FF4A494B" Canvas.Top="62.331" Width="5"/>
+            <Ellipse Fill="#FF848F9E" Height="5" Canvas.Left="90" Stroke="#FF4A494B" Canvas.Top="42.331" Width="5"/>
+            <Ellipse Fill="#FF848F9E" Height="5" Canvas.Left="25" Stroke="#FF4A494B" Canvas.Top="62.331" Width="5"/>
+            <Ellipse Fill="#FF848F9E" Height="5" Canvas.Left="25" Stroke="#FF4A494B" Canvas.Top="42.331" Width="5"/>
+            <metro:DropDownButton Height="30" Canvas.Left="25" Width="70.667" ArrowBrush="{x:Null}" ArrowPressedBrush="{x:Null}" Background="{x:Null}" ArrowMouseOverBrush="{x:Null}" BorderBrush="{x:Null}"
+                                  
+                                  Content="{Binding Path=Label}" Canvas.Top="0.896" FontWeight="Bold" FontFamily="Microsoft YaHei UI" FontSize="13.333" ArrowVisibility="Collapsed">
+                <metro:DropDownButton.Items>
+                    <ItemsControl>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Left" Margin="3" Padding="8,5" VerticalAlignment="Center"
+                                    Style="{DynamicResource SquareButtonStyle}"
+                                    Content="{Binding Path=Status,Converter={StaticResource ElseBtnSwitchCov}}"
+                                    Click="CheckSwitchBtn_Click"
+                                        />
+                        </DockPanel>
+                    </ItemsControl>
+                </metro:DropDownButton.Items>
+            </metro:DropDownButton>
+
+        </Canvas>
+    </Grid>
+</UserControl>

@@ -33,9 +33,25 @@ namespace ExpRuntimeApp.ExpWindows
             esWnd.Show();
         }
 
-        private void ExitExpBtn_Click(object sender, RoutedEventArgs e)
+        private async void ExitExpBtn_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            //var mySettings = new MetroDialogSettings()
+            //{
+            //    AnimateShow = true,
+            //    AnimateHide = true,
+            //};
+
+            //var edlg = await this.ShowProgressAsync(
+            //"退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序", true, mySettings
+            //);
+
+            //await Task.Run(() =>
+            //{
+            //    System.Threading.Thread.Sleep(10000);
+            //    edlg.CloseAsync();
+            //});
+
+            Close();            
         }
 
         private void OpenHistoryAnalyseWndBtn_Click(object sender, RoutedEventArgs e)
@@ -52,6 +68,7 @@ namespace ExpRuntimeApp.ExpWindows
                 {
                     ExpRunSwitch.IsChecked = false;
                 }
+
                 e.Cancel = false;
             }
             else
@@ -74,10 +91,15 @@ namespace ExpRuntimeApp.ExpWindows
                     //    AnimateShow = false,
                     //    AnimateHide = false
                     //};
-                    //var edlg = this.ShowProgressAsync(
+                    //var edlg = await this.ShowProgressAsync(
                     //"退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序", true, mySettings
                     //);
 
+                    //await Task.Run(() =>
+                    //{
+                    //    System.Threading.Thread.Sleep(10000);
+                    //    edlg.CloseAsync();
+                    //});
                 }
                 else
                 {
@@ -110,16 +132,20 @@ namespace ExpRuntimeApp.ExpWindows
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void MetroWindow_Closed(object sender, EventArgs e)
+        private void MetroWindow_Closed(object sender, EventArgs e)
         {
-            var edlg = await this.ShowProgressAsync(
-                "退出试验，请等待...", "正在退出试验，执行关键退出步骤，关闭应用程序"
-                );
-
-            System.Threading.Thread.Sleep(3000);
-
+            var wnds = App.Current.Windows;
+            if (wnds != null)
+            {
+                foreach (var item in wnds)
+                {
+                    var wnd = item as Window;
+                    wnd?.Close();
+                }
+            }
+            System.Threading.Thread.Sleep(5000);
             App.Current.Shutdown();
-            // await edlg
+            
         }
 
         private void ResetFaultBtn_Click(object sender, RoutedEventArgs e)
@@ -140,7 +166,7 @@ namespace ExpRuntimeApp.ExpWindows
                 }
             }
         }
-        
+
         private void OpenDataReportWndBtn_Click(object sender, RoutedEventArgs e)
         {
             DataReportWnd reprotWnd = new DataReportWnd();

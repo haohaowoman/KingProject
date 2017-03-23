@@ -50,6 +50,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         /// </summary>
         static public double HeaterMinSetTemp = 100;
 
+        private int _offComTick = 0;
+
         /// <summary>
         /// 每个电炉的真实最小要求流量，如果低于此值应该关闭加热器。
         /// 在低温加热时最低要求流量默认为200，高温加热时最低要求流量默认为300。
@@ -61,7 +63,6 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                 return _currentSetTemp > WhereIsHeaterHighTemp ? HeaterHighTempReMinFlow : HeaterLowTempReMinFlow;
             }
         }
-        
 
         /// <summary>
         /// 获取/设置电炉是否准备好的状态通道。
@@ -182,7 +183,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             {
                 double rTemp = 0;
                 bt = GetCtrlTemperature(out rTemp);
-                
+
                 if (bt)
                 {
                     // 由于数据类型的精度误差 将误差在0.1内的视为相等。
@@ -205,7 +206,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                         lock (_heaterLocker)
                         {
                             bt &= _heaterCtrl.SetTemp((float)tTemp);
-                        }                        
+                        }
 
                         if (bt)
                         {
@@ -219,7 +220,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                                 HeaterStartChannel.ControllerExecute();
                                 bt &= true;
                             }
-                        }                        
+                        }
                     }
                 }
 
@@ -230,16 +231,10 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                     {
                         bt = _heaterCtrl.SetComStyle(true);
                         bt &= _heaterCtrl.SetRun(true);
-                    }                    
-                    HeaterIsRemote = bt;
-                    HeaterConnection = bt;                    
-                }
+                    }
 
-                if (HeaterConnectionChannel != null)
-                {
-                    HeaterConnectionChannel.Status = bt;
                 }
-
+                UpdateHeaterConnection(bt);
             }
             else
             {
@@ -248,6 +243,37 @@ namespace LabMCESystem.Servers.HS.HS_Executers
 
             return bt;
         }
+
+        /// <summary>
+        /// 更新电炉链接状态。
+        /// </summary>
+        /// <param name="bt"></param>
+        private void UpdateHeaterConnection(bool bt)
+        {
+            HeaterIsRemote = bt;
+            HeaterConnection = bt;
+            if (HeaterConnectionChannel != null)
+            {
+                HeaterConnectionChannel.Status = bt;
+            }
+            // 连续出现20次通讯中断 报故障 停止。            
+            if (!bt)
+            {
+                _offComTick++;
+                if (_offComTick >= 30)
+                {
+                    Stop();
+                    HeaterFualtChannel.Status = true;
+                    _offComTick = 0;
+                }
+            }
+            else
+            {
+                // 成功重新计数。
+                _offComTick = 0;
+            }
+        }
+
         private object _heaterLocker = new object();
         /// <summary>
         /// 获取电炉的当前设定温度。
@@ -257,7 +283,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public bool GetCtrlTemperature(out double cTemp)
         {
             cTemp = 0;
-            float sv = 0;            
+            float sv = 0;
             bool bt = false;
 
             lock (_heaterLocker)
@@ -274,6 +300,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
                     HeaterChannel.MeasureValue = sv;
                 }
             }
+            UpdateHeaterConnection(bt);
             return bt;
         }
 
@@ -295,8 +322,8 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             if (bt)
             {
                 cTemp = pv;
-
             }
+            UpdateHeaterConnection(bt);
             return bt;
         }
 
@@ -307,7 +334,9 @@ namespace LabMCESystem.Servers.HS.HS_Executers
         public bool Stop()
         {
             bool bs = false;
-            if (HeaterReadyChannel?.Status == true)
+            System.Diagnostics.Debug.Assert(HeaterRunStatusChannel != null);
+
+            if (HeaterReadyChannel?.Status == true && HeaterRunStatusChannel.Status)
             {
                 // 电炉准备好输出。
                 if (HeaterRemoteControlChannle?.Status == true &&
@@ -343,7 +372,7 @@ namespace LabMCESystem.Servers.HS.HS_Executers
             }
             lock (_heaterLocker)
             {
-                _heaterCtrl.ReleaseCtrl(); 
+                _heaterCtrl.ReleaseCtrl();
             }
         }
 

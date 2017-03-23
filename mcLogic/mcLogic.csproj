@@ -44,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Sample.cs" />
-    <Compile Include="Demarcate\DemarcateFactory.cs" />
-    <Compile Include="Demarcate\LinerDemarcater.cs" />
-    <Compile Include="Demarcate\RangeDemarcater.cs" />
+    <Compile Include="Data\Demarcate\DemarcateFactory.cs" />
+    <Compile Include="Data\Demarcate\LinerDemarcater.cs" />
+    <Compile Include="Data\Demarcate\RangeDemarcater.cs" />
     <Compile Include="Execute\DigitalExecuter.cs" />
     <Compile Include="Execute\Executer.cs" />
     <Compile Include="Execute\ClosedLoopExecuter.cs" />
