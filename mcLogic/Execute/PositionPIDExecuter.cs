@@ -19,19 +19,15 @@ namespace mcLogic.Execute
 
         public PositionPIDExecuter(double targetVal, SafeRange srange, PIDParam param) : base(targetVal, srange, param)
         {
-            
+            TargetValChanged += PositionPIDExecuter_TargetValChanged;
         }
-
-
+        
         #region Override
 
         protected override bool OnPIDMath(ref double eVal)
-        {
-            // 对积分项进行积分
-            EIntegrating += ECurrent;
-
+        {            
             // 计算微分项，用差分代替微分
-            EDefferentiation = ELastOne;
+            EDefferentiation = ECurrent - ELastOne;
 
             if (ExecuteTCount == 0)
             {
@@ -39,12 +35,32 @@ namespace mcLogic.Execute
                 eVal = Param.Kp * ECurrent + FedbackData;
             }
             else
-            {
+            {                
                 double Kd = 0;
                 double Ki = 0;
                 Param.GetPostionPIDParam(out Ki, out Kd);
 
-                eVal = Param.Kp * ECurrent + Ki * EIntegrating + Kd * EDefferentiation + _initExecuteVal;
+                if (AllwaysInIntegrating)
+                {
+                    // 对积分项进行积分
+                    EIntegrating += ECurrent;
+                    eVal = Param.Kp * ECurrent + Ki * EIntegrating + Kd * EDefferentiation + _initExecuteVal;
+                }
+                else
+                {
+                    // 主动分离积分项。
+                    if (AllowTolerance.IsInTolerance(TargetVal, FedbackData))
+                    {
+                        // 对积分项进行积分
+                        EIntegrating += ECurrent;
+                        eVal = Param.Kp * ECurrent + Ki * EIntegrating + Kd * EDefferentiation + _initExecuteVal;
+                    }
+                    else
+                    {
+                        EIntegrating = 0;
+                        eVal = Param.Kp * ECurrent + Kd * EDefferentiation + _initExecuteVal;
+                    }
+                }                
             }
             return true;
         }
@@ -58,7 +74,7 @@ namespace mcLogic.Execute
         protected override void OnPIDExecute()
         {
             // 已执行一次输出
-            if (ExecuteTCount == 1)
+            if (ExecuteTCount >= 1)
             {
                 _initExecuteVal = ExecuteVal;
             }
@@ -68,8 +84,14 @@ namespace mcLogic.Execute
 
         #region Operations
 
+        /// <summary>
+        /// 控制目标值发生改变时，如果进行了连续控制的改变，则清除积分项误差，减少积分对突变的影响。
+        /// </summary>        
+        private void PositionPIDExecuter_TargetValChanged(object sender, TargetValChangeEventArgs e)
+        {
+            EIntegrating = 0;
+        }
         
-
         #endregion
 
         #region Properties
@@ -86,6 +108,10 @@ namespace mcLogic.Execute
         /// 获取微分项
         /// </summary>
         public double EDefferentiation { get; private set; }
+        /// <summary>
+        /// 获取/设置此值，指示是否总是加入积分项进行计算，如果为False则只会在反馈达到允许公差后加入积分项计算。
+        /// </summary>
+        public bool AllwaysInIntegrating { get; set; } = false;
 
         #endregion
     }

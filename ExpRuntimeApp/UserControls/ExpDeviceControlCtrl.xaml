@@ -1,0 +1,558 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.ExpDeviceControlCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d"
+             
+             d:DesignHeight="800" d:DesignWidth="1680" DataContext="{StaticResource ExpViewModule}">
+    <UserControl.Resources>
+        <local:SwitchEOVStatusConverter x:Key="SwitchConterter"/>
+    </UserControl.Resources>
+    <Grid Margin="0" Button.Click="UniformGrid_Click">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Frame Grid.Column="0" Margin="5,8" FontSize="18" BorderThickness="1" BorderBrush="AliceBlue" Source="/Pages/ElementPages/ExperimentAreaInfoPage.xaml">
+
+            </Frame>
+            <GroupBox Grid.Column="1" Margin="5,8" Header="风机及加热器调节">
+                <DockPanel Margin="3">
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[FirstColdFan]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="风机转速控制："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center" 
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3"
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[HotRoad1#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="热路1#加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center"
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3"
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[HotRoad2#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="热路2#加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center" 
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[HotRoad3#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="热路3#加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center"
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[HotRoad4#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="热路4#加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center" 
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[HotRoad5#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="热路5#加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center"
+                                    FontSize="18"                                    
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[SecendCold1#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="二冷路1#号加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center"
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid DockPanel.Dock="Top" Columns="4" DataContext="{Binding Path=MdChannels[SecendCold2#Heater]}">
+                        <TextBlock Margin="2,3" VerticalAlignment="Center" Text="二冷路2#号加热器："/>
+                        <TextBlock Margin="2,3" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="反馈：{0:F0} {1}">
+                                    <Binding Path="MeasureValue"/>
+                                    <Binding Path="Unit"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="80" Margin="2,3" FontSize="18" StringFormat="{}{0:F0}"
+                                     Minimum="{Binding Path=RangeLow}" Maximum="{Binding Path=RangeHigh}"
+                                     Value="{Binding Path=AOValue}"
+                                     />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Cursor="Hand">
+                            <Button Margin="2,3"  Padding="10,3" HorizontalAlignment="Center"
+                                    FontSize="18"
+                                    Content="启动"
+                                    Command="{Binding Path=ExpPointOutputCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+                            <Button Margin="2,3"  Padding="10,3" 
+                                    FontSize="18"
+                                    Content="停止"
+                                    Command="{Binding Path=ExpPointOutputStopCommand,Source={StaticResource ExpViewModule}}" 
+                                    CommandParameter="{Binding}"/>
+
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <TextBlock DockPanel.Dock="Bottom" Margin="2,3" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Red" FontStyle="Italic" FontSize="18" MaxWidth="500"
+                               TextWrapping="WrapWithOverflow"
+                               Text="注意：&#x0d;对风机和加热器进行手动控制时为直接硬件操作，请人为确保其控制条件，否则请不要随意进行手动操作。"/>
+                </DockPanel>
+
+            </GroupBox>
+        </Grid>
+
+        <ContentControl Grid.Column="2" Grid.RowSpan="2">
+            <UniformGrid Columns="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Content="FT0101 PID 监控" Padding="10,20" Margin="10" Click="FT0101Watcher_BtnClick"/>
+                <Button Content="FT0102 PID 监控" Padding="10,20" Margin="10" Click="FT0102Watcher_BtnClick"/>
+                <Button Content="TT0105 PID 监控" Padding="10,20" Margin="10" Click="TT0105Watcher_BtnClick"/>
+                <Button Content="TT0106 PID 监控" Padding="10,20" Margin="10" Click="TT0106Watcher_BtnClick"/>
+                <Button Content="数采通道计量" Padding="10,20" Margin="10" Click="JiLiang_BtnClick" FontSize="16" />
+                <Button Content="数采通道校准" Padding="10,20" Margin="10" Click="Calibration_BtnClick" FontSize="16" />
+            </UniformGrid>
+        </ContentControl>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Margin="5,8" Header="热路阀门调节">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                Text="PV0104：" Margin="2,3"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[PV0104].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[PV0104].AOValue}"
+                                     />
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0104]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[PV0104]}"/>
+                <TextBlock Grid.Row="0" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0104].Summary}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                                Text="FT0102A：" Margin="2,3"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[FT0102A].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="1" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[FT0102A].AOValue}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[FT0102A]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[FT0102A]}"
+                        />
+                <TextBlock Grid.Row="1" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0102A].Summary}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
+                                Text="FT0102B：" Margin="2,3"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[FT0102B].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="2" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[FT0102B].AOValue}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[FT0102B]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[FT0102B]}"
+                        />
+                <TextBlock Grid.Row="2" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0102B].Summary}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
+                                Text="PV0108：" Margin="2,3"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[PV0108].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="3" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[PV0108].AOValue}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0108]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[PV0108]}"
+                        />
+                <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0108].Summary}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
+                                Text="PV0109：" Margin="2,3"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[PV0109].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="4" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[PV0109].AOValue}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0109]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[PV0109]}"
+                        />
+                <TextBlock Grid.Row="4" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0109].Summary}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
+                                Text="EV0103：" Margin="2,3"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding MdChannels[EV0103].Status, Converter={StaticResource SwitchConterter}, StringFormat=当前状态：\{0\}}"/>
+                <metro:ToggleSwitch Grid.Row="5" Grid.Column="2" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
+                                                OffLabel="关"
+                                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0103].NextStatus}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[EV0103]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[EV0103]}"
+                        />
+                <TextBlock Grid.Row="5" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0103].Summary}"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"
+                                Text="EV0104：" Margin="2,3"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,3" MinWidth="100"
+                           Text="{Binding MdChannels[EV0104].Status, Converter={StaticResource SwitchConterter}, StringFormat=当前状态：\{0\}}"/>
+                <metro:ToggleSwitch Grid.Row="6" Grid.Column="2" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
+                                                OffLabel="关"
+                                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0104].NextStatus}"/>
+                <Button Grid.Row="6" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[EV0104]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[EV0104]}"
+                        />
+                <TextBlock Grid.Row="6" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0104].Summary}"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="1" Margin="5,8" Header="二冷路阀门调节">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                Text="PV0103：" Margin="2,3"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[PV0103].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="0" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[PV0103].AOValue}"/>
+                <Button Grid.Row="0" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0103]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[PV0103]}"
+                        />
+                <TextBlock Grid.Row="0" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0103].Summary}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                                Text="FT0101A：" Margin="2,3"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[FT0101A].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="1" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[FT0101A].AOValue}"/>
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[FT0101A]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[FT0101A]}"
+                        />
+                <TextBlock Grid.Row="1" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0101A].Summary}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
+                                Text="FT0101B：" Margin="2,3"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[FT0101B].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="2" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[FT0101B].AOValue}"/>
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[FT0101B]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[FT0101B]}"
+                        />
+                <TextBlock Grid.Row="2" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[FT0101B].Summary}"/>
+
+
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
+                                Text="PV0107：" Margin="2,3"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="120"
+                           Text="{Binding MdChannels[PV0107].MeasureValue, StringFormat=当前开度：\{0:f1\} %}"/>
+                <metro:NumericUpDown Grid.Row="3" Grid.Column="2" 
+                                VerticalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18" StringFormat="{}{0:F1}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding MdChannels[PV0107].AOValue}"/>
+                <Button Grid.Row="3" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[PV0107]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[PV0107]}"
+                        />
+                <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[PV0107].Summary}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
+                                Text="EV0101：" Margin="2,3"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding MdChannels[EV0101].Status, Converter={StaticResource SwitchConterter}, StringFormat=当前状态：\{0\}}"/>
+                <metro:ToggleSwitch Grid.Row="4" Grid.Column="2" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
+                                OffLabel="关"
+                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0101].NextStatus}"/>
+                <Button Grid.Row="4" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[EV0101]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[EV0101]}"
+                        />
+                <TextBlock Grid.Row="4" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0101].Summary}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
+                                Text="EV0102：" Margin="2,3"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Margin="2,3" MinWidth="100"
+                           Text="{Binding MdChannels[EV0102].Status, Converter={StaticResource SwitchConterter}, StringFormat=当前状态：\{0\}}"/>
+                <metro:ToggleSwitch Grid.Row="5" Grid.Column="2" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="120" Margin="8,3" FontSize="18"
+                                OffLabel="关"
+                                OnLabel="开"
+                                    IsChecked="{Binding MdChannels[EV0102].NextStatus}"/>
+                <Button Grid.Row="5" Grid.Column="3" Margin="5" Padding="10,3" Content="确定" FontSize="18" Cursor="Hand" Tag="{Binding MdChannels[EV0102]}"
+                        Command="{Binding ExpPointOutputCommand}"
+                        CommandParameter="{Binding MdChannels[EV0102]}"
+                        />
+                <TextBlock Grid.Row="5" Grid.Column="4" Margin="3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow" FontStyle="Italic"
+                           Text="{Binding Path=MdChannels[EV0102].Summary}"/>
+            </Grid>
+        </GroupBox>
+
+
+    </Grid>
+</UserControl>

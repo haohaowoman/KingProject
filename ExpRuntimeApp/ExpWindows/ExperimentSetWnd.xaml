@@ -1,0 +1,87 @@
+﻿<metro:MetroWindow x:Class="ExpRuntimeApp.ExpWindows.ExperimentSetWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+                   xmlns:prop="clr-namespace:ExpRuntimeApp.Properties"
+                   DataContext="{StaticResource ExpViewModule}"
+        mc:Ignorable="d"
+        Title="试验设置" Height="1050" Width="1680"
+        FontSize="18"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized" Icon="pack://siteoforigin:,,,/Images/SettingIcon.ico" Background="{DynamicResource HS_BackgroundBrush}">
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+    </Window.Resources>
+
+    <Grid>
+        <metro:MetroAnimatedTabControl Margin="1" metro:TabControlHelper.IsUnderlined="True">
+            <TabItem Header="快速试验设置" metro:ControlsHelper.HeaderMargin="8,3">
+                <Grid Background="{DynamicResource HS_BackgroundBrush}" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" 
+                        Margin="5, 10" Padding="3" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            BorderThickness="2" BorderBrush="DarkGray" CornerRadius="3">
+                        <uc:HS_ExpPointSet HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" Margin="10"/>
+                    </Border>
+
+                    <Border Visibility="Collapsed" Grid.Row="1" 
+                        Margin="5, 10" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                            BorderThickness="2" BorderBrush="DarkGray" CornerRadius="3">
+                        <uc:HS_ExpControlToleranceCtrl HorizontalAlignment="Left" d:LayoutOverrides="Width, Height" Margin="10"/>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem Header="试验设备控制及维护" metro:ControlsHelper.HeaderMargin="8,3">
+                <Grid Background="#FFE5E5E5">
+                    <uc:ExpDeviceControlCtrl/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="通道及传感器设置" metro:ControlsHelper.HeaderMargin="8,3">
+                <Grid Background="#FFE5E5E5">
+                    <Frame Source="/Pages/ElementPages/AllHasSensorChannelsInfoPage.xaml"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="用户设置" metro:ControlsHelper.HeaderMargin="8,3">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <uc:UserInfoCtrl Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Top"/>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="3">
+                        <TextBlock Text="文件数据默认储存位置:" Margin="3"/>
+                        <TextBox Margin="3" Width="200" HorizontalAlignment="Left" Text="{Binding Path=DefualtReportDicPath}"/>
+                        <Label VerticalAlignment="Center" Content="自动写入："/>
+                        <metro:ToggleSwitch IsChecked="{Binding Path=AutoWrite}" OffLabel="关" OnLabel="开"/>
+                        <Label VerticalAlignment="Center" Content="自动写入间隔(s)："/>
+                        <TextBox VerticalAlignment="Center" Text="{Binding Path=WriteInterval}"/>
+                        <Button Style="{DynamicResource AccentedSquareButtonStyle}"
+                            Margin="10" Padding="20,5" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                Command="{Binding Path=SaveSettings}"
+                                Content="确定"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+        </metro:MetroAnimatedTabControl>
+
+    </Grid>
+</metro:MetroWindow>

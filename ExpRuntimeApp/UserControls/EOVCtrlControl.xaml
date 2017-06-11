@@ -7,64 +7,32 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         x:Class="ExpRuntimeApp.UserControls.EOVCtrlControl"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200" BorderThickness="2"
+             d:DesignHeight="97" d:DesignWidth="200" BorderThickness="2" Height="139" Width="258"    
 
              >
+    <UserControl.Resources>
+        <Path x:Key="ControlBtn" Data="M16.075001,6.8899995 C12.822595,6.8899995 10.186,9.2908722 10.186,12.252499 10.186,15.214126 12.822595,17.614999 16.075001,17.614999 19.327404,17.614999 21.964001,15.214126 21.964001,12.252499 21.964001,9.2908722 19.327404,6.8899995 16.075001,6.8899995 z M15.257789,1.0002409 C15.57257,1.0017321 15.903256,1.0101666 16.251011,1.0260884 23.669777,1.3657486 21.902821,3.7542132 25.082001,4.9482542 27.843424,4.9482542 30.082001,7.1868488 30.082001,9.9482952 L30.082001,12.615318 C30.082001,15.376765 23.605003,24.134998 20.84358,24.134998 L10.951892,24.134998 C8.1904678,24.134998 1,15.376765 1,12.615318 L1,9.9482952 C1,7.1868488 3.2385762,4.9482542 6,4.9482542 9.0323553,3.8101839 8.8572273,0.96991587 15.257789,1.0002409 z" Height="25.135" Canvas.Left="81.858" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Top="8.052" Width="31.082" />
+    </UserControl.Resources>
 
-    <Grid ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},Path=EOVChannel.Summary}">
+    <Grid ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},Path=EOVChannel.Summary}" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:EOVCtrlControl},Path=EOVChannel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Viewbox Margin="0" Grid.Row="1" Stretch="Fill">
-            <Canvas Height="196" Width="196">
-                <Path Canvas.Top="54.667" Stroke="#FF1B0A0A" Height="130.333" Canvas.Left="1.334" Width="192.332" Data="M167.832,70.499999 L191.832,70.499999 191.832,99.499999 167.832,99.499999 z M0.5,70.499999 L24.5,70.499999 24.5,99.499999 0.5,99.499999 z M84.166,0.5 L113.166,0.5 113.166,38.671221 113.39972,38.760073 C122.11546,42.196887 129.55704,48.163462 134.81967,55.755038 L134.98289,55.999999 157.666,55.999999 C163.18884,55.999999 167.666,60.477153 167.666,65.999999 L167.666,104 C167.666,109.52285 163.18884,114 157.666,114 L131.04437,114 130.95625,114.10174 C122.35864,123.56121 109.95586,129.5 96.166,129.5 82.376144,129.5 69.973358,123.56121 61.375748,114.10174 L61.287621,114 34.666,114 C29.143152,114 24.666,109.52285 24.666,104 L24.666,65.999999 C24.666,60.477153 29.143152,55.999999 34.666,55.999999 L57.354111,55.999999 57.735134,55.436457 C63.853199,46.764567 72.832306,40.255641 83.299171,37.282973 L84.166,37.048407 z" Stretch="Fill" StrokeThickness="2" d:IsLocked="True">
+            <Canvas Height="98.334" Width="192.332" d:LayoutOverrides="TopPosition, BottomPosition">
+                <Path Stroke="#FF1B0A0A" Height="93.74" Width="192.332" Data="M167.832,70.499999 L191.832,70.499999 191.832,99.499999 167.832,99.499999 z M0.5,70.499999 L24.5,70.499999 24.5,99.499999 0.5,99.499999 z M110.96262,37.586966 C119.67836,41.02378 129.55704,48.163462 134.81967,55.755038 L134.98289,55.999999 157.666,55.999999 C163.18884,55.999999 167.666,60.477153 167.666,65.999999 L167.666,104 C167.666,109.52285 163.18884,114 157.666,114 L131.04437,114 130.95625,114.10174 C122.35864,123.56121 109.95586,129.5 96.166,129.5 82.376144,129.5 69.973358,123.56121 61.375748,114.10174 L61.287621,114 34.666,114 C29.143152,114 24.666,109.52285 24.666,104 L24.666,65.999999 C24.666,60.477153 29.143152,55.999999 34.666,55.999999 L57.354111,55.999999 57.735134,55.436457 C63.853199,46.764567 72.832306,40.255641 83.299171,37.282973 83.299171,37.282973 110.96262,37.586966 110.96262,37.586966 z" Stretch="Fill" StrokeThickness="2" Canvas.Top="2.927">
                     <Path.Fill>
                         <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
-                            <GradientStop Color="#FF635F5F" Offset="0.054"/>
-                            <GradientStop Color="#FF2B1919" Offset="0.768"/>
-                            <GradientStop Color="#FF483E3E" Offset="0.23"/>
-                            <GradientStop Color="#FF3C2F2F" Offset="0.358"/>
-                            <GradientStop Color="#FF352525" Offset="0.517"/>
+                            <GradientStop Color="#FF759DB0" Offset="0.054"/>
+                            <GradientStop Color="#FF475D74" Offset="0.256"/>
+                            <GradientStop Color="#FF2F434D" Offset="0.867"/>
+                            <GradientStop Color="#FF274D5F" Offset="0.635"/>
                         </LinearGradientBrush>
                     </Path.Fill>
                 </Path>
-                <Canvas Height="55.162" Canvas.Left="10" Canvas.Top="4.838" Width="176">
-                    <Rectangle Height="55.162" Width="176" RadiusX="10" RadiusY="10" Stroke="#FF1B1616" StrokeThickness="2">
-                        <Rectangle.Fill>
-                            <LinearGradientBrush EndPoint="0.457,0.79" StartPoint="0.379,0.144">
-                                <GradientStop Color="#FF575261" Offset="0.027"/>
-                                <GradientStop Color="#FF1D2636" Offset="0.893"/>
-                            </LinearGradientBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                    <TextBox x:Name="textBox" Height="30.162" Canvas.Left="25"
-                             Canvas.Top="6" Width="125" IsReadOnly="True" CaretBrush="Black"
-                             Text="{
-                        Binding RelativeSource=
-                        {RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},
-                        Mode=OneWay,Path=EOVChannel.MeasureValue,StringFormat={}{0:F2}%
-                        }" FontSize="16" FontWeight="Bold" FontStyle="Italic" IsHitTestVisible="False"/>
-                    <ProgressBar Height="5" Value="{
-                        Binding RelativeSource=
-                        {RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},
-                        Mode=OneWay,Path=EOVChannel.MeasureValue,StringFormat={}{0:F2}
-                        }" Canvas.Left="10" Canvas.Top="40.162" Width="155"
-                             />
-                </Canvas>
-                <Rectangle Height="4.333" Canvas.Left="82.333" RadiusY="2" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="90" Width="35.334" Fill="Black"/>
-                <Rectangle Height="20" Canvas.Left="61" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="145" Width="75">
-                    <Rectangle.Fill>
-                        <LinearGradientBrush EndPoint="0.929,1.016" StartPoint="0.048,0.02">
-                            <GradientStop Color="#FF635F5F" Offset="0.018"/>
-                            <GradientStop Color="#FF2B1919" Offset="0.826"/>
-                            <GradientStop Color="#FF483E3E" Offset="0.144"/>
-                            <GradientStop Color="#FF3C2F2F" Offset="0.35"/>
-                            <GradientStop Color="#FF352525" Offset="0.551"/>
-                        </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Rectangle Height="15" Canvas.Left="55" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="100" Width="5">
+                <Rectangle Height="10" Canvas.Left="72.332" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="88.334" Width="49" Fill="#FF666D7A"/>
+                <Rectangle Height="15" Canvas.Left="53.666" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="11.667" Width="5">
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
                             <GradientStop Color="#FF635F5F" Offset="0.054"/>
@@ -75,7 +43,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="15" Canvas.Left="135" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="100" Width="5">
+                <Rectangle Height="15" Canvas.Left="133.666" RadiusY="3" RadiusX="3" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="11.667" Width="5">
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.972,0.987" StartPoint="0.048,0.02">
                             <GradientStop Color="#FF635F5F" Offset="0.054"/>
@@ -86,12 +54,12 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Path Data="M52.667082,111.33392 C78.166954,129.33131 116.50009,131.49792 139.99997,112.00048" Height="16.416" Canvas.Left="51.667" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="110.333" Width="89.333"/>
-                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="5" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="20"/>
-                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="171.998" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="20"/>
-                <Path Data="M33.333333,112 C41.333333,138.66667 34.000325,168.66596 34.000325,168.66596" Height="58.667" Canvas.Left="32.333" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="111" Width="5.736"/>
-                <Path Data="M161.99907,112.667 C154.00206,148.66737 161.33231,167.33372 162.66587,168.66739" Height="58" Canvas.Left="157.319" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="111.667" Width="6.348"/>
-                <Path Data="M36.000671,126.66968 L158.667,126.00181" Height="2.667" Canvas.Left="35" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="125" Width="124.667">
+                <Path Data="M52.667082,111.33392 C78.166954,129.33131 116.50009,131.49792 139.99997,112.00048" Height="16.416" Canvas.Left="50.333" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="22" Width="89.333"/>
+                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="3.666" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="36.667" Width="20"/>
+                <Path Data="M1,1 L6.5,28.5 M5,1 L10.5,28.5 M13.5,1 L19,28.5 M9.5,1 L15,28.5" Height="29.5" Canvas.Left="170.664" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="36.667" Width="20"/>
+                <Path Data="M33.333333,112 C41.333333,138.66667 34.000325,168.66596 34.000325,168.66596" Height="58.667" Canvas.Left="30.999" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="22.667" Width="5.736"/>
+                <Path Data="M161.99907,112.667 C154.00206,148.66737 161.33231,167.33372 162.66587,168.66739" Height="58" Canvas.Left="155.985" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="23.334" Width="6.348"/>
+                <Path Data="M36.000671,126.66968 L158.667,126.00181" Height="2.667" Canvas.Left="33.666" Stretch="Fill" Stroke="#FF1B0A0A" StrokeThickness="2" Canvas.Top="36.667" Width="124.667">
                     <Path.Fill>
                         <LinearGradientBrush EndPoint="0.929,1.016" StartPoint="0.048,0.02">
                             <GradientStop Color="#FF635F5F" Offset="0.018"/>
@@ -102,10 +70,49 @@
                         </LinearGradientBrush>
                     </Path.Fill>
                 </Path>
-                <Ellipse Height="5.75" Canvas.Left="38.069" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="111.667" Width="6"/>
-                <Ellipse Height="5.75" Canvas.Left="151.319" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="111.667" Width="6"/>
-                <Ellipse Height="5.75" Canvas.Left="38.069" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="161.417" Width="6"/>
-                <Ellipse Height="5.75" Canvas.Left="151.319" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="161.417" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="36.735" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="23.334" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="149.985" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="23.334" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="36.735" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="73.084" Width="6"/>
+                <Ellipse Height="5.75" Canvas.Left="149.985" Stroke="#FF151010" StrokeThickness="2" Canvas.Top="73.084" Width="6"/>
+                <TextBox x:Name="textBox" 
+                         IsReadOnly="True"
+                         Height="28.829" Canvas.Left="53.666"
+                         TextAlignment="Center"
+                        Canvas.Top="43.416" Width="86"  CaretBrush="Black" FontSize="16" FontWeight="Bold" FontStyle="Italic" IsHitTestVisible="False" BorderBrush="Black"
+                         >
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0:F1} {1}" >
+                            <Binding Path="MeasureValue"/>
+                            <Binding Path="Unit"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <metro:DropDownButton Canvas.Left="83" Canvas.Top="6"
+                                      ArrowVisibility="Collapsed"
+                                      ArrowBrush="{x:Null}"
+                                      ArrowMouseOverBrush="{x:Null}"
+                                      ArrowPressedBrush="{x:Null}" BorderBrush="{x:Null}" Width="28" Background="{x:Null}" Height="22"
+                                      Cursor="Hand"
+                                      Content="{StaticResource ControlBtn}">
+
+                    <metro:DropDownButton.Items>
+                        <ItemsControl>
+                            <DockPanel>
+                                <metro:NumericUpDown DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                     Minimum="0" Maximum="100" StringFormat="{}{0:F1} %" TextAlignment="Right"
+                                                     Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:EOVCtrlControl},Path=EOVChannel.AOValue,UpdateSourceTrigger=LostFocus}"
+                                                     />
+                                <Button DockPanel.Dock="Left" Margin="3" Padding="8,5" VerticalAlignment="Center"
+                                        Content="确定"
+                                        Click="EovAOBtn_Click"
+                                        />
+                            </DockPanel>
+                        </ItemsControl>
+
+                    </metro:DropDownButton.Items>
+
+                </metro:DropDownButton>
+
             </Canvas>
 
         </Viewbox>

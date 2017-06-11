@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Demarcate\LinerDemarcater.cs" />
-    <Compile Include="Demarcate\RangeDemarcater.cs" />
+    <Compile Include="Data\Sample.cs" />
+    <Compile Include="Data\Demarcate\DemarcateFactory.cs" />
+    <Compile Include="Data\Demarcate\LinerDemarcater.cs" />
+    <Compile Include="Data\Demarcate\RangeDemarcater.cs" />
     <Compile Include="Execute\DigitalExecuter.cs" />
     <Compile Include="Execute\Executer.cs" />
     <Compile Include="Execute\ClosedLoopExecuter.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="Execute\IncrementPIDExecuter.cs" />
     <Compile Include="Execute\IPeriodExecute.cs" />
     <Compile Include="Execute\IPredicateExecute.cs" />
+    <Compile Include="Execute\NoLogicExecuter.cs" />
     <Compile Include="Execute\PeriodExecuter.cs" />
     <Compile Include="Execute\PeriodStepExecuter.cs" />
     <Compile Include="Execute\PIDExecuterBase.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="Execute\PredicatePositionPID.cs" />
     <Compile Include="Execute\SeparateIntegratingPID.cs" />
     <Compile Include="Execute\SerialExecuteSys.cs" />
+    <Compile Include="Execute\SimplePulseExecuter.cs" />
     <Compile Include="Execute\StepExecuter.cs" />
     <Compile Include="Execute\Watcher\ExecuteWatcher.cs" />
     <Compile Include="Execute\Watcher\ExecuteWatcherDlg.cs">

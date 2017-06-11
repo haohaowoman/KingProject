@@ -31,9 +31,9 @@ namespace mcLogic.Execute
         protected override bool OnPIDMath(ref double eVal)
         {
             bool br = base.OnPIDMath(ref eVal);
-            if (br && IsSpearateIntegrating && ExecuteTCount >= 1)
+            if (br && ExecuteTCount >= 1 && IsSpearateIntegrating && !AllowTolerance.IsInTolerance(TargetVal, FedbackData))
             {
-                // 在些减去积分项的影响
+                // 在此减去积分项的影响
                 double ki, kd;
                 Param.GetPostionPIDParam(out ki, out kd);
                 eVal = eVal - ki * EIntegrating;

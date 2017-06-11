@@ -29,11 +29,10 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.CustomLabel customLabel1 = new System.Windows.Forms.DataVisualization.Charting.CustomLabel();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.EChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.label1 = new System.Windows.Forms.Label();
             this.ETypeTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -47,40 +46,17 @@
             this.PIDKiTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.PIDTdTextBox = new System.Windows.Forms.TextBox();
+            this.ResetBtn = new System.Windows.Forms.Button();
+            this.EOverBtn = new System.Windows.Forms.Button();
+            this.EBegainBtn = new System.Windows.Forms.Button();
+            this.EChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.ResetButton = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.TargetValueTextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.TsTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.EChart)).BeginInit();
             this.SuspendLayout();
-            // 
-            // EChart
-            // 
-            this.EChart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            customLabel1.Text = "DateTime";
-            chartArea1.AxisX.CustomLabels.Add(customLabel1);
-            chartArea1.AxisX.Title = "DateTime";
-            chartArea1.Name = "ChartArea1";
-            this.EChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            legend1.Title = "Executer";
-            this.EChart.Legends.Add(legend1);
-            this.EChart.Location = new System.Drawing.Point(14, 95);
-            this.EChart.Name = "EChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.IsValueShownAsLabel = true;
-            series1.Legend = "Legend1";
-            series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series1.Name = "ExeValue";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Color = System.Drawing.Color.Red;
-            series2.Legend = "Legend1";
-            series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Diamond;
-            series2.Name = "FedbackValue";
-            this.EChart.Series.Add(series1);
-            this.EChart.Series.Add(series2);
-            this.EChart.Size = new System.Drawing.Size(566, 304);
-            this.EChart.TabIndex = 0;
-            this.EChart.Text = "Watcher Data Chart";
             // 
             // label1
             // 
@@ -116,9 +92,9 @@
             // 
             // RefreshBtn
             // 
-            this.RefreshBtn.Location = new System.Drawing.Point(521, 66);
+            this.RefreshBtn.Location = new System.Drawing.Point(1061, 47);
             this.RefreshBtn.Name = "RefreshBtn";
-            this.RefreshBtn.Size = new System.Drawing.Size(59, 23);
+            this.RefreshBtn.Size = new System.Drawing.Size(111, 23);
             this.RefreshBtn.TabIndex = 3;
             this.RefreshBtn.Text = "Refresh";
             this.RefreshBtn.UseVisualStyleBackColor = true;
@@ -129,9 +105,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(231, 23);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 12);
+            this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 1;
-            this.label3.Text = "ExecuterPeriod";
+            this.label3.Text = "Period";
             // 
             // PeriodTextBox
             // 
@@ -188,30 +164,165 @@
             this.PIDTdTextBox.Size = new System.Drawing.Size(66, 21);
             this.PIDTdTextBox.TabIndex = 2;
             // 
+            // ResetBtn
+            // 
+            this.ResetBtn.Location = new System.Drawing.Point(729, 18);
+            this.ResetBtn.Name = "ResetBtn";
+            this.ResetBtn.Size = new System.Drawing.Size(75, 23);
+            this.ResetBtn.TabIndex = 4;
+            this.ResetBtn.Text = "ResetParam";
+            this.ResetBtn.UseVisualStyleBackColor = true;
+            this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
+            // 
+            // EOverBtn
+            // 
+            this.EOverBtn.Location = new System.Drawing.Point(859, 47);
+            this.EOverBtn.Name = "EOverBtn";
+            this.EOverBtn.Size = new System.Drawing.Size(92, 23);
+            this.EOverBtn.TabIndex = 4;
+            this.EOverBtn.Text = "ExecuteOver";
+            this.EOverBtn.UseVisualStyleBackColor = true;
+            this.EOverBtn.Click += new System.EventHandler(this.EOverBtn_Click);
+            // 
+            // EBegainBtn
+            // 
+            this.EBegainBtn.Location = new System.Drawing.Point(729, 47);
+            this.EBegainBtn.Name = "EBegainBtn";
+            this.EBegainBtn.Size = new System.Drawing.Size(111, 23);
+            this.EBegainBtn.TabIndex = 4;
+            this.EBegainBtn.Text = "ExecuteBegain";
+            this.EBegainBtn.UseVisualStyleBackColor = true;
+            this.EBegainBtn.Click += new System.EventHandler(this.EBegainBtn_Click);
+            // 
+            // EChart
+            // 
+            this.EChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.EChart.BackColor = System.Drawing.Color.Gainsboro;
+            chartArea1.AxisX.ArrowStyle = System.Windows.Forms.DataVisualization.Charting.AxisArrowStyle.Triangle;
+            chartArea1.AxisX.LabelStyle.Format = "{0:HH:mm:ss}";
+            chartArea1.AxisX.Title = "Time";
+            chartArea1.AxisY.ArrowStyle = System.Windows.Forms.DataVisualization.Charting.AxisArrowStyle.Triangle;
+            chartArea1.AxisY.LabelStyle.Format = "{0:F1}";
+            chartArea1.AxisY.Title = "Value";
+            chartArea1.BackColor = System.Drawing.Color.LightGray;
+            chartArea1.CursorX.IsUserEnabled = true;
+            chartArea1.CursorX.IsUserSelectionEnabled = true;
+            chartArea1.CursorX.LineWidth = 2;
+            chartArea1.CursorY.IsUserEnabled = true;
+            chartArea1.CursorY.IsUserSelectionEnabled = true;
+            chartArea1.CursorY.LineWidth = 2;
+            chartArea1.CursorY.Position = 10D;
+            chartArea1.Name = "ChartArea1";
+            this.EChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            legend1.Title = "Executer";
+            this.EChart.Legends.Add(legend1);
+            this.EChart.Location = new System.Drawing.Point(14, 74);
+            this.EChart.Name = "EChart";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.IsValueShownAsLabel = true;
+            series1.LabelFormat = "{0:F1}";
+            series1.Legend = "Legend1";
+            series1.LegendText = "ExeValue";
+            series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series1.Name = "ExeValue";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Color = System.Drawing.Color.Red;
+            series2.IsValueShownAsLabel = true;
+            series2.LabelFormat = "{0:f1}";
+            series2.Legend = "Legend1";
+            series2.LegendText = "FedbackValue";
+            series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series2.Name = "FedbackValue";
+            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            this.EChart.Series.Add(series1);
+            this.EChart.Series.Add(series2);
+            this.EChart.Size = new System.Drawing.Size(1160, 661);
+            this.EChart.TabIndex = 5;
+            this.EChart.Text = "Watcher Data Chart";
+            title1.Name = "Title1";
+            title1.Text = "PID调节监控器";
+            this.EChart.Titles.Add(title1);
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.Location = new System.Drawing.Point(967, 47);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(75, 23);
+            this.ResetButton.TabIndex = 6;
+            this.ResetButton.Text = "Reset";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(525, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(71, 12);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "TargetValue";
+            // 
+            // TargetValueTextBox
+            // 
+            this.TargetValueTextBox.Location = new System.Drawing.Point(602, 20);
+            this.TargetValueTextBox.Name = "TargetValueTextBox";
+            this.TargetValueTextBox.Size = new System.Drawing.Size(100, 21);
+            this.TargetValueTextBox.TabIndex = 2;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(525, 50);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(17, 12);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Ts";
+            // 
+            // TsTextBox
+            // 
+            this.TsTextBox.Location = new System.Drawing.Point(548, 47);
+            this.TsTextBox.Name = "TsTextBox";
+            this.TsTextBox.Size = new System.Drawing.Size(62, 21);
+            this.TsTextBox.TabIndex = 2;
+            // 
             // ExecuteWatcherDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(590, 411);
+            this.ClientSize = new System.Drawing.Size(1184, 747);
+            this.Controls.Add(this.ResetButton);
+            this.Controls.Add(this.EChart);
+            this.Controls.Add(this.EBegainBtn);
+            this.Controls.Add(this.EOverBtn);
+            this.Controls.Add(this.ResetBtn);
             this.Controls.Add(this.RefreshBtn);
             this.Controls.Add(this.PIDTdTextBox);
             this.Controls.Add(this.PIDKiTextBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.PIDKpTextBox);
             this.Controls.Add(this.label5);
+            this.Controls.Add(this.TsTextBox);
+            this.Controls.Add(this.TargetValueTextBox);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.PeriodTextBox);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ENameTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.ETypeTextBox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.EChart);
-            this.MaximizeBox = false;
             this.Name = "ExecuteWatcherDlg";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ExecuteWatcherDlg";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ExecuteWatcherDlg_FormClosed);
             this.Load += new System.EventHandler(this.ExecuteWatcherDlg_Load);
             ((System.ComponentModel.ISupportInitialize)(this.EChart)).EndInit();
             this.ResumeLayout(false);
@@ -220,8 +331,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.DataVisualization.Charting.Chart EChart;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ETypeTextBox;
         private System.Windows.Forms.Label label2;
@@ -235,5 +344,14 @@
         private System.Windows.Forms.TextBox PIDKiTextBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox PIDTdTextBox;
+        private System.Windows.Forms.Button ResetBtn;
+        private System.Windows.Forms.Button EOverBtn;
+        private System.Windows.Forms.Button EBegainBtn;
+        private System.Windows.Forms.DataVisualization.Charting.Chart EChart;
+        private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox TargetValueTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox TsTextBox;
     }
 }

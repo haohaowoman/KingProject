@@ -33,6 +33,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,9 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HS\Calibration\Calibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HS\Calibration\Calibration.Designer.cs">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HS\ChannelSet\HS_Elements.cs">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="HS\ChannelSet\HS_Elements.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </Compile>
     <Compile Include="HS\HS_ElectricHeaterGroup.cs" />
+    <Compile Include="HS\HS_Executers\FirstColdFIRQExecuter.cs" />
     <Compile Include="HS\HS_Executers\HS_FirstColdFanDevice.cs" />
     <Compile Include="HS\HS_Executers\HS_FIRQExecuter.cs" />
+    <Compile Include="HS\HS_Executers\HS_HeaterContrller.cs" />
+    <Compile Include="HS\HS_Executers\HS_TempreatureExecute.cs" />
+    <Compile Include="HS\HS_HeaterLogical.cs" />
     <Compile Include="HS\HS_HotRoadHeaterExe.cs" />
     <Compile Include="HS\HS_MCDEExceptionCode.cs" />
     <Compile Include="HS\HS_MCDeviceInitial.cs" />
@@ -62,6 +81,22 @@
       <Project>{c84a8feb-b898-4a4c-a208-5e240f1c2db8}</Project>
       <Name>ExperimentDataExchange</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HS_DeviceInteract\HS_DeviceInteract.csproj">
+      <Project>{3400094f-1619-4335-87ba-232205c2884e}</Project>
+      <Name>HS_DeviceInteract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\EM9118\EM9118\EM9118.csproj">
+      <Project>{7cd40878-4588-4c3d-8786-7b628c72ade8}</Project>
+      <Name>EM9118</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\FP23Cmd\FP23Cmd\FP23Cmd.csproj">
+      <Project>{976faa7a-484d-4dc5-aac3-6c56738aad36}</Project>
+      <Name>FP23Cmd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HS_MeasureDevice\newopcdll\newopcdll.csproj">
+      <Project>{d0b2b395-22f9-419b-9009-37bb5d3c0824}</Project>
+      <Name>newopcdll</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lab Devices Manager\LabElement.csproj">
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>
@@ -78,6 +113,35 @@
       <Project>{9aa6b9d7-b437-4e26-84c1-3e3c402ed4b8}</Project>
       <Name>mcLogic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="HS\ChannelSet\HS_Elements.xsc">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </None>
+    <None Include="HS\ChannelSet\HS_Elements.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HS_Elements.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="HS\ChannelSet\HS_Elements.xss">
+      <DependentUpon>HS_Elements.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HS\Calibration\Calibration.resx">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RS485Ctrl\RS485Ctrl.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="RS485Ctrl\RS485Modbus.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

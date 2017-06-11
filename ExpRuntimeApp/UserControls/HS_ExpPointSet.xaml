@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.HS_ExpPointSet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{StaticResource ExpViewModule}">
+    <Grid Margin="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" d:LayoutOverrides="Height">
+            <TextBlock VerticalAlignment="Center"
+                Text="热路空气流量调节：" Margin="2" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Name="RL_Flow_ControlValue" Margin="2" MinWidth="80" FontSize="18" StringFormat="{}{0:F1} Kg/h" d:LayoutOverrides="LeftPosition, RightPosition"
+                                 DataContext="{Binding Path=MdExperPoints[热边空气流量]}"
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"                
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气流量]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气流量]}"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" d:LayoutOverrides="Height">
+
+            <TextBlock VerticalAlignment="Center"
+                Text="热路空气温度调节：" Margin="2" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Margin="2" MinWidth="100" StringFormat="{}{0:F1} ℃" FontSize="18" d:LayoutOverrides="LeftPosition, RightPosition"
+                                 DataContext="{Binding Path=MdExperPoints[热边空气进口温度]}"
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[热边空气进口温度]}"/>
+
+        </StackPanel>
+        <StackPanel Margin="2" Orientation="Vertical" Grid.Row="2" d:LayoutOverrides="Height">
+            <TextBlock VerticalAlignment="Center"
+                Text="二冷路空气流量调节：" Margin="2"/>
+            <metro:NumericUpDown Name="ELL_Flow_ControlValue" MinWidth="100" Margin="2" FontSize="18" StringFormat="{}{0:F1} Kg/h"
+                                 DataContext="{Binding Path=MdExperPoints[二冷空气流量]}"
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气流量]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气流量]}"/>
+
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="3" d:LayoutOverrides="Width">
+            <TextBlock VerticalAlignment="Center"
+                Text="二冷路空气温度调节：" Margin="2"/>
+            <metro:NumericUpDown MinWidth="100" Margin="2" FontSize="18" StringFormat="{}{0:F1} ℃" d:LayoutOverrides="Height"
+                                 DataContext="{Binding Path=MdExperPoints[二冷空气进口温度]}"
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气进口温度]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[二冷空气进口温度]}"/>
+
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="4" Visibility="Collapsed" d:LayoutOverrides="Height">
+
+            <TextBlock Margin="2" VerticalAlignment="Center"
+                Text="一冷路空气流量调节：" d:LayoutOverrides="LeftPosition, RightPosition"/>
+            <metro:NumericUpDown Margin="2" MinWidth="100" FontSize="18" StringFormat="{}{0:F1} Kg/h" d:LayoutOverrides="LeftPosition, RightPosition"
+                                 DataContext="{Binding Path=MdExperPoints[一冷空气流量]}"
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width" Visibility="Collapsed">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdExperPoints[一冷空气流量]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdExperPoints[一冷空气流量]}"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Row="4" d:LayoutOverrides="Height" DataContext="{Binding Path=MdChannels[FirstColdFan]}">
+           
+            <TextBlock Margin="2" VerticalAlignment="Center"
+                d:LayoutOverrides="LeftPosition, RightPosition">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="一冷路风机控制:{0:F0}-{1:F0}">
+                        <Binding Path="RangeLow"/>
+                        <Binding Path="RangeHigh"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <metro:NumericUpDown Margin="2" MinWidth="100" FontSize="18" StringFormat="{}{0:F0} rpm" d:LayoutOverrides="LeftPosition, RightPosition"
+                                 
+                                 Minimum="{Binding Path=RangeLow}"
+                                 Maximum="{Binding Path=RangeHigh}"
+                                 Value="{Binding Path=AOValue}"
+                                 />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" Margin="3" Orientation="Horizontal" d:LayoutOverrides="Width">
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                Content="启动" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputCommand}" CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"/>
+            <Button Margin="3"  Padding="10,3" VerticalAlignment="Bottom" 
+                Content="停止" FontSize="18" Cursor="Hand"
+                    Command="{Binding Path=ExpPointOutputStopCommand}" CommandParameter="{Binding Path=MdChannels[FirstColdFan]}"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

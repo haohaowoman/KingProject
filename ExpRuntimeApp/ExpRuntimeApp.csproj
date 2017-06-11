@@ -25,9 +25,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -48,6 +50,27 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\FactoryIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DDE39360B3D86318FA5786B1B12900171B1111B6</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ExpRuntimeApp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=1.3.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -88,10 +111,64 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataReport\HS_ExpDataReport.cs">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DataReport\HS_ExpDataReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ExpTask\TaskElement.cs" />
+    <Compile Include="ExpWindows\AllChannelsPointsWnd.xaml.cs">
+      <DependentUpon>AllChannelsPointsWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\AnalogyValuesWnd.xaml.cs">
+      <DependentUpon>AnalogyValuesWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\DataReportWnd.xaml.cs">
+      <DependentUpon>DataReportWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\ExperimentSetWnd.xaml.cs">
+      <DependentUpon>ExperimentSetWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\FualtListWnd.xaml.cs">
+      <DependentUpon>FualtListWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\GBSettingsWnd.xaml.cs">
+      <DependentUpon>GBSettingsWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\HistoryAnalyseWnd.xaml.cs">
+      <DependentUpon>HistoryAnalyseWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\QuikChsLookListWnd.xaml.cs">
+      <DependentUpon>QuikChsLookListWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\RLTempSetPropWnd.xaml.cs">
+      <DependentUpon>RLTempSetPropWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\RLTempSetWarnningWnd.xaml.cs">
+      <DependentUpon>RLTempSetWarnningWnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\TestMainWindow.xaml.cs">
+      <DependentUpon>TestMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpWindows\UserLogin.xaml.cs">
+      <DependentUpon>UserLogin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\ChannelValues.cs" />
+    <Compile Include="Modules\ElementPropertyConverter.cs" />
+    <Compile Include="Modules\ExceptionActionModule.cs" />
     <Compile Include="Modules\Initialization.cs" />
+    <Compile Include="Modules\TaskerValueConverter.cs" />
+    <Compile Include="Pages\ElementPages\AllHasSensorChannelsInfoPage.xaml.cs">
+      <DependentUpon>AllHasSensorChannelsInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml.cs">
       <DependentUpon>ExperimentAreaInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ElementPages\FaultListPage.xaml.cs">
+      <DependentUpon>FaultListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ElementPages\SensorsInforPage.xaml.cs">
       <DependentUpon>SensorsInforPage.xaml</DependentUpon>
@@ -102,11 +179,23 @@
     </Compile>
     <Compile Include="Pages\MeasureAndControlPages\ChValueRowDetailsTemplateSelector.cs" />
     <Compile Include="Pages\MeasureAndControlPages\EPItemDataTemplateSelector.cs" />
+    <Compile Include="Pages\MeasureAndControlPages\ExpTaskerPage.xaml.cs">
+      <DependentUpon>ExpTaskerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MeasureAndControlPages\HistoryDataAnalysePage.xaml.cs">
+      <DependentUpon>HistoryDataAnalysePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MeasureAndControlPages\HistoryExperimentReportPage.xaml.cs">
+      <DependentUpon>HistoryExperimentReportPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\EOVCtrlControl.xaml.cs">
       <DependentUpon>EOVCtrlControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ExpCommandBar.xaml.cs">
       <DependentUpon>ExpCommandBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ExpDeviceControlCtrl.xaml.cs">
+      <DependentUpon>ExpDeviceControlCtrl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\FirstColdControl.xaml.cs">
       <DependentUpon>FirstColdControl.xaml</DependentUpon>
@@ -114,8 +203,29 @@
     <Compile Include="UserControls\FirstColdFan.xaml.cs">
       <DependentUpon>FirstColdFan.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FirstColdRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>FirstColdRoadExpPointsCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\HeaterControl.xaml.cs">
       <DependentUpon>HeaterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HotRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>HotRoadExpPointsCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_EovCtrl.xaml.cs">
+      <DependentUpon>HS_EovCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_ExpControlToleranceCtrl.xaml.cs">
+      <DependentUpon>HS_ExpControlToleranceCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_ExpPointSet.xaml.cs">
+      <DependentUpon>HS_ExpPointSet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_FlowSensorCtrl.xaml.cs">
+      <DependentUpon>HS_FlowSensorCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_GKUI_Experiment.xaml.cs">
+      <DependentUpon>HS_GKUI_Experiment.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HS_GKUI_HotRoad.xaml.cs">
       <DependentUpon>HS_GKUI_HotRoad.xaml</DependentUpon>
@@ -123,12 +233,37 @@
     <Compile Include="UserControls\HS_GKUI_SecendCold.xaml.cs">
       <DependentUpon>HS_GKUI_SecendCold.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HS_HotRoadList.xaml.cs">
+      <DependentUpon>HS_HotRoadList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_PressureSensorCtrl.xaml.cs">
+      <DependentUpon>HS_PressureSensorCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_ProductInforCtrl.xaml.cs">
+      <DependentUpon>HS_ProductInforCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_SwitchEovCtrl.xaml.cs">
+      <DependentUpon>HS_SwitchEovCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HS_TemperatureSensor.xaml.cs">
+      <DependentUpon>HS_TemperatureSensor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ProductExpPerformanceCtrl.xaml.cs">
+      <DependentUpon>ProductExpPerformanceCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SecendColdRoadExpPointsCtrl.xaml.cs">
+      <DependentUpon>SecendColdRoadExpPointsCtrl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SwtichEOVControl.xaml.cs">
       <DependentUpon>SwtichEOVControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\TesttingMakeSure.xaml.cs">
       <DependentUpon>TesttingMakeSure.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserInfoCtrl.xaml.cs">
+      <DependentUpon>UserInfoCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ValueConverter.cs" />
     <Compile Include="ViewModules\ExperimentViewModule.cs" />
     <Page Include="CellDataTemplate.xaml">
       <SubType>Designer</SubType>
@@ -138,11 +273,59 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ExpWindows\AllChannelsPointsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\AnalogyValuesWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\DataReportWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\ExperimentSetWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\FualtListWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\GBSettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\HistoryAnalyseWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExpWindows\MeasureAndControlWnd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExpWindows\PrepareOrLookWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\QuikChsLookListWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\RLTempSetPropWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\RLTempSetWarnningWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\TestMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpWindows\UserLogin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,7 +355,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\ElementPages\AllHasSensorChannelsInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ElementPages\ExperimentAreaInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ElementPages\FaultListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,6 +380,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MeasureAndControlPages\ExpPointDataGridShowPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MeasureAndControlPages\ExpTaskerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MeasureAndControlPages\HistoryDataAnalysePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MeasureAndControlPages\HistoryExperimentReportPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,6 +415,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ExpDeviceControlCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\FirstColdControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -228,7 +435,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\FirstColdRoadExpPointsCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\HeaterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HotRoadExpPointsCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_EovCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_ExpControlToleranceCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_ExpPointSet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_FlowSensorCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_GKUI_Experiment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,11 +475,43 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\HS_HotRoadList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_PressureSensorCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_ProductInforCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_SwitchEovCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HS_TemperatureSensor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ProductExpPerformanceCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SecendColdRoadExpPointsCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SwtichEOVControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\TesttingMakeSure.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UserInfoCtrl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,12 +540,28 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DataReport\HS_ExpDataReport.xsc">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </None>
+    <None Include="DataReport\HS_ExpDataReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HS_ExpDataReport.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataReport\HS_ExpDataReport.xss">
+      <DependentUpon>HS_ExpDataReport.xsd</DependentUpon>
+    </None>
+    <None Include="ExpRuntimeApp_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="ReportTemplate\ExperimentReport.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +569,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExpViews\" />
+    <Folder Include="Pages\TempCtrlPages\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\DefualtUserImage.png">
@@ -313,6 +597,10 @@
       <Project>{aa65fed6-969e-4d6f-8ab7-dff6bfc1331c}</Project>
       <Name>LabElement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LabDeviceModule\LabDeviceModule.csproj">
+      <Project>{F94FDF1F-45F5-4CBD-8D9C-04C2A1AE8FEE}</Project>
+      <Name>LabDeviceModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LabServicesStand_alone\LabServicesStand_alone.csproj">
       <Project>{a5499c18-05f5-41db-b3fd-2aa60d691ab6}</Project>
       <Name>LabServicesStand_alone</Name>
@@ -327,6 +615,61 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\SettingIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FactoryIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warning-Message.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CheckRight.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Incident.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>6</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Format.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Factory.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\History.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.HS_FlowSensorCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="150"
+             >
+    <Canvas DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:HS_FlowSensorCtrl},Path=FlowChannel}"
+            ToolTip="{Binding Path=Summary}">
+        <Path  Canvas.Left="0" Stroke="Black" Canvas.Top="0" Width="150" Height="150" Data="M75,0.5 C91.07235,0.5 105.95597,5.5895362 118.12711,14.244856 L118.98645,14.871601 119.12604,14.684934 C121.23531,12.129089 124.42741,10.5 128,10.500001 134.35127,10.5 139.5,15.648726 139.5,22 139.5,25.572592 137.87091,28.76469 135.31506,30.873959 L135.1284,31.013546 135.75514,31.872881 C144.41046,44.044025 149.5,58.92765 149.5,75 149.5,91.07235 144.41046,105.95597 135.75514,118.12711 L135.1284,118.98645 135.31506,119.12604 C137.87091,121.23531 139.5,124.42741 139.5,128 139.5,134.35127 134.35127,139.5 128,139.5 124.42741,139.5 121.23531,137.87091 119.12604,135.31506 L118.98645,135.1284 118.12711,135.75514 C105.95597,144.41046 91.07235,149.5 75,149.5 58.92765,149.5 44.044025,144.41046 31.872881,135.75514 L31.013546,135.1284 30.873959,135.31506 C28.76469,137.87091 25.572592,139.5 22,139.5 15.648726,139.5 10.5,134.35127 10.500001,128 10.5,124.42741 12.129089,121.23531 14.684934,119.12604 L14.871601,118.98645 14.244856,118.12711 C5.5895362,105.95597 0.5,91.07235 0.5,75 0.5,58.92765 5.5895362,44.044025 14.244856,31.872881 L14.871601,31.013546 14.684934,30.873959 C12.129089,28.76469 10.5,25.572592 10.500001,22 10.5,15.648726 15.648726,10.5 22,10.500001 25.572592,10.5 28.76469,12.129089 30.873959,14.684934 L31.013546,14.871601 31.872881,14.244856 C44.044025,5.5895362 58.92765,0.5 75,0.5 z" Stretch="Fill">
+            <Path.Fill>
+                <LinearGradientBrush EndPoint="0.847,1.028" StartPoint="0.187,-0.021">
+                    <GradientStop Color="Yellow" Offset="0.004"/>
+                    <GradientStop Color="#FFB0B860" Offset="0.715"/>
+                </LinearGradientBrush>
+            </Path.Fill>
+        </Path>
+        <Ellipse Fill="#FFCDD4B6"  Canvas.Left="10" Stroke="Black" Canvas.Top="10" Width="130" Height="130"/>
+        <Ellipse  Canvas.Left="15.255" Stroke="Black" Canvas.Top="14.745" Width="120" Height="120" Fill="#FFF4F4F5"/>
+        <TextBox x:Name="textBox" Height="37" Canvas.Left="26" TextWrapping="Wrap" Text="{Binding Path=MeasureValue,StringFormat={}{0:F0}}" Canvas.Top="50" Width="99"
+                 IsReadOnly="True" FontSize="24" IsHitTestVisible="False" TextAlignment="Center" BorderThickness="2"/>
+        <TextBlock x:Name="textBlock" TextAlignment="Center" FontSize="16" Height="24" Canvas.Left="27" TextWrapping="Wrap" Text="{Binding Path=Unit}" Canvas.Top="87" Width="98" FontStyle="Italic"/>
+        <Ellipse Fill="#FFF7FB95" Height="12" Canvas.Left="15" Stroke="Black" Canvas.Top="15" Width="12"/>
+        <Ellipse Fill="#FFF7FB95" Height="12" Canvas.Left="123" Stroke="Black" Canvas.Top="15" Width="12"/>
+        <Ellipse Fill="#FFF7FB95" Height="12" Canvas.Left="123" Stroke="Black" Canvas.Top="123" Width="12"/>
+        <Ellipse Fill="#FFF7FB95" Height="12" Canvas.Left="15" Stroke="Black" Canvas.Top="123" Width="12"/>
+        <TextBlock TextAlignment="Center" FontSize="18" Height="24" Canvas.Left="27" TextWrapping="Wrap" Text="{Binding Label}" Canvas.Top="26" Width="98" FontWeight="Bold"/>
+    </Canvas>
+</UserControl>

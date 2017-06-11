@@ -362,6 +362,41 @@ namespace LabMCESystem.LabElement
             return ba ? ch : null;
         }
 
+        /// <summary>
+        /// 根据chStyel，工厂创建通道类型，但不将通道添加至gDev设备。
+        /// </summary>
+        /// <param name="gDev">设备对象。</param>
+        /// <param name="label">通道的Label属性。</param>
+        /// <param name="chStyel">通道的Sytle属性。</param>
+        /// <returns>返回创建的对象。</returns>
+        public static Channel CreateChannel(LabDevice gDev, string label, ExperimentStyle chStyel)
+        {
+            Channel ch = null;
+
+            switch (chStyel)
+            {
+                case ExperimentStyle.Measure:
+                    ch = new AnalogueMeasureChannel(gDev, label);
+                    break;
+                case ExperimentStyle.Control:
+                    ch = new AnalogueOutputChannel(gDev, label);
+                    break;
+                case ExperimentStyle.Feedback:
+                    ch = new FeedbackChannel(gDev, label);
+                    break;
+                case ExperimentStyle.Status:
+                    ch = new StatusChannel(gDev, label);
+                    break;
+                case ExperimentStyle.StatusControl:
+                    ch = new StatusOutputChannel(gDev, label);
+                    break;
+                default:
+
+                    break;
+            }
+            return  ch;
+        }
+
         #endregion
     }
 }

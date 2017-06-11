@@ -32,19 +32,19 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // 控制产生
-            ExperimentViewModule vm = DataContext as ExperimentViewModule;
-            Button btn = e.OriginalSource as Button;
-            if (btn != null && btn.Tag != null)
-            {
-                // 通道行
-                MdChannel cv = btn.Tag as MdChannel;
+            //ExperimentViewModule vm = DataContext as ExperimentViewModule;
+            //Button btn = e.OriginalSource as Button;
+            //if (btn != null && btn.Tag != null)
+            //{
+            //    // 通道行
+            //    MdChannel cv = btn.Tag as MdChannel;
 
-                if (cv != null && (cv.Channel.Style & ExperimentStyle.Control) == ExperimentStyle.Control)
-                {
-                    cv.ControllerExecute();
-                }
+            //    if (cv != null && (cv.Channel.Style & ExperimentStyle.Control) == ExperimentStyle.Control)
+            //    {
+            //        cv.ControllerExecute();
+            //    }
 
-            }
+            //}
         }
     }
 }

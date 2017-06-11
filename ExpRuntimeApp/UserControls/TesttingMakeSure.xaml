@@ -37,9 +37,9 @@
 
             <GroupBox DockPanel.Dock="Top" Header="一冷">
                 <UniformGrid  Columns="2">
-                    <metro:ToggleSwitch Name="bSure5" Header="一冷风机准备完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure5" Header="一冷风机检查完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
 
-                    <metro:ToggleSwitch Name="bSure6" Header="一冷安全阀门已经打开：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
+                    <metro:ToggleSwitch Name="bSure6" Header="变频器检查完成：" OffLabel="未完成" OnLabel="完成" Margin="5,2"/>
                     
                 </UniformGrid>
             </GroupBox>

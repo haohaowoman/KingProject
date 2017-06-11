@@ -49,12 +49,12 @@ namespace LabMCESystem.Servers.HS
 
         private HS_MeasCtrlDevice _hs_Device;
         /// <summary>
-        /// 获取/设置环散系统测控设备对象
+        /// 获取环散系统测控设备对象
         /// </summary>
         public HS_MeasCtrlDevice HS_Device
         {
             get { return _hs_Device; }
-            set { _hs_Device = value; }
+            private set { _hs_Device = value; }
         }
 
         public EExceptionManager ExcepManager { get; private set; }
@@ -101,6 +101,16 @@ namespace LabMCESystem.Servers.HS
         #region Operators
 
         /// <summary>
+        /// 关闭服务。
+        /// </summary>
+        public void Close()
+        {
+            _hs_Device.Stop();
+            System.Threading.Thread.Sleep(100);
+            _hs_Device.Close();
+        }
+
+        /// <summary>
         /// 初始化实验段与测试点
         /// </summary>
         private void InitialExpArea()
@@ -113,16 +123,21 @@ namespace LabMCESystem.Servers.HS
             area.CreatePointIn("一冷空气出口温度");
             area.CreatePointIn("一冷空气进口压力");
             area.CreatePointIn("一冷空气出口压力");
+            area.CreatePointIn("一冷压差");
+            area.CreatePointIn("散热效率");
+            area.CreatePointIn("一冷吸热量");
 
             ElementManager?.RegistNewExpArea(area);
 
             // 为测试点配对通道
             area.GetElementAsLabel("一冷空气流量").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("FT0103");
             area.GetElementAsLabel("一冷空气进口温度").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("TT01");
-            area.GetElementAsLabel("一冷空气出口温度").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("TT03");
+            area.GetElementAsLabel("一冷空气出口温度").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("TT05");
             area.GetElementAsLabel("一冷空气进口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT01");
-            area.GetElementAsLabel("一冷空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT03");
-
+            area.GetElementAsLabel("一冷空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT05");
+            area.GetElementAsLabel("一冷压差").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("YL_PRESSUREDIFF");
+            area.GetElementAsLabel("散热效率").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("HEAT_EMISS_EFFIC");
+            area.GetElementAsLabel("一冷吸热量").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("YL_HEAT");
             // 二冷
             area = new ExperimentalArea("二冷");
             
@@ -132,6 +147,8 @@ namespace LabMCESystem.Servers.HS
             area.CreatePointIn("二冷空气进口压力");
             area.CreatePointIn("二冷空气出口压力");
 
+            area.CreatePointIn("二冷压差");
+            area.CreatePointIn("二冷吸热量");
             ElementManager?.RegistNewExpArea(area);
 
             // 为测试点配对通道
@@ -140,6 +157,8 @@ namespace LabMCESystem.Servers.HS
             area.GetElementAsLabel("二冷空气出口温度").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("TT0108");
             area.GetElementAsLabel("二冷空气进口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT0107");
             area.GetElementAsLabel("二冷空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT0110");
+            area.GetElementAsLabel("二冷压差").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("EL_PRESSUREDIFF");
+            area.GetElementAsLabel("二冷吸热量").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("EL_HEAT");
 
             //热边
             area = new ExperimentalArea("热边");
@@ -149,6 +168,8 @@ namespace LabMCESystem.Servers.HS
             area.CreatePointIn("热边空气出口温度");
             area.CreatePointIn("热边空气进口压力");
             area.CreatePointIn("热边空气出口压力");
+            area.CreatePointIn("热边散热量");
+            area.CreatePointIn("热边压差");
 
             ElementManager?.RegistNewExpArea(area);
 
@@ -158,6 +179,8 @@ namespace LabMCESystem.Servers.HS
             area.GetElementAsLabel("热边空气出口温度").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("TT0107");
             area.GetElementAsLabel("热边空气进口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT0108");
             area.GetElementAsLabel("热边空气出口压力").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("PT0109");
+            area.GetElementAsLabel("热边压差").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("RL_PRESSUREDIFF");
+            area.GetElementAsLabel("热边散热量").PairedChannel = ElementManager.Devices.First().GetElementAsLabel("RL_HEAT");
         }
 
         #endregion

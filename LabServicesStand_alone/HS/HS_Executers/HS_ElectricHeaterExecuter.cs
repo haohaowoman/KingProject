@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using mcLogic.Execute;
 using mcLogic;
-
+using LabMCESystem.LabElement;
+using LabMCESystem.Servers.HS.HS_Executers;
 namespace LabMCESystem.Servers.HS
 {
     /// <summary>
@@ -15,51 +16,91 @@ namespace LabMCESystem.Servers.HS
     /// 为保护加热器的使用寿命 Kp = 0.6 Ti = 10s Td = 1 
     /// 电加热器为一个加热组 热边加热器包含5个电炉 二冷边加热组包含2个电炉同时与空气混合
     /// </summary>
-    abstract class HS_ElectricHeaterExecuter : PredicatePositionPID
+    class HS_ElectricHeaterExecuter : PredicatePositionPID
     {
-        public HS_ElectricHeaterExecuter(string designMark, HS_MeasCtrlDevice dev) : base(24.0, new SafeRange(0, 1000), new PIDParam() { Ts = 20000, Kp = 0.6, Ti = 10000, Td = 1000})
+        public HS_ElectricHeaterExecuter(string designMark, HS_HeaterContrller heater) : base(100, new SafeRange(0, 800), new PIDParam() { Ts = 45000, Kp = 1, Ti = 0, Td = 0 })
         {
-            HS_Device = dev;
+            if (heater == null)
+            {
+                throw new ArgumentNullException(nameof(heater));
+            }
+
+            Heater = heater;
+
+            UpdateFedback += HS_ElectricHeaterExecuter_UpdateFedback;
+
+            ExecuteChanged += HS_ElectricHeaterExecuter_ExecuteChanged;
+
+            ExecuteOvered += HS_ElectricHeaterExecuter_ExecuteOvered;
+            // 公差为数据类型的精度。
+            AllowTolerance = new Tolerance(0.11);
+
+            AutoFinish = true;
         }
+                
+        /// <summary>
+        /// 为防止电炉功率过大设置电炉的升温步进为100。
+        /// </summary>
+        public static double HeaterTempUpStepInterval = 100;
+
+        public HS_HeaterContrller Heater { get; set; }
 
         /// <summary>
-        /// 获取/设置所属的设备。
-        /// </summary>
-        public HS_MeasCtrlDevice HS_Device { get; set; }
-        
-        /// <summary>
-        /// 获取/设置电加热器的最低进入流量
+        /// 获取/设置电加热器的最低进入流量。
         /// </summary>
         public double RequireMinInFlow { get; set; }
-        /// <summary>
-        /// 获取/设置电炉组。
-        /// </summary>
-        public HS_ElectricHeaterGroup Heaters { get; set; }
 
-        /// <summary>
-        /// 打开加热器组。
-        /// </summary>
-        public void OpenHeaters()
+        private void HS_ElectricHeaterExecuter_ExecuteChanged(object sender, double executedVal)
         {
-            OpenHeatersFlow();
+            if(true != Heater?.SetTemperature(executedVal))
+            {
+                System.Diagnostics.Debug.WriteLine($"/********Heater {Heater?.Caption} set tempreature {executedVal:F1} fault.********/");
+            }
         }
-        /// <summary>
-        /// 重写此函数以实现加热器打开流程逻辑。
-        /// </summary>
-        protected abstract void OpenHeatersFlow();
 
-        /// <summary>
-        /// 关闭加热器组。
-        /// </summary>
-        public void CloseHeaters()
+        private void HS_ElectricHeaterExecuter_UpdateFedback(IDataFeedback sender)
         {
-            CloseHeatersFlow();
+            if (Heater != null)
+            {
+                double temp = 0;
+                if (Heater.GetCtrlTemperature(out temp))
+                {
+                    sender.FedbackData = temp;
+                }
+            }
         }
-        /// <summary>
-        /// 重写此函数以实现加热器的关闭流程。
-        /// </summary>
-        protected abstract void CloseHeatersFlow();
 
+        private void HS_ElectricHeaterExecuter_ExecuteOvered(object obj)
+        {
+            Reset();
+        }
 
+        protected override bool OnExecute(ref double eVal)
+        {
+            //HS_ElectricHeaterExecuter_UpdateFedback(this);
+            bool br = base.OnExecute(ref eVal);
+            if (br)
+            {
+                if (Heater?.HeaterIsRun == true)
+                {
+                    double tc = TargetVal - FedbackData;
+
+                    if (tc <= 0)
+                    {
+                        eVal = TargetVal;
+                    }
+                    else
+                    {
+                        eVal = FedbackData + Math.Min(HeaterTempUpStepInterval, tc);
+                    }
+                }
+                else
+                {
+                    eVal = Math.Min(TargetVal, HeaterTempUpStepInterval);
+                }
+            }
+
+            return br;
+        }
     }
 }

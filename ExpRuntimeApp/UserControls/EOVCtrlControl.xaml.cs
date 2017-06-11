@@ -36,5 +36,9 @@ namespace ExpRuntimeApp.UserControls
         public static readonly DependencyProperty EOVProperty =
             DependencyProperty.Register("EOVChannel", typeof(MdChannel), typeof(EOVCtrlControl), new PropertyMetadata());
 
+        private void EovAOBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EOVChannel?.ControllerExecute();
+        }
     }
 }

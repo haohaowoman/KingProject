@@ -48,7 +48,7 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                         rt = EOVChannelTemplate;
                                         break;
                                     case "℃":
-                                        rt = TemperatureTemplate;
+                                        rt = DefualtMeasureDataTemplate;
                                         break;
                                     case "Kg/h":
                                         rt = FlowTemplate;
@@ -61,7 +61,13 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                         }
                         break;
                     case ExperimentStyle.Control:
-
+                        {
+                            IController se = cv.Channel as IController;
+                            if (se != null)
+                            {
+                                rt = StatusOutputTemplate;
+                            }
+                        }
                         break;
                     case ExperimentStyle.Feedback:
                         {
@@ -72,9 +78,15 @@ namespace ExpRuntimeApp.Pages.MeasureAndControlPages
                                 {
                                     case "%":
                                         rt = EOVChannelTemplate;
-                                        break;                                    
+                                        break;
+                                    case "℃":
+                                        rt = TemperatureTemplate;
+                                        break;
+                                    case "Kg/h":
+                                        rt = FlowTemplate;
+                                        break;
                                     default:
-                                        rt = DefualtMeasureDataTemplate;
+                                        rt = FlowTemplate;
                                         break;
                                 }
                             }

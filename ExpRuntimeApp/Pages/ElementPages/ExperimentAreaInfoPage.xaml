@@ -4,10 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ExpRuntimeApp.Pages.ElementPages"
+      xmlns:md="clr-namespace:ExpRuntimeApp.Modules"
+      xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="800" d:DesignWidth="800"
+      FontSize="18"
       xmlns:label="clr-namespace:LabMCESystem.LabElement;assembly=LabElement"
-      DataContext="{Binding Path=ElementManager, Source={StaticResource SingleService}}"
+      DataContext="{StaticResource ExpViewModule}"
       Title="ExperimentAreaInfoPage" Loaded="Page_Loaded">
 
 
@@ -23,39 +26,29 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Content="实验段信息:" Grid.ColumnSpan="2"></Label>
-
-        <TreeView Grid.Row="1" Grid.Column="0" Name="DevTree" Margin="3" ItemsSource="{Binding Path=ExperimnetAreas}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type label:ExperimentalArea}" ItemsSource="{Binding Path=SubElements}">
-                    <StackPanel Margin="3">
-                        <TextBlock Text="{Binding Path=Label, Mode=TwoWay}"/>
-
-                    </StackPanel>
-
-                    <!--<HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate DataType="{x:Type label:LabChannel}">
-                            <TextBlock Text="{Binding Path=Label, Mode=TwoWay}" Margin="3,3,10,3" Padding="10,3" HorizontalAlignment="Left"/>
-                        </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>-->
-
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
         <!--Devices information data grid.-->
-        <DataGrid Name="epGrid" Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding ElementName=DevTree,Path=SelectedItem}" ItemsSource="{Binding Path=SubElements}" AutoGenerateColumns="False">
+        <DataGrid Name="epGrid" Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding Path=MdExperPoints}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="名称" Binding="{Binding Path=Label}"></DataGridTextColumn>
-                <DataGridTextColumn Header="工作方式" Binding="{Binding Path=WorkType}"></DataGridTextColumn>
-                <DataGridComboBoxColumn Header="匹配通道" ItemsSource="{Binding Source={StaticResource SingleService}, Path=ElementManager.AllChannels}" DisplayMemberPath="Label" SelectedItemBinding="{Binding Path=PairedChannel}"/>
-                <DataGridTextColumn Header="单位" Binding="{Binding Path=Units}"></DataGridTextColumn>
-
+                <DataGridTextColumn Header="试验点名称" IsReadOnly="True" Binding="{Binding Path=Label}"></DataGridTextColumn>
+                
+                <DataGridComboBoxColumn Header="连接通道" 
+                                        ItemsSource="{Binding Source={StaticResource ExpViewModule}, Path=MdChannels}"
+                                        
+                                        IsReadOnly="True"
+                                        SelectedValueBinding="{Binding Path=PairedChannel}"
+                                        SelectedValuePath="Channel"
+                                        
+                                        />
+                
+                <DataGridTextColumn Header="值" MinWidth="80" IsReadOnly="True" Binding="{Binding Path=MeasureValue,StringFormat={}{0:F1}}"/>
+                <DataGridTextColumn Header="单位" IsReadOnly="True" Binding="{Binding Path=Unit}"/>
             </DataGrid.Columns>
 
             <DataGrid.GroupStyle>
                 <GroupStyle AlternationCount="5">
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Label}" Background="#FFD9D9E8"/>
+                            <TextBlock Margin="5" Foreground="White" Text="{Binding Path=Name}" Background="#FFD9D9E8"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>

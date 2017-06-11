@@ -12,6 +12,110 @@ using System.Collections;
 
 namespace ExpRuntimeApp.Modules
 {
+    public class MdLinserSensor : INotifyPropertyChanged, IUnitRange
+    {
+        public MdLinserSensor(LinerSensor sensor)
+        {
+            Sensor = sensor;
+        }
+
+        public QRange Range
+        {
+            get
+            {
+                return ((IUnitRange)Sensor).Range;
+            }
+
+            set
+            {
+                ((IUnitRange)Sensor).Range = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+
+        public LinerSensor Sensor { get; private set; }
+
+        public string Unit
+        {
+            get
+            {
+                return ((IUnitRange)Sensor).Unit;
+            }
+
+            set
+            {
+                ((IUnitRange)Sensor).Unit = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Unit"));
+            }
+        }
+
+        public string Label { get { return Sensor.Label; } }
+
+        public string Summary
+        {
+            get { return Sensor.Summary; }
+            set
+            {
+                Sensor.Summary = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Summary"));
+            }
+        }
+
+        public string SensorNumber
+        {
+            get
+            {
+                return Sensor.SensorNumber;
+            }
+            set
+            {
+                Sensor.SensorNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SenserNumber"));
+            }
+        }
+        public double SensorQRangeLow
+        {
+            get { return Range.Low; }
+            set
+            {
+                Range = new QRange(value, Range.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorQRangeLow"));
+            }
+        }
+
+        public double SensorQRangeHigh
+        {
+            get { return Range.Height; }
+            set
+            {
+                Range = new QRange(Range.Low,value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorQRangeHigh"));
+            }
+        }
+
+        public double SensorElecRangeLow
+        {
+            get { return Sensor.ElectricSignalRange.Low; }
+            set
+            {
+                Sensor.ElectricSignalRange = new QRange(value, Sensor.ElectricSignalRange.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorElecRangeLow"));
+            }
+        }
+
+        public double SensorElecRangHigh
+        {
+            get { return Sensor.ElectricSignalRange.Height; }
+            set
+            {
+                Sensor.ElectricSignalRange = new QRange(Sensor.ElectricSignalRange.Low, value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SensorElecRangHigh"));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public override string ToString() => $"{Label}/{SensorNumber}";
+    }
     /// <summary>
     /// UI通道模块，实现通道信息的界面更新。
     /// </summary>
@@ -39,6 +143,7 @@ namespace ExpRuntimeApp.Modules
         public event Action<IController> SettedControlValue;
         public event ControllerExecuteEventHandler Execute;
         public event Action<IStatusController> SettedNextStatus;
+        public event ControllerExecuteEventHandler StopExecute;
 
         private Channel _channel;
 
@@ -56,6 +161,12 @@ namespace ExpRuntimeApp.Modules
                     {
                         old.NotifyElementLabelChanged -= NotifyElementLabelChanged;
                         old.NotifyValueUpdated -= NotifyValueUpdated;
+
+                        var aoc = old as AnalogueOutputChannel;
+                        if (aoc != null)
+                        {
+                            aoc.AOValueChanged -= NotifyAOValueChanged;
+                        }
                     }
 
                     _channel = value;
@@ -65,12 +176,19 @@ namespace ExpRuntimeApp.Modules
                     {
                         _channel.NotifyElementLabelChanged += NotifyElementLabelChanged;
                         _channel.NotifyValueUpdated += NotifyValueUpdated;
+
+                        var aoc = _channel as AnalogueOutputChannel;
+                        if (aoc != null)
+                        {
+                            aoc.AOValueChanged += NotifyAOValueChanged;
+                        }
                     }
 
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Channel"));
                 }
             }
         }
+
 
         public IAnalogueMeasure AsAIChannel
         {
@@ -187,6 +305,14 @@ namespace ExpRuntimeApp.Modules
         {
             get
             {
+                if (AsAIChannel?.Collector != null)
+                {
+                    var ls = AsAIChannel.Collector as LinerSensor;
+                    if (ls != null)
+                    {
+                        return new MdLinserSensor(ls);
+                    }
+                }
                 return AsAIChannel?.Collector;
             }
 
@@ -225,6 +351,32 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+        public double RangeLow
+        {
+            get
+            {
+                return AsAIChannel?.Range.Low ?? 0;
+            }
+            set
+            {
+                AsAIChannel.Range = new QRange(value, AsAIChannel.Range.Height);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+
+        public double RangeHigh
+        {
+            get
+            {
+                return AsAIChannel?.Range.Height ?? 0;
+            }
+            set
+            {
+                AsAIChannel.Range = new QRange(AsAIChannel.Range.Low, value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Range"));
+            }
+        }
+
         public double AOValue
         {
             get
@@ -234,8 +386,12 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.AOValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.AOValue = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
+                }
+
             }
         }
 
@@ -248,8 +404,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.Controller = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Controller"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.Controller = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Controller"));
+                }
             }
         }
 
@@ -262,8 +421,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsAOChannel.ControlValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ControlValue"));
+                if (AsAOChannel != null)
+                {
+                    AsAOChannel.ControlValue = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ControlValue"));
+                }
             }
         }
 
@@ -290,8 +452,11 @@ namespace ExpRuntimeApp.Modules
 
             set
             {
-                AsStatusController.NextStatus = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NextStatus"));
+                if (AsStatusController != null)
+                {
+                    AsStatusController.NextStatus = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NextStatus")); 
+                }
             }
         }
 
@@ -306,7 +471,12 @@ namespace ExpRuntimeApp.Modules
 
         public void ControllerExecute()
         {
-            AsController.ControllerExecute();
+            AsController?.ControllerExecute();
+        }
+
+        public void StopControllerExecute()
+        {
+            AsController?.StopControllerExecute();
         }
 
         private void NotifyValueUpdated(object obj, object e)
@@ -320,6 +490,11 @@ namespace ExpRuntimeApp.Modules
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MeasureValue"));
             }
+        }
+
+        private void NotifyAOValueChanged(IAnalogueOutput obj)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AOValue"));
         }
 
         private void NotifyElementLabelChanged(LabElement sender, NotifyElementLabelChangedEventArgs arg)
@@ -355,6 +530,7 @@ namespace ExpRuntimeApp.Modules
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
         }
+
         #endregion
     }
 
@@ -457,6 +633,47 @@ namespace ExpRuntimeApp.Modules
             }
         }
 
+
+        public new double RangeLow
+        {
+            get
+            {
+                return _exeprPoint?.Range.Low ?? 0;
+            }
+            set
+            {
+                _exeprPoint.Range = new QRange(value, _exeprPoint.Range.Height);
+                NotifyPorpertyChanged("Range");
+            }
+        }
+
+        public new double RangeHigh
+        {
+            get
+            {
+                return _exeprPoint?.Range.Height ?? 0;
+            }
+            set
+            {
+                _exeprPoint.Range = new QRange(_exeprPoint.Range.Low, value);
+                NotifyPorpertyChanged("Range");
+            }
+        }
+
+
+        public Channel PairedChannel
+        {
+            set
+            {
+                _exeprPoint.PairedChannel = value;
+                NotifyPorpertyChanged("PairedChannel");
+            }
+            get
+            {
+                return _exeprPoint.PairedChannel;
+            }
+        }
+
         #endregion
 
         #region Operators
@@ -485,10 +702,10 @@ namespace ExpRuntimeApp.Modules
     /// <summary>
     /// 提供了通道Label属性索引元素的功能。
     /// </summary>
-    public class MdChannelsCollection : 
+    public class MdChannelsCollection :
         IList,
-        IList<MdChannel>, 
-        ICollection, 
+        IList<MdChannel>,
+        ICollection,
         ICollection<MdChannel>,
         INotifyCollectionChanged
     {

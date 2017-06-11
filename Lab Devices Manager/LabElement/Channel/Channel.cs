@@ -87,6 +87,8 @@ namespace LabMCESystem.LabElement
         /// </summary>
         public event EventHandler<object> NotifyValueUpdated;
         #endregion
+
+        #region Operators
         
         /// <summary>
         /// 派生类调用此方法以触发NotifyValueUpdated事件。
@@ -95,11 +97,7 @@ namespace LabMCESystem.LabElement
         {
             NotifyValueUpdated?.Invoke(this, Value);
         }
-
-        #region Operators
         
-
-
         #endregion
     }
 }

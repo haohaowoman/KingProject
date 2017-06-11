@@ -9,6 +9,7 @@ namespace mcLogic
     /// <summary>
     /// 控制执行器的安全输出范围
     /// </summary>
+    [Serializable]
     public struct SafeRange
     {
         /// <summary>

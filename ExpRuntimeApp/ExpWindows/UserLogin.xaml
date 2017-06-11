@@ -1,0 +1,52 @@
+﻿<metro:MetroWindow x:Class="ExpRuntimeApp.ExpWindows.UserLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        mc:Ignorable="d"
+        Title="进入环散系统" Height="697" Width="800"
+        FontSize="24"
+                   WindowStartupLocation="CenterScreen"
+                   WindowState="Normal" ShowMaxRestoreButton="False" EnableDWMDropShadow="True" Icon="pack://siteoforigin:,,,/Images/DefualtUserImage.png"
+                   DataContext="{StaticResource ExpViewModule}">
+    <Grid HorizontalAlignment="Center" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--#region -->
+        <DockPanel Grid.Row="0" Margin="5,10" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <!--User heard image-->
+            <Image DockPanel.Dock="Left" Margin="3" Source="pack://siteoforigin:,,,/Images/DefualtUserImage.png" MinHeight="16" MinWidth="16" MaxHeight="72" MaxWidth="72"/>
+
+            <StackPanel DockPanel.Dock="Left" Margin="1" VerticalAlignment="Center">
+                <TextBlock Text="姓名:" Margin="5,3"/>
+                <ComboBox Margin="5,3" MinWidth="140" MaxWidth="250" IsEditable="True" Text="{Binding Path=UserName}"/>
+                <TextBlock Text="工号:" Margin="5,3"/>
+                <TextBox Margin="5,3" Text="{Binding Path=UserID}" />
+            </StackPanel>
+
+            <uc:HS_ProductInforCtrl DockPanel.Dock="Right" Margin="20,5"/>
+        </DockPanel>
+        <!--#endregion-->
+
+        <ScrollViewer Grid.Row="1" Margin="3,10" HorizontalAlignment="Center">
+            <uc:TesttingMakeSure x:Name="MakeSure" HorizontalAlignment="Center"/>
+        </ScrollViewer>
+
+        <Canvas Grid.Row="2">
+            <Button DockPanel.Dock="Left" Content="进入试验" 
+                    Padding="20,8" Style="{DynamicResource AccentedSquareButtonStyle}" Canvas.Left="317.571" IsDefault="True" Canvas.Top="8.224"
+                    Click="Button_Click"
+                    IsEnabled="{Binding ElementName=MakeSure,Path=BeSured}"/>
+            <Button Content="取消" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" 
+                    FontSize="24" Canvas.Left="475.071" Height="47.923" IsCancel="True" Canvas.Top="8.224"
+                    Click="CancelButton_Click"/>
+
+        </Canvas>
+    </Grid>
+</metro:MetroWindow>

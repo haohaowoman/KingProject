@@ -24,7 +24,7 @@ namespace ExpRuntimeApp
         private void Application_Startup(object sender, StartupEventArgs e)
        {
             HS_Server srvRes = TryFindResource("SingleService") as HS_Server;
-
+            //var r = this.Resources.MergedDictionaries;
             //if (srvRes != null)
             //{
             //    // Tyr load server from bin data file.
@@ -59,6 +59,24 @@ namespace ExpRuntimeApp
             //{
             //    MessageBox.Show("打开服务资源失败，将不能进行试验。", "错误", MessageBoxButton.OKCancel, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
             //}
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            var vmd = TryFindResource("ExpViewModule") as ViewModules.ExperimentViewModule;
+            vmd?.Dispose();
+            HS_Server srvRes = TryFindResource("SingleService") as HS_Server;
+            srvRes?.Close();
+        }
+
+        private void Application_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
+        }
+
+        private void Application_NavigationFailed(object sender, System.Windows.Navigation.NavigationFailedEventArgs e)
+        {
+
         }
     }
 }

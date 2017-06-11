@@ -150,7 +150,10 @@ namespace LabMCESystem.EException
         {
             get
             {
-                return _appears.Last();
+                lock (_appearLocker)
+                {
+                    return _appears.Last(); 
+                }
             }
         }
 

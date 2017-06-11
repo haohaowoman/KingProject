@@ -129,19 +129,26 @@ namespace mcLogic.Execute
     }
 
     /// <summary>
-    /// PID控制逻辑执行器基类
+    /// PID控制逻辑执行器基类。
+    /// 执行器定时周期默认为1s，PID执行后将对周期次数重置，执行定时周期以100ms为基数。
     /// </summary>
     public abstract class PIDExecuterBase : ClosedLoopExecuter, IPeriodExecute, IDisposable
     {
+        /// <summary>
+        /// 执行定时周期时间基数。
+        /// </summary>
+        public static double PeriodIntervalBase = 100;
+
         public PIDExecuterBase(double targetVal, SafeRange srange) : base(targetVal, srange)
         {
             _periodTimer = new Timer();
+            PeriodInterval = 1000;
 
             _periodTimer.Elapsed += _periodTimer_Elapsed;
 
             ExecuteChanged += PIDExecuterBase_ExecuteChanged;
 
-            FedbackInTolerance += PIDExecuterBase_FedbackInToleranced;
+            FedbackInTolerance += PIDExecuterBase_FedbackInToleranced;            
         }
 
         /// <summary>
@@ -162,14 +169,16 @@ namespace mcLogic.Execute
         {
             ExecuteTCount++;
             OnPIDExecute();
+            PeriodCount = 0;
         }
         // 周期执行
         private void _periodTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            PeriodCount++;
             Execute();
         }
 
-        private void PIDExecuterBase_FedbackInToleranced(object obj)
+        private void PIDExecuterBase_FedbackInToleranced(object sender, double fValue)
         {
             // 自动停止执行
             if (AutoFinish)
@@ -184,12 +193,11 @@ namespace mcLogic.Execute
 
         public override void Reset()
         {
-            ExecuteOver();
-
+            _periodTimer.Stop();
             ExecuteTCount = 0;
             ECurrent = 0;
             ELastOne = 0;
-            
+            PeriodCount = 0;
             base.Reset();
         }
         /// <summary>
@@ -204,7 +212,14 @@ namespace mcLogic.Execute
         protected override bool OnExecute(ref double eVal)
         {
             bool be = base.OnExecute(ref eVal);
+            double periodTime = PeriodCount * PeriodInterval;
 
+            // 第一次PID输出不计入周期次数计算。
+            if (ExecuteTCount >= 1)
+            {
+                be &= periodTime >= Param.Ts;
+            }            
+            
             if (be)
             {
                 // 得到当前的执行误差 与 上一次执行误差
@@ -223,6 +238,7 @@ namespace mcLogic.Execute
         public override void ExecuteOver()
         {
             _periodTimer.Stop();
+            PeriodCount = 0;
             base.ExecuteOver();
         }
 
@@ -242,11 +258,16 @@ namespace mcLogic.Execute
 
         #region Properties， Fields
         // 周期定时器
+
         private Timer _periodTimer;
+        /// <summary>
+        /// 获取已有的周期次数，在一个PID周期完成之后将重置。
+        /// </summary>
+        public int PeriodCount { get; protected set; }
 
         private PIDParam _param;
         /// <summary>
-        /// 获取/设置PID参数
+        /// 获取/设置PID参数，重新设置PID周期后将可能影响PeriodInterval属性。
         /// </summary>
         public PIDParam Param
         {
@@ -254,7 +275,8 @@ namespace mcLogic.Execute
             set
             {
                 _param = value;
-                _periodTimer.Interval = value.Ts;
+                PeriodInterval = Math.Max(Math.Min(PeriodInterval, value.Ts), PeriodIntervalBase);
+
             }
         }
 
@@ -274,7 +296,7 @@ namespace mcLogic.Execute
         public double ELastOne { get; private set; }
 
         /// <summary>
-        /// 获取/设置是否在反馈值达到目标值指定的公差范围内自动完成和关闭执行器
+        /// 获取/设置是否在反馈值达到目标值指定的公差范围内自动完成和关闭执行器。
         /// </summary>
         public bool AutoFinish { get; set; } = false;
 
@@ -283,19 +305,18 @@ namespace mcLogic.Execute
         #region IPeriodExecute
 
         /// <summary>
-        /// 获取/设置PID的执行周期
+        /// 获取/设置执行器执行周期时间间隔，在此处设置将不会受到PeriodIntervalBase的影响。
         /// </summary>
         public double PeriodInterval
         {
             get
             {
-                return _param.Ts;
+                return _periodTimer.Interval;
             }
 
             set
             {
                 _periodTimer.Interval = value;
-                _param.Ts = value;
             }
         }
 
@@ -314,6 +335,8 @@ namespace mcLogic.Execute
 
         public void Start()
         {
+            Execute();
+            PeriodCount = 0;
             _periodTimer.Start();
         }
 
@@ -329,6 +352,7 @@ namespace mcLogic.Execute
 
         public void Dispose()
         {
+            Close();
             _periodTimer?.Dispose();
         }
 

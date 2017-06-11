@@ -64,6 +64,15 @@ namespace mcLogic.Execute
             }
         }
 
+        /// <summary>
+        /// 获取已有的周期次数。
+        /// </summary>
+        public int PeriodCount
+        {
+            get;
+            protected set;
+        }
+
         public void Resum()
         {
             _periodTimer.Enabled = true;
@@ -93,6 +102,7 @@ namespace mcLogic.Execute
 
         private void _periodTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            PeriodCount++;
             Execute();            
         }
 

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="HS_ExpDataReport" targetNamespace="http://tempuri.org/HS_ExpDataReport.xsd" xmlns:mstns="http://tempuri.org/HS_ExpDataReport.xsd" xmlns="http://tempuri.org/HS_ExpDataReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="HS_ExpDataReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="HS_ExpDataReport" msprop:Generator_UserDSName="HS_ExpDataReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="HS_DataReport" msprop:Generator_TableClassName="HS_DataReportDataTable" msprop:Generator_TableVarName="tableHS_DataReport" msprop:Generator_RowChangedName="HS_DataReportRowChanged" msprop:Generator_TablePropName="HS_DataReport" msprop:Generator_RowDeletingName="HS_DataReportRowDeleting" msprop:Generator_RowChangingName="HS_DataReportRowChanging" msprop:Generator_RowEvHandlerName="HS_DataReportRowChangeEventHandler" msprop:Generator_RowDeletedName="HS_DataReportRowDeleted" msprop:Generator_RowClassName="HS_DataReportRow" msprop:Generator_UserTableName="HS_DataReport" msprop:Generator_RowEvArgName="HS_DataReportRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_dateTime" msdata:Caption="时间" msprop:Generator_ColumnVarNameInTable="column_dateTime" msprop:Generator_ColumnPropNameInRow="_dateTime" msprop:Generator_ColumnPropNameInTable="_dateTimeColumn" msprop:Generator_UserColumnName="_dateTime" type="xs:dateTime" />
+              <xs:element name="_rlFlow" msdata:Caption="热边流量Kg/h" msprop:Generator_ColumnVarNameInTable="column_rlFlow" msprop:Generator_ColumnPropNameInRow="_rlFlow" msprop:Generator_ColumnPropNameInTable="_rlFlowColumn" msprop:Generator_UserColumnName="_rlFlow" type="xs:double" minOccurs="0" />
+              <xs:element name="_ylFlow" msdata:Caption="一冷流量Kg/h" msprop:Generator_ColumnVarNameInTable="column_ylFlow" msprop:Generator_ColumnPropNameInRow="_ylFlow" msprop:Generator_ColumnPropNameInTable="_ylFlowColumn" msprop:Generator_UserColumnName="_ylFlow" type="xs:double" minOccurs="0" />
+              <xs:element name="_ylInTemp" msdata:Caption="一冷进口温度℃" msprop:Generator_ColumnVarNameInTable="column_ylInTemp" msprop:Generator_ColumnPropNameInRow="_ylInTemp" msprop:Generator_ColumnPropNameInTable="_ylInTempColumn" msprop:Generator_UserColumnName="_ylInTemp" type="xs:double" minOccurs="0" />
+              <xs:element name="_elFlow" msdata:Caption="二冷流量Kg/h" msprop:Generator_ColumnVarNameInTable="column_elFlow" msprop:Generator_ColumnPropNameInRow="_elFlow" msprop:Generator_ColumnPropNameInTable="_elFlowColumn" msprop:Generator_UserColumnName="_elFlow" type="xs:double" minOccurs="0" />
+              <xs:element name="_elInTemp" msdata:Caption="二冷进口温度℃" msprop:Generator_ColumnVarNameInTable="column_elInTemp" msprop:Generator_ColumnPropNameInRow="_elInTemp" msprop:Generator_ColumnPropNameInTable="_elInTempColumn" msprop:Generator_UserColumnName="_elInTemp" type="xs:double" minOccurs="0" />
+              <xs:element name="_elOutTemp" msdata:Caption="二冷出口温度℃" msprop:Generator_ColumnVarNameInTable="column_elOutTemp" msprop:Generator_ColumnPropNameInRow="_elOutTemp" msprop:Generator_ColumnPropNameInTable="_elOutTempColumn" msprop:Generator_UserColumnName="_elOutTemp" type="xs:double" minOccurs="0" />
+              <xs:element name="_rlOutPress" msdata:Caption="热边出口压力KPa" msprop:Generator_ColumnVarNameInTable="column_rlOutPress" msprop:Generator_ColumnPropNameInRow="_rlOutPress" msprop:Generator_ColumnPropNameInTable="_rlOutPressColumn" msprop:Generator_UserColumnName="_rlOutPress" type="xs:double" minOccurs="0" />
+              <xs:element name="_rlInPress" msdata:Caption="热边进口压力KPa" msprop:Generator_ColumnVarNameInTable="column_rlInPress" msprop:Generator_ColumnPropNameInRow="_rlInPress" msprop:Generator_ColumnPropNameInTable="_rlInPressColumn" msprop:Generator_UserColumnName="_rlInPress" type="xs:double" minOccurs="0" />
+              <xs:element name="_rlInTemp" msdata:Caption="热边进口温度℃" msprop:Generator_ColumnVarNameInTable="column_rlInTemp" msprop:Generator_ColumnPropNameInRow="_rlInTemp" msprop:Generator_ColumnPropNameInTable="_rlInTempColumn" msprop:Generator_UserColumnName="_rlInTemp" type="xs:double" minOccurs="0" />
+              <xs:element name="_rlOutTemp" msdata:Caption="热边出口温度℃" msprop:Generator_ColumnVarNameInTable="column_rlOutTemp" msprop:Generator_ColumnPropNameInRow="_rlOutTemp" msprop:Generator_ColumnPropNameInTable="_rlOutTempColumn" msprop:Generator_UserColumnName="_rlOutTemp" type="xs:double" minOccurs="0" />
+              <xs:element name="_elInPress" msdata:Caption="二冷进口压力KPa" msprop:Generator_ColumnVarNameInTable="column_elInPress" msprop:Generator_ColumnPropNameInRow="_elInPress" msprop:Generator_ColumnPropNameInTable="_elInPressColumn" msprop:Generator_UserColumnName="_elInPress" type="xs:double" minOccurs="0" />
+              <xs:element name="_elOutPress" msdata:Caption="二冷出口压力KPa" msprop:Generator_ColumnVarNameInTable="column_elOutPress" msprop:Generator_ColumnPropNameInRow="_elOutPress" msprop:Generator_ColumnPropNameInTable="_elOutPressColumn" msprop:Generator_UserColumnName="_elOutPress" type="xs:double" minOccurs="0" />
+              <xs:element name="_rlPressDiff" msdata:Caption="热边压差KPa" msprop:Generator_ColumnVarNameInTable="column_rlPressDiff" msprop:Generator_ColumnPropNameInRow="_rlPressDiff" msprop:Generator_ColumnPropNameInTable="_rlPressDiffColumn" msprop:Generator_UserColumnName="_rlPressDiff" type="xs:double" minOccurs="0" />
+              <xs:element name="_elPressDiff" msdata:Caption="二冷压差KPa" msprop:Generator_ColumnVarNameInTable="column_elPressDiff" msprop:Generator_ColumnPropNameInRow="_elPressDiff" msprop:Generator_ColumnPropNameInTable="_elPressDiffColumn" msprop:Generator_UserColumnName="_elPressDiff" type="xs:double" minOccurs="0" />
+              <xs:element name="_heatEmissEffec" msdata:Caption="散热效率" msprop:Generator_ColumnVarNameInTable="column_heatEmissEffec" msprop:Generator_ColumnPropNameInRow="_heatEmissEffec" msprop:Generator_ColumnPropNameInTable="_heatEmissEffecColumn" msprop:Generator_UserColumnName="_heatEmissEffec" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ExperimentInfo" msprop:Generator_TableClassName="ExperimentInfoDataTable" msprop:Generator_TableVarName="tableExperimentInfo" msprop:Generator_TablePropName="ExperimentInfo" msprop:Generator_RowDeletingName="ExperimentInfoRowDeleting" msprop:Generator_RowChangingName="ExperimentInfoRowChanging" msprop:Generator_RowEvHandlerName="ExperimentInfoRowChangeEventHandler" msprop:Generator_RowDeletedName="ExperimentInfoRowDeleted" msprop:Generator_UserTableName="ExperimentInfo" msprop:Generator_RowChangedName="ExperimentInfoRowChanged" msprop:Generator_RowEvArgName="ExperimentInfoRowChangeEvent" msprop:Generator_RowClassName="ExperimentInfoRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_expTime" msdata:Caption="ExperimentTime" msprop:Generator_ColumnVarNameInTable="column_expTime" msprop:Generator_ColumnPropNameInRow="_expTime" msprop:Generator_ColumnPropNameInTable="_expTimeColumn" msprop:Generator_UserColumnName="_expTime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="_expType" msdata:Caption="Experiemnt Type" msprop:Generator_ColumnVarNameInTable="column_expType" msprop:Generator_ColumnPropNameInRow="_expType" msprop:Generator_ColumnPropNameInTable="_expTypeColumn" msprop:Generator_UserColumnName="_expType" type="xs:string" minOccurs="0" />
+              <xs:element name="_userName" msdata:Caption="User Name" msprop:Generator_ColumnVarNameInTable="column_userName" msprop:Generator_ColumnPropNameInRow="_userName" msprop:Generator_ColumnPropNameInTable="_userNameColumn" msprop:Generator_UserColumnName="_userName" type="xs:string" minOccurs="0" />
+              <xs:element name="_userID" msdata:Caption="User Work ID" msprop:Generator_ColumnVarNameInTable="column_userID" msprop:Generator_ColumnPropNameInRow="_userID" msprop:Generator_ColumnPropNameInTable="_userIDColumn" msprop:Generator_UserColumnName="_userID" type="xs:string" minOccurs="0" />
+              <xs:element name="_productType" msdata:Caption="Product Type" msprop:Generator_ColumnVarNameInTable="column_productType" msprop:Generator_ColumnPropNameInRow="_productType" msprop:Generator_ColumnPropNameInTable="_productTypeColumn" msprop:Generator_UserColumnName="_productType" type="xs:string" minOccurs="0" />
+              <xs:element name="_productID" msdata:Caption="Product ID" msprop:Generator_ColumnVarNameInTable="column_productID" msprop:Generator_ColumnPropNameInRow="_productID" msprop:Generator_ColumnPropNameInTable="_productIDColumn" msprop:Generator_UserColumnName="_productID" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:HS_DataReport" />
+      <xs:field xpath="mstns:_dateTime" />
+    </xs:unique>
+    <xs:unique name="ExperimentInfo_Constraint1" msdata:ConstraintName="Constraint1">
+      <xs:selector xpath=".//mstns:ExperimentInfo" />
+      <xs:field xpath="mstns:_expTime" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

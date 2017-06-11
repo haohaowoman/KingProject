@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="ExpRuntimeApp.UserControls.SecendColdRoadExpPointsCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpRuntimeApp.UserControls"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{StaticResource ExpViewModule}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <UniformGrid Grid.Column="0" Margin="5" Columns="1">
+            <TextBlock Text="二冷路空气流量：" VerticalAlignment="Center"/>
+
+            <TextBlock Text="二冷路空气入口压力：" VerticalAlignment="Center"/>
+
+            <TextBlock Text="二冷路空气入口温度：" VerticalAlignment="Center"/>
+
+            <TextBlock Text="二冷路空气出口压力：" VerticalAlignment="Center"/>
+
+            <TextBlock Text="二冷路空气出口温度：" VerticalAlignment="Center"/>
+
+            <TextBlock Text="二冷路吸热量：" VerticalAlignment="Center"/>
+            <TextBlock Text="二冷路压差△P：" VerticalAlignment="Center"/>
+        </UniformGrid>
+        <UniformGrid Grid.Column="1" Margin="5" Columns="1" Grid.ColumnSpan="2" d:LayoutOverrides="Width, Height">
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷空气流量].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气流量].Unit"/>
+                </MultiBinding>
+            </TextBox>
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷空气进口压力].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气进口压力].Unit"/>
+                </MultiBinding>
+            </TextBox>
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷空气进口温度].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气进口温度].Unit"/>
+                </MultiBinding>
+            </TextBox>
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷空气出口压力].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气出口压力].Unit"/>
+                </MultiBinding>
+            </TextBox>
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷空气出口温度].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷空气出口温度].Unit"/>
+                </MultiBinding>
+            </TextBox>
+
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷吸热量].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷吸热量].Unit"/>
+                </MultiBinding>
+            </TextBox>
+
+            <TextBox Style="{StaticResource HeaderTextBox}" FontWeight="Bold" VerticalAlignment="Center">
+                <MultiBinding StringFormat="{}{0:F0} {1}" Mode="OneWay">
+                    <Binding Path="MdExperPoints[二冷压差].MeasureValue"/>
+                    <Binding Path="MdExperPoints[二冷压差].Unit"/>
+                </MultiBinding>
+            </TextBox>
+        </UniformGrid>
+
+    </Grid>
+</UserControl>

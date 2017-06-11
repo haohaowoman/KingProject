@@ -38,12 +38,7 @@ namespace ExpRuntimeApp.UserControls
             DependencyProperty.Register("FanIsPowerOn", typeof(bool), typeof(FirstColdFan), new PropertyMetadata(false));
 
         public String FunCaption { get; set; } = "Fun";
-
-        private void FanPowerOnBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        
     }
 
     public class TextHeaderHelper

@@ -56,5 +56,15 @@ namespace LabMCESystem.LabElement
         /// 调用ControllerExecute后发生。
         /// </summary>
         event ControllerExecuteEventHandler Execute;
+
+        /// <summary>
+        /// 通知控制器停止控制操作。
+        /// </summary>
+        void StopControllerExecute();
+
+        /// <summary>
+        /// 调用StopControllerExecute后发生。
+        /// </summary>
+        event ControllerExecuteEventHandler StopExecute;
     }
 }

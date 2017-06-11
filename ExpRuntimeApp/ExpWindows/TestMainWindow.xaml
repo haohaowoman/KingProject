@@ -1,0 +1,436 @@
+﻿<metro:MetroWindow x:Class="ExpRuntimeApp.ExpWindows.TestMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpRuntimeApp.ExpWindows"
+        mc:Ignorable="d"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:uc="clr-namespace:ExpRuntimeApp.UserControls"
+                   xmlns:Charts="clr-namespace:Visifire.Charts;assembly=WPFVisifire.Charts"
+        Title="环形散热器热动力性能试验台测控系统" Height="980" Width="1900"
+        FontSize="18"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Closing="MetroWindow_Closing"
+                   Closed="MetroWindow_Closed"
+                   Icon="/ExpRuntimeApp;component/Images/Factory.ico"
+        DataContext="{StaticResource ExpViewModule}" Background="{DynamicResource HS_BackgroundBrush}" ShowCloseButton="False" ShowDialogsOverTitleBar="False" ShowMaxRestoreButton="False"
+        >
+    
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <Button Margin="1"
+                Click="ShowAllChannelsBtn_Click"
+                ToolTip="查看所有及试验点视图"
+                    Content="详细"/>
+            <Button Margin="1" Width="16" Height="16" Click="QuikChsListBtn_Click"
+                    ToolTip="通道数据快速查看窗口，进行系统固有及自定义通道的数据监测。">
+                <Rectangle Width="16" Height="16" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button,Mode=FindAncestor},Path=Foreground}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Visual="{StaticResource appbar_list}" Stretch="Uniform"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+                
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Text="环形散热器热动力性能试验台测控系统" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Margin="1,5" FontWeight="Bold" TextOptions.TextFormattingMode="Display" Foreground="Black"/>
+
+        <!--fualt status-->
+        <DockPanel Grid.Row="1" Margin="5">
+            <StackPanel DockPanel.Dock="Top">
+                <Label Margin="8,3" VerticalAlignment="Center"
+                       Content="试验类型:"/>
+                <ComboBox Margin="8,5" VerticalAlignment="Center" IsEditable="True" Text="{Binding Path=ExpType}">
+                    <ComboBox.Items>
+                        <ComboBoxItem Margin="5,1" Content="设计点性能试验"/>
+                        <ComboBoxItem Margin="5,1" Content="流阻特性曲线试验"/>
+                        <ComboBoxItem Margin="5,1" Content="产品散热性能试验"/>
+                    </ComboBox.Items>
+                </ComboBox>
+            </StackPanel>
+            <Border DockPanel.Dock="Top" Margin="5" Padding="5"
+                    BorderThickness="3" CornerRadius="5"
+                    BorderBrush="DarkGray">
+                <DockPanel>
+                    <uc:HS_ProductInforCtrl DockPanel.Dock="Top" Margin="8,3" HorizontalAlignment="Stretch"/>
+
+
+                </DockPanel>
+            </Border>
+            <Border DockPanel.Dock="Top" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
+                <ScrollViewer d:LayoutOverrides="Height" VerticalScrollBarVisibility="Auto">
+                    <DockPanel>
+
+                        <UniformGrid DockPanel.Dock="Top" Columns="1" VerticalAlignment="Top" >
+                            <ToggleButton Margin="10" Content="风机报警" Style="{DynamicResource ErrorStatusLight}"
+                                FontSize="24"
+                                IsChecked="{Binding MdChannels[风机报警].Status}"/>
+                            <ToggleButton Margin="10" Content="实验室报警" Style="{DynamicResource ErrorStatusLight}"
+                                FontSize="24"
+                                IsChecked="{Binding MdChannels[实验室报警].Status}"/>
+
+                            <ToggleButton Margin="10" Content="加热器报警" Style="{DynamicResource ErrorStatusLight}"
+                                FontSize="24"
+                                IsChecked="{Binding MdChannels[加热器报警].Status}"/>
+
+                        </UniformGrid>
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <UniformGrid DockPanel.Dock="Top" Columns="2">
+                                <Button 
+                                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                                    Margin="3" Padding="8,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+                                    FontSize="18"
+                                    Click="ShowFaultListButton_Click"
+                                    Content="故障列表"/>
+                                <Button 
+                                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                                    Margin="3" Padding="8,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+                                    FontSize="18"
+                                    Content="故障清除"
+                                    Tag="{Binding Path=MdChannels[报警复位]}"
+                                    ToolTip="复位操作台及风机故障报警。"
+                                    Click="ResetFaultBtn_Click"                                   
+                                    CommandParameter="{Binding Path=MdChannels[FanFaultRest]}"/>
+                            </UniformGrid>
+                            <Label DockPanel.Dock="Top" Margin="5,3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Content="当前故障信息："/>
+                            <ListBox DockPanel.Dock="Top" BorderThickness="2" BorderBrush="DarkGray" Margin="0,3" MaxWidth="180" FontSize="16">
+                                <TextBlock Text="{Binding Path=CurrentException.ExcepTypeStr,StringFormat=类型：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                                <TextBlock Text="{Binding Path=CurrentException.LastAppearInfo.AppearTime,StringFormat=时间：{0:HH:mm:ss}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                                <TextBlock Text="{Binding Path=CurrentException.Label,StringFormat=名称：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                                <TextBlock Text="{Binding Path=CurrentException.Summary,StringFormat=说明：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                                <TextBlock Text="{Binding Path=CurrentException.DealOpinion,StringFormat=意见：{0}}" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+
+                            </ListBox>
+                        </DockPanel>
+                    </DockPanel>
+                </ScrollViewer>
+            </Border>
+        </DockPanel>
+        <Border Grid.Column="1" Grid.Row="1" Margin="5" Padding="5" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" Grid.Column="0" Margin="5" Visibility="Visible">
+                    <Grid DockPanel.Dock="Top" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!--control buttons-->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+                            <metro:ToggleSwitch Margin="5,8" Header="试验特性曲线" HeaderFontFamily="Microsoft YaHei" FontFamily="Microsoft YaHei" OnLabel="开" OffLabel="关" IsChecked="{Binding Path=IsShowExpChart}"/>
+                            
+                            <Label Margin="5,8" VerticalAlignment="Center" Content="横坐标轴选择："/>
+                            <ComboBox x:Name="ChartSource" Margin="5,8" MinWidth="180" VerticalAlignment="Center" SelectedIndex="0"
+                                      ItemsSource="{Binding Path=ChartSource}" DisplayMemberPath="XAxiseLabel"/>
+                        </StackPanel>
+                        <!--chart-->
+                        <Charts:Chart Grid.Row="1" AnimationEnabled="False" BorderBrush="Gray" ZoomingEnabled="True" IndicatorEnabled="True" Margin="0,0,0,0"
+                                      DataContext="{Binding ElementName=ChartSource,Path=SelectedItem}">
+                            <Charts:Chart.Titles>
+                                <Charts:Title Text="试验特性曲线" FontSize="16" HorizontalAlignment="Right"/>
+                            </Charts:Chart.Titles>
+                            <Charts:Chart.Legends>
+                                <Charts:Legend x:Name="HotRoadLengend" TitleFontSize="16" Title="" FontSize="16" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
+                                
+                            </Charts:Chart.Legends>
+
+                            <Charts:Chart.AxesX>
+                                <Charts:Axis Title="{Binding Path=XAxiseLabel,StringFormat={}{0} Kg/h}"/>
+                            </Charts:Chart.AxesX>
+
+                            <Charts:Chart.AxesY>
+                                <Charts:Axis Title="压差△P KPa"/>
+                            </Charts:Chart.AxesY>
+                            <Charts:Chart.Series>
+                                
+                                <!--Hot Road Charts-->
+                                <Charts:DataSeries 
+                                    LegendText="流阻特性" Legend="" ShowInLegend="False" RenderAs="Spline"
+                                    DataPoints="{Binding Path=FlowResistance}" XValueType="Numeric">
+                                    
+                                </Charts:DataSeries>
+                            </Charts:Chart.Series>
+                        </Charts:Chart>
+                        <Charts:Chart Grid.Row="2" AnimationEnabled="False" BorderBrush="Gray" ZoomingEnabled="True" IndicatorEnabled="True" Margin="0,0,0,5"
+                                      DataContext="{Binding ElementName=ChartSource,Path=SelectedItem}">
+                            <Charts:Chart.Titles>
+                                <Charts:Title Text="试验特性曲线" FontSize="16" HorizontalAlignment="Right"/>
+                            </Charts:Chart.Titles>
+                            <Charts:Chart.Legends>
+                                <Charts:Legend x:Name="MissHeatEffic" TitleFontSize="16" Title="" FontSize="16" TitleBackground="{x:Null}" VerticalAlignment="Bottom" TitleAlignmentX="Center"/>
+
+                            </Charts:Chart.Legends>
+
+                            <Charts:Chart.AxesX>
+                                <Charts:Axis Title="{Binding Path=XAxiseLabel,StringFormat={}{0} Kg/h}"/>
+                            </Charts:Chart.AxesX>
+
+                            <Charts:Chart.AxesY>
+                                <Charts:Axis Title="散热效率η KPa"/>
+                            </Charts:Chart.AxesY>
+                            <Charts:Chart.Series>
+
+                                <!--Hot Road Charts-->
+                                <Charts:DataSeries 
+                                    LegendText="产品散热特性" Legend="MissHeatEffic" ShowInLegend="False" RenderAs="Spline"
+                                    DataPoints="{Binding Path=MissHeatEffic}" XValueType="Numeric">
+
+                                </Charts:DataSeries>
+                            </Charts:Chart.Series>
+                        </Charts:Chart>
+                    </Grid>
+                </DockPanel>
+
+                <UniformGrid Grid.Row="0" Grid.Column="1" Columns="2">
+                    <GroupBox Header="试验快速设置" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <uc:HS_ExpPointSet/>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox Header="热路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <uc:HotRoadExpPointsCtrl/>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox Header="二冷路段" Margin="5" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <uc:SecendColdRoadExpPointsCtrl/>
+                        </ScrollViewer>
+                    </GroupBox>
+
+                    <GroupBox Header="一冷路实验段" Margin="5"  VerticalAlignment="Stretch" metro:ControlsHelper.HeaderFontSize="24">
+                        <ScrollViewer VerticalAlignment="Stretch"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto">
+                            <uc:FirstColdRoadExpPointsCtrl/>
+                        </ScrollViewer>
+                    </GroupBox>
+                </UniformGrid>
+
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BorderThickness="3" CornerRadius="5" BorderBrush="DarkGray" Margin="5" Padding="5" MinWidth="200">
+            <UniformGrid Columns="1">
+                <Button DockPanel.Dock="Right" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5" Padding="10,5" Command="{Binding Path=AddDataReportNow}"
+                    >
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_cursor_hand}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Bottom" Text="手动记录"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Click="ExpSetBtn_Click" Margin="10,5" Command="{Binding Path=Test}">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_settings}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验设置"></TextBlock>
+                    </DockPanel>
+                </Button>
+                <Button Click="GBSettingButton_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5,0,5" HorizontalAlignment="Left" Width="164">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_book}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验工步"/>
+                    </DockPanel>
+                </Button>
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5"
+                        Click="OpenGKUIsBtn_Click">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_layout_expand_right}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验工况"></TextBlock>
+                    </DockPanel>
+                </Button>
+                <Button Click="OpenHistoryAnalyseWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_console}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock DockPanel.Dock="Bottom" Text="历史数据"></TextBlock>
+                    </DockPanel>
+                </Button>
+
+                <Button Click="OpenDataReportWndBtn_Click" Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10,5">
+                    <DockPanel>
+                        <Rectangle DockPanel.Dock="Top" Width="76" Height="76" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Button},Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_office_publisher}" Stretch="None"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        
+                        <TextBlock DockPanel.Dock="Bottom" Text="试验报表"></TextBlock>
+                    </DockPanel>
+                </Button>
+                
+                <ToggleButton x:Name="ExpRunSwitch" Content="开始试验" Click="BegainExpTgBtn_Click" Margin="10" BorderThickness="2" BorderBrush="Black" Foreground="White" FontWeight="SemiBold" FontSize="24" Style="{DynamicResource ToggleButtonStyle2}" IsChecked="{Binding Path=IsExpRunning}">
+                    <ToggleButton.Resources>
+                        <Style x:Key="ToggleButtonStyle2" TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            <Setter Property="Background" Value="#CC119EDA"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="metro:ControlsHelper.CornerRadius" Value="3"/>
+                            <Setter Property="FontFamily" Value="{DynamicResource DefaultFont}"/>
+                            <Setter Property="FontSize" Value="{DynamicResource UpperCaseContentFontSize}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="MinHeight" Value="25"/>
+                            <Setter Property="Padding" Value="5,6"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid>
+                                            <Border x:Name="Background" Background="{TemplateBinding Background}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{x:Null}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            <Border x:Name="DisabledVisualElement" Background="{DynamicResource ControlsDisabledBrush}" CornerRadius="{Binding (metro:ControlsHelper.CornerRadius), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" IsHitTestVisible="False" Opacity="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            <metro:ContentControlEx x:Name="PART_ContentPresenter" ContentCharacterCasing="{Binding (metro:ControlsHelper.ContentCharacterCasing), RelativeSource={RelativeSource TemplatedParent}}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" TargetName="DisabledVisualElement" Value="0.7"/>
+                                                <Setter Property="Opacity" TargetName="PART_ContentPresenter" Value="0.3"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush2}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush5}"/>
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush8}"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush3}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush7}"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource ButtonMouseOverBorderBrush}"/>
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Resources>
+                </ToggleButton>
+            </UniformGrid>
+        </Border>
+        <Button Content="退出试验" IsCancel="True" Click="ExitExpBtn_Click" Grid.Column="2" Grid.Row="2" Margin="10" BorderBrush="Black" Background="DarkRed" Foreground="White" FontWeight="SemiBold" FontSize="24" />
+
+        <!--Remote status bar-->
+        <!--#region Status bar-->
+
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" BorderThickness="2" CornerRadius="3" BorderBrush="DarkGray">
+            <StackPanel Orientation="Horizontal">
+                <Label Grid.Row="2" Content="设备在线状态：" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[PLCRemoteConnection].Status}"
+                              ToolTip="PLC在线状态"
+                              Content="PLC连接" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[ADDevRemoteConnection].Status}"
+                              ToolTip="数采设备在线状态"
+                              Content="数采设备" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[FanRemoteConnection].Status}"
+                              ToolTip="风机在线状态"
+                              Content="风机变频器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[RL_1#RemoteConnection].Status}"
+                              ToolTip="热路1#加热器在线状态"
+                              Content="热路1#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[RL_2#RemoteConnection].Status}"
+                              ToolTip="热路2#加热器在线状态"
+                              Content="热路2#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[RL_3#RemoteConnection].Status}"
+                              ToolTip="热路3#加热器在线状态"
+                              Content="热路3#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[RL_4#RemoteConnection].Status}"
+                              ToolTip="热路4#加热器在线状态"
+                              Content="热路4#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[RL_5#RemoteConnection].Status}"
+                              ToolTip="热路5#加热器在线状态"
+                              Content="热路5#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[ELL_1#RemoteConnection].Status}"
+                              ToolTip="二冷路1#加热器在线状态"
+                              Content="二冷1#加热器" FontSize="14"/>
+                <ToggleButton Style="{DynamicResource StatusSwitchLight}" Margin="8,3" IsEnabled="False"
+                              IsChecked="{Binding Path=MdChannels[ELL_2#RemoteConnection].Status}"
+                              ToolTip="二冷路2#加热器在线状态"
+                              Content="二冷2#加热器" FontSize="14"/>
+
+                <DockPanel Margin="8,3" HorizontalAlignment="Stretch">
+
+                    <Label DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" Content="{Binding Path=ExpInformation,StringFormat=信息：{0}}"/>
+                    <TextBlock DockPanel.Dock="Left" Margin="3" Text="" TextDecorations="Underline"/>
+
+                </DockPanel>
+            </StackPanel>
+        </Border>
+        <!--#endregion-->
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="22,3" VerticalAlignment="Center" HorizontalAlignment="Right"
+                   FontWeight="UltraBold"
+                   Text="{Binding Path=ExpTime,StringFormat=实验时间:{0:HH:mm:ss}}"/>
+    </Grid>
+</metro:MetroWindow>

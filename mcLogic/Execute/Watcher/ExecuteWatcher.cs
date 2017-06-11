@@ -50,7 +50,8 @@ namespace mcLogic.Execute.Watcher
         /// </summary>
         public void ShowWatcherDialog()
         {
-
+            var watcher = new ExecuteWatcherDlg(this);
+            watcher.Show();
         }
 
         private void Ex_ExecuteChanged(object sender, double executedVal)
@@ -70,6 +71,13 @@ namespace mcLogic.Execute.Watcher
             {
                 WatchData.RemoveAt(0);
             }
+
+            WatchDataChanged?.Invoke(this, WatchData);
         }
+
+        /// <summary>
+        /// 当执行器数据集合发生改变是发生。
+        /// </summary>
+        public event EventHandler<List<EWatcherData>> WatchDataChanged;
     }
 }

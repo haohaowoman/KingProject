@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="HS_Elements" targetNamespace="http://tempuri.org/HS_Elements.xsd" xmlns:mstns="http://tempuri.org/HS_Elements.xsd" xmlns="http://tempuri.org/HS_Elements.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="HS_Elements" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="HS_Elements" msprop:Generator_UserDSName="HS_Elements">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Channels" msprop:Generator_TableClassName="ChannelsDataTable" msprop:Generator_TableVarName="tableChannels" msprop:Generator_TablePropName="Channels" msprop:Generator_RowDeletingName="ChannelsRowDeleting" msprop:Generator_RowChangingName="ChannelsRowChanging" msprop:Generator_RowEvHandlerName="ChannelsRowChangeEventHandler" msprop:Generator_RowDeletedName="ChannelsRowDeleted" msprop:Generator_UserTableName="Channels" msprop:Generator_RowChangedName="ChannelsRowChanged" msprop:Generator_RowEvArgName="ChannelsRowChangeEvent" msprop:Generator_RowClassName="ChannelsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_lab" msdata:Caption="Label" msprop:Generator_ColumnVarNameInTable="column_lab" msprop:Generator_ColumnPropNameInRow="_lab" msprop:Generator_ColumnPropNameInTable="_labColumn" msprop:Generator_UserColumnName="_lab" type="xs:string" />
+              <xs:element name="_prompt" msdata:Caption="Prompt" msprop:Generator_ColumnVarNameInTable="column_prompt" msprop:Generator_ColumnPropNameInRow="_prompt" msprop:Generator_ColumnPropNameInTable="_promptColumn" msprop:Generator_UserColumnName="_prompt" type="xs:string" minOccurs="0" />
+              <xs:element name="_summary" msdata:Caption="Summary" msprop:Generator_ColumnVarNameInTable="column_summary" msprop:Generator_ColumnPropNameInRow="_summary" msprop:Generator_ColumnPropNameInTable="_summaryColumn" msprop:Generator_UserColumnName="_summary" type="xs:string" minOccurs="0" />
+              <xs:element name="_type" msdata:Caption="Type" msprop:Generator_ColumnVarNameInTable="column_type" msprop:Generator_ColumnPropNameInRow="_type" msprop:Generator_ColumnPropNameInTable="_typeColumn" msprop:Generator_UserColumnName="_type" type="xs:string" minOccurs="0" />
+              <xs:element name="_sensor" msprop:Generator_ColumnVarNameInTable="column_sensor" msprop:Generator_ColumnPropNameInRow="_sensor" msprop:Generator_ColumnPropNameInTable="_sensorColumn" msprop:Generator_UserColumnName="_sensor" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Sensors" msprop:Generator_TableClassName="SensorsDataTable" msprop:Generator_TableVarName="tableSensors" msprop:Generator_TablePropName="Sensors" msprop:Generator_RowDeletingName="SensorsRowDeleting" msprop:Generator_RowChangingName="SensorsRowChanging" msprop:Generator_RowEvHandlerName="SensorsRowChangeEventHandler" msprop:Generator_RowDeletedName="SensorsRowDeleted" msprop:Generator_UserTableName="Sensors" msprop:Generator_RowChangedName="SensorsRowChanged" msprop:Generator_RowEvArgName="SensorsRowChangeEvent" msprop:Generator_RowClassName="SensorsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="_lab" msprop:Generator_ColumnVarNameInTable="column_lab" msprop:Generator_ColumnPropNameInRow="_lab" msprop:Generator_ColumnPropNameInTable="_labColumn" msprop:Generator_UserColumnName="_lab" type="xs:string" />
+              <xs:element name="_summary" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="_summary" msprop:Generator_ColumnVarNameInTable="column_summary" msprop:Generator_ColumnPropNameInTable="_summaryColumn" msprop:Generator_UserColumnName="_summary" type="xs:string" minOccurs="0" />
+              <xs:element name="_sensorNumber" msprop:Generator_ColumnVarNameInTable="column_sensorNumber" msprop:Generator_ColumnPropNameInRow="_sensorNumber" msprop:Generator_ColumnPropNameInTable="_sensorNumberColumn" msprop:Generator_UserColumnName="_sensorNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="_unit" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="_unit" msprop:Generator_ColumnVarNameInTable="column_unit" msprop:Generator_ColumnPropNameInTable="_unitColumn" msprop:Generator_UserColumnName="_unit" type="xs:string" minOccurs="0" />
+              <xs:element name="_elecRangeLow" msprop:Generator_ColumnVarNameInTable="column_elecRangeLow" msprop:Generator_ColumnPropNameInRow="_elecRangeLow" msprop:Generator_ColumnPropNameInTable="_elecRangeLowColumn" msprop:Generator_UserColumnName="_elecRangeLow" type="xs:double" minOccurs="0" />
+              <xs:element name="_elecRangeHigh" msprop:Generator_ColumnVarNameInTable="column_elecRangeHigh" msprop:Generator_ColumnPropNameInRow="_elecRangeHigh" msprop:Generator_ColumnPropNameInTable="_elecRangeHighColumn" msprop:Generator_UserColumnName="_elecRangeHigh" type="xs:double" minOccurs="0" />
+              <xs:element name="_qRangeLow" msprop:Generator_ColumnVarNameInTable="column_qRangeLow" msprop:Generator_ColumnPropNameInRow="_qRangeLow" msprop:Generator_ColumnPropNameInTable="_qRangeLowColumn" msprop:Generator_UserColumnName="_qRangeLow" type="xs:double" minOccurs="0" />
+              <xs:element name="_qRangeHigh" msprop:Generator_ColumnVarNameInTable="column_qRangeHigh" msprop:Generator_ColumnPropNameInRow="_qRangeHigh" msprop:Generator_ColumnPropNameInTable="_qRangeHighColumn" msprop:Generator_UserColumnName="_qRangeHigh" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Channels" />
+      <xs:field xpath="mstns:_lab" />
+    </xs:unique>
+    <xs:unique name="Sensors_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Sensors" />
+      <xs:field xpath="mstns:_lab" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="Channels_Sensors" msdata:parent="Channels" msdata:child="Sensors" msdata:parentkey="_sensor" msdata:childkey="_lab" msprop:Generator_UserChildTable="Sensors" msprop:Generator_ChildPropName="GetSensorsRows" msprop:Generator_UserRelationName="Channels_Sensors" msprop:Generator_RelationVarName="relationChannels_Sensors" msprop:Generator_UserParentTable="Channels" msprop:Generator_ParentPropName="ChannelsRow" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

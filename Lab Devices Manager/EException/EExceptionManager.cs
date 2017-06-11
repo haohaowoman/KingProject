@@ -127,7 +127,7 @@ namespace LabMCESystem.EException
 
         private void ExcepAppearedAgain(object sender, EExcepAppearAgainEventArgs e)
         {
-            //ActivatedEException?.Invoke(this, new News);
+            ActivatedEException?.Invoke(this, new ActivatedEExceptionEventArgs(sender as EExcepAction, e.NewEExcepAppearInfo));
         }
 
         private void ExcepStateChanged(object sender, EExcepStateChangedEventArgs e)
